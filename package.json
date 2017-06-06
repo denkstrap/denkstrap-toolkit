@@ -1,0 +1,34 @@
+{
+  "name": "denkstrap-toolbelt",
+  "version": "1.0.0",
+  "description": "A toolbelt with handy stuff in web development",
+  "main": "index.js",
+  "author": "Marius Büscher <marius.buescher@denkwerk.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "karma start --single-run"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-istanbul": "^0.12.2",
+    "babel-loader": "^7.0.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "glob": "^7.1.2",
+    "istanbul": "^0.4.5",
+    "istanbul-instrumenter-loader": "^2.0.0",
+    "jasmine": "^2.6.0",
+    "jasmine-core": "^2.6.2",
+    "karma": "^1.7.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-jenkins-reporter": "^0.0.2",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-sinon": "^1.0.5",
+    "karma-tape-reporter": "^1.0.3",
+    "karma-webpack": "^2.0.3",
+    "sinon": "^2.3.2",
+    "webpack": "^2.6.1"
+  }
+}
