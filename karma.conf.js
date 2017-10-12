@@ -9,20 +9,31 @@ module.exports = function( config ) {
 
         // Frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: [ 'jasmine', 'sinon' ],
+        frameworks: [ 'jasmine', 'sinon', 'fixture' ],
 
         // List of files / patterns to load in the browser
         files: [
             'node_modules/babel-polyfill/dist/polyfill.js',
             'src/**/*.js',
-            'test/**/*.js'
+            'test/**/*.js',
+            {
+                pattern: 'test/fixtures/**/*',
+                included: true,
+                served: true
+            }
         ],
 
         // Preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'src/**/*.js': [ 'webpack' ],
-            'test/**/*.js': [ 'webpack' ]
+            'test/**/*.js': [ 'webpack' ],
+            'test/fixtures/**/*.html'   : [ 'html2js' ],
+            'test/fixtures/**/*.json'   : ['json_fixtures']
+        },
+
+        jsonFixturesPreprocessor: {
+            variableName: '__json__'
         },
 
         webpack: require( './webpack.config.js' )(),
@@ -38,6 +49,9 @@ module.exports = function( config ) {
             require( 'karma-phantomjs-launcher' ),
             require( 'karma-coverage' ),
             require( 'karma-tape-reporter' ),
+            require( 'karma-fixture' ),
+            require( 'karma-html2js-preprocessor' ),
+            require( 'karma-json-fixtures-preprocessor' )
         ],
 
         // Test results reporter to use

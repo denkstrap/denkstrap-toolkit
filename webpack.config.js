@@ -20,6 +20,12 @@ module.exports = (config) => {
                 );
             });
         },
+        // entry: {
+        //     'validation.service': './src/validation/validation.service.js',
+        //     'validation.service.ext': './src/validation/validation.service.ext.js',
+        //     'cache.service': './src/cache/cache.service.js'
+        // },
+
         module: {
             loaders: [
                 {

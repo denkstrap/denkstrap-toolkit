@@ -22,13 +22,17 @@
     "karma": "^1.7.0",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-coverage": "^1.1.1",
+    "karma-fixture": "^0.2.6",
+    "karma-html2js-preprocessor": "^1.1.0",
     "karma-jasmine": "^1.1.0",
     "karma-jenkins-reporter": "^0.0.2",
+    "karma-json-fixtures-preprocessor": "0.0.6",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.5",
     "karma-tape-reporter": "^1.0.3",
     "karma-webpack": "^2.0.3",
     "sinon": "^2.3.2",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.9.1"
   }
 }
