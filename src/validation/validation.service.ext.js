@@ -36,13 +36,13 @@ export class ValidationServiceExt extends ValidationService {
      *
      * @param {Object} field
      */
-    setValue( field ) {
+    setValueByField( field ) {
+        if ( typeof field !== 'object' ) {
+            throw new TypeError( 'The field parameter must be an object' );
+        }
         var name = field.name;
         var value = field.getAttribute( 'type' ) === 'checkbox' ? ( field.checked ? true : false ) : field.value;
-        // console.log( typeof field , name, value );
         super.setValue( name, value );
     }
-
-
-
 }
+

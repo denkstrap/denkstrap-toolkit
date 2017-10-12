@@ -19,7 +19,7 @@ validation.resolver = {
     getValidator: function( validatorName ) {
         var validator =
             new Promise( function( resolve, reject ) {
-                resolve( function( value, validator, validationService ) {
+                resolve( function( value, validator ) {
                     return new Promise( function( resolve, reject ) {
                         validation.validators[ validatorName ]( value ).then( function( result ) {
                             resolve(
@@ -73,7 +73,6 @@ var validationService = new ValidationServiceExt(
 
 var form = document.getElementById( 'form' );
 
-
 form.addEventListener( 'submit', function( event ) {
     event.preventDefault();
     var validatorNames = Object.keys( validation.validationConfig );
@@ -91,32 +90,25 @@ form.addEventListener( 'submit', function( event ) {
 } );
 
 var addInputFieldBtn = document.getElementById( 'addInputFieldBtn' );
+if ( addInputFieldBtn !== null ) {
+    var counter = 0;
+    addInputFieldBtn.addEventListener( 'click', function() {
+        counter++;
+        var name = 'dynamic-field-required' + counter;
+        var html = '<label for="' + name + '">' + name +
+            '  </label>' +
+            '<input name="' + name + '" id="' + name + '" ' +
+            'data-validation=\'{' +
+            '"required": { "message": "Required \\"' +
+            name + '\\" not set" } }' +
+            '\'' +
+            '><br><br>';
 
-var counter = 0;
-addInputFieldBtn.addEventListener( 'click', function() {
-    counter++;
-    var name = 'dynamic-field-required' + counter;
-    var html = '<label for="' + name + '">' + name +
-        '  </label>' +
-        '<input name="' + name + '" id="' + name + '" ' +
-        'data-validation=\'{' +
-        '"required": { "message": "Required \\"' +
-        name + '\\" not set" } }' +
-        '\'' +
-        '><br><br>';
+        form.insertAdjacentHTML( 'afterbegin', html );
+        validation.validationConfig = setValidationConfig();
+        validationService.setConfig( validation.validationConfig );
+        console.log( 'validation.validationConfig', validation.validationConfig );
 
-    form.insertAdjacentHTML( 'afterbegin', html );
-    validation.validationConfig = setValidationConfig();
-    validationService.setConfig( validation.validationConfig );
-    console.log( 'validation.validationConfig', validation.validationConfig );
-
-} );
-
-// validationService.setValue( 'fieldA', 'testsdfsdf.de' );
-// validationService.setValue( 'fieldB', 'lorem ipsum' );
-// validationService.validateForm().then( function( result ) {
-//     console.log( 'validateForm success', result );
-// } ).catch( function( result ) {
-//     console.log( 'validateForm fail', result );
-// } );
+    } );
+}
 
