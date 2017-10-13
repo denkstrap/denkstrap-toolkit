@@ -30,9 +30,8 @@ export class ValidationServiceExt extends ValidationService {
         this.config = config;
     }
 
-
     /**
-     * Set one value
+     * Set one value by field
      *
      * @param {Object} field
      */
@@ -45,4 +44,3 @@ export class ValidationServiceExt extends ValidationService {
         super.setValue( name, value );
     }
 }
-

@@ -13,35 +13,53 @@ validation.cache = {
     }
 };
 
+validation.condition = function( field ) {
+    // adjusted jQuery
+    // https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
+    return !!( ( field.offsetWidth || field.offsetHeight ) && field.offsetParent );
+}
+
 // the validation resolver is handling the validators and validation-config
 // to serve proper validation data to the ValidationService - Class
 validation.resolver = {
     getValidator: function( validatorName ) {
         var validator =
             new Promise( function( resolve, reject ) {
-                resolve( function( value, validator ) {
+                // the validator function itself is giving back via resolve
+                // and could be taken via then
+                resolve( function( value, validator, validationService, field ) {
                     return new Promise( function( resolve, reject ) {
-                        validation.validators[ validatorName ]( value ).then( function( result ) {
+                        var fieldDom = document.getElementsByName( field )[ 0 ];
+                        // console.log( 'field', field, 'fieldDom', fieldDom, validation.condition( fieldDom ) );
+                        if ( validation.condition( fieldDom ) ) {
+                            validation.validators[ validatorName ]( value ).then( function( result ) {
+                                resolve(
+                                    {
+                                        isValid: true
+                                    }
+                                );
+                            } ).catch( function( result ) {
+                                var message = typeof validator.message !== 'undefined' ? validator.message :
+                                    ( typeof result.message !== 'undefined' ? result.message : '' );
+                                reject(
+                                    {
+                                        isValid: false,
+                                        message: message
+                                    }
+                                );
+                            } );
+                        } else {
                             resolve(
                                 {
                                     isValid: true
                                 }
                             );
-                        } ).catch( function( result ) {
-                            var message = typeof validator.message !== 'undefined' ? validator.message :
-                                ( typeof result.message !== 'undefined' ? result.message : '' );
-                            reject(
-                                {
-                                    isValid: false,
-                                    message: message
-                                }
-                            );
-                        } );
-
+                        }
                     } );
                 } );
             } );
 
+        // the validator promise is giving back;
         return validator;
     }
 };
@@ -49,6 +67,7 @@ validation.resolver = {
 // validationConfig
 validation.validationConfig = {};
 
+// fill up validation config via data attributes of fields
 function setValidationConfig() {
     var config = {};
     var fields = document.querySelectorAll( 'input' );
@@ -64,6 +83,8 @@ function setValidationConfig() {
 }
 validation.validationConfig = setValidationConfig();
 
+console.log( 'validation.validationConfig', validation.validationConfig );
+
 // console.log( 'validation', validation );
 
 var validationService = new ValidationServiceExt(
@@ -71,8 +92,8 @@ var validationService = new ValidationServiceExt(
     validation.resolver,
     validation.cache );
 
-var form = document.getElementById( 'form' );
 
+var form = document.getElementById( 'form' );
 form.addEventListener( 'submit', function( event ) {
     event.preventDefault();
     var validatorNames = Object.keys( validation.validationConfig );
@@ -80,7 +101,7 @@ form.addEventListener( 'submit', function( event ) {
         var fieldValue = document.getElementsByName( validatorName )[ 0 ].value;
         // console.log( 'fieldValue', fieldValue );
         // validationService.setValue( validatorName, fieldValue );
-        validationService.setValue( document.getElementsByName( validatorName )[ 0 ] );
+        validationService.setValueByField( document.getElementsByName( validatorName )[ 0 ] );
     } );
     validationService.validateForm().then( function( result ) {
         console.log( 'validateForm success', result );
@@ -112,3 +133,4 @@ if ( addInputFieldBtn !== null ) {
     } );
 }
 
+document.getElementById( 'submit-btn' ).click();

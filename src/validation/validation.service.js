@@ -25,11 +25,12 @@
  * A validator must implement a certain interface. This interface is not checked, so be sure to implement it
  * the right way.
  *
- * There are three parameters passed to the validator:
+ * There are four parameters passed to the validator:
  *
  * 1. The value which should be validate
  * 2. The config for the validator coming straight from the service config
  * 3. The validator service itself to eventually do validation on dependencies
+ * 4. The fieldname to handle field propertys in validator (e.g. visibility)
  *
  * The validator **must** return a promise which is resolved when the validation is valid and rejects
  * when the validation fails. The results must be passed to the resolve/reject function as an object looking
@@ -182,7 +183,8 @@ export class ValidationService {
                     return validator(
                         value,
                         validators[ validatorName ],
-                        this
+                        this,
+                        field
                     ).then( function( validationResult ) {
                         cached.results[ validatorName ] = validationResult;
                         this.cache.setValue( cacheKey, cached );

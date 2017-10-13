@@ -11,37 +11,51 @@
 </head>
 <body>
 <form id="form">
-    <!--<label for="zip">Zip(Ajax; value !== '' -> true)</label>-->
-    <!--<input name="zip" id="zip"-->
-           <!--data-validation='{-->
-                <!--"zip": { "message": "Zip does not exist." }-->
-            <!--}'-->
-    <!--&gt;-->
-    <!--<br><br>-->
+    <label for="zip">Zip(Ajax; value !== '' -> true)</label>
+    <input name="zip" id="zip"
+           data-validation='{
+                "zip": { "message": "Zip does not exist." }
+            }'
+    >
+    <br><br>
     <label for="name">Name</label>
-    <input name="name" id="name"
+    <input name="name"
+           id="name"
+           data-validation='{
+                "required": { "message": "Required \"name\" not set" },
+                "minlength": { }
+            }'
+    >
+    <br><br>
+
+    <label for="name-unvisible">Name unvisible</label>
+    <input style="display: none;"
+           name="name-unvisible"
+           id="name-unvisible"
            data-validation='{
                 "required": { "message": "Required \"name\" not set" }
             }'
     >
-    <!--<label for="email">E-Mail</label>-->
-    <!--<input name="email" id="email"-->
-           <!--data-validation='{-->
-                <!--"email": {}-->
-            <!--}'>-->
-    <!--<br><br>-->
-
-    <!--<label for="newsletter">Newsletter</label>-->
-    <!--<input type="checkbox" name="newsletter" id="newsletter"-->
-           <!--data-validation='{-->
-                <!--"checkbox": { "message": "check this option, please." }-->
-            <!--}'-->
-    <!--&gt;-->
-    <!--<br><br>-->
-    <!--<button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>-->
     <br><br>
 
-    <button type="submit">Fomular validieren</button>
+    <label for="email">E-Mail</label>
+    <input name="email" id="email"
+           data-validation='{
+                "email": {}
+            }'>
+    <br><br>
+
+    <label for="newsletter">Newsletter</label>
+    <input type="checkbox" name="newsletter" id="newsletter"
+           data-validation='{
+                "checkbox": { "message": "check this option, please." }
+            }'
+    >
+    <br><br>
+    <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
+    <br><br>
+
+    <button id="submit-btn" type="submit">Fomular validieren</button>
 </form>
 
 <script type="text/javascript" src="ajax.js"></script>
@@ -52,6 +66,7 @@
 <script type="text/javascript" src="validators/email.js"></script>
 <script type="text/javascript" src="validators/zip.js"></script>
 <script type="text/javascript" src="validators/checkbox.js"></script>
+<script type="text/javascript" src="validators/minlength.js"></script>
 
 </body>
 
