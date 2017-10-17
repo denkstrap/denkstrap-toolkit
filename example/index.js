@@ -62,7 +62,7 @@ validation.resolver = {
                     return new Promise( function( resolve, reject ) {
                         var fieldDom = document.getElementsByName( field )[ 0 ];
                         if ( validation.condition( fieldDom ) ) {
-                            validation.validators.action[ validatorName ]( value ).then( function( result ) {
+                            validation.validators[ validatorName ].action( value ).then( function( result ) {
                                 resolve(
                                     {
                                         isValid: true
