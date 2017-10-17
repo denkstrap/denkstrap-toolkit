@@ -22,25 +22,21 @@ export class ValidationServiceExt extends ValidationService {
     }
 
     /**
-     * Set config
-     *
-     * @param {Object} config
-     */
-    setConfig( config ) {
-        this.config = config;
-    }
-
-    /**
      * Set one value by field
      *
      * @param {Object} field
      */
     setValueByField( field ) {
-        if ( typeof field !== 'object' ) {
-            throw new TypeError( 'The field parameter must be an object' );
+        if ( !( field instanceof HTMLInputElement ||
+            field instanceof HTMLSelectElement ||
+            field instanceof HTMLTextAreaElement )
+        ) {
+            throw new TypeError( 'The field parameter must be instance of ' +
+                'HTMLInputElement, HTMLSelectElement or  HTMLTextAreaElement' );
         }
         var name = field.name;
         var value = field.getAttribute( 'type' ) === 'checkbox' ? ( field.checked ? true : false ) : field.value;
         super.setValue( name, value );
     }
+
 }

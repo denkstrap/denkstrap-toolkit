@@ -1,4 +1,5 @@
-validation.validators.required = function( value ) {
+validation.validators.required = {};
+validation.validators.required.action = function( value ) {
     return new Promise( function( resolve, reject ) {
         var valid = value === '' ? false : true;
         if ( valid ) {
@@ -13,3 +14,4 @@ validation.validators.required = function( value ) {
         }
     } );
 }
+validation.validators.required.caching = false;

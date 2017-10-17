@@ -1,4 +1,5 @@
-validation.validators.checkbox = function( value ) {
+validation.validators.checkbox = {};
+validation.validators.checkbox.action = function( value ) {
     return new Promise( function( resolve, reject ) {
         var valid = value;
         if ( valid ) {

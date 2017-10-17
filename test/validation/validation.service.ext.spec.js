@@ -19,17 +19,10 @@ describe( 'Validation Service Ext', function() {
         setValue: function() {}
     };
 
-    var configValues = [
-        { value: 'string', name: 'String' },
-        { value: undefined, name: 'undefined' },
-        { value: [], name: 'Array' },
-        { value: 5, name: 'Number' }
-    ];
-
-    it( 'should throw an error when given parameter is not type of object', function() {
+    it( 'should throw an error when given parameter is not instance of ' +
+        'TMLInputElemen, HTMLSelectElement or  HTMLTextAreaElement', function() {
         var validationResolver = { getValidator: function() {} };
         var validationService = new ValidationServiceExt( {}, validationResolver, cacheMock );
-        var el = document.getElementById( 'name' );
         expect(function() {
             validationService.setValueByField( 'string' )
         }).toThrowError( TypeError );

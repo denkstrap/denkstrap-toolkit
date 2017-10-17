@@ -75,6 +75,15 @@ export class ValidationService {
     }
 
     /**
+     * Set config
+     *
+     * @param {Object} config
+     */
+    setConfig( config ) {
+        this.config = config;
+    }
+
+    /**
      * Set all values
      *
      * @param {Object} data

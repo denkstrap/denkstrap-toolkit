@@ -11,6 +11,23 @@
 </head>
 <body>
 <form id="form">
+    <label for="name">Name</label>
+    <!--<input name="name"-->
+           <!--id="name"-->
+           <!--data-validation='{-->
+                <!--"required": { "message": "Required \"name\" not set" },-->
+                <!--"caching" : true-->
+            <!--}'-->
+    <!--&gt;-->
+    <!--<input name="name"-->
+           <!--id="name"-->
+           <!--data-validation='{-->
+                <!--"required": { "message": "Required \"name\" not set" }-->
+            <!--}'-->
+    <!--&gt;-->
+    <!--<br><br>-->
+
+
     <label for="zip">Zip(Ajax; value !== '' -> true)</label>
     <input name="zip" id="zip"
            data-validation='{
@@ -23,7 +40,8 @@
            id="name"
            data-validation='{
                 "required": { "message": "Required \"name\" not set" },
-                "minlength": { }
+                "minlength": { },
+                "caching": false
             }'
     >
     <br><br>
@@ -60,13 +78,16 @@
 
 <script type="text/javascript" src="ajax.js"></script>
 
-<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="base.js"></script>
 
 <script type="text/javascript" src="validators/required.js"></script>
 <script type="text/javascript" src="validators/email.js"></script>
 <script type="text/javascript" src="validators/zip.js"></script>
 <script type="text/javascript" src="validators/checkbox.js"></script>
 <script type="text/javascript" src="validators/minlength.js"></script>
+
+<script type="text/javascript" src="index.js"></script>
+
 
 </body>
 

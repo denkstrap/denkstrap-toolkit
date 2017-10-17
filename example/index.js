@@ -1,23 +1,54 @@
-// global validation object to store validation data
-validation = {};
-
-// the validators are in folder "/validators"
-validation.validators = {};
-
+// validation cache off version
+// validation.cache = {
+//     getValue: function() {
+//         return false;
+//     },
+//     setValue: function() {
+//     }
+// };
 // validation cache (used to avoid unnecessary validations
+
 validation.cache = {
-    getValue: function() {
-        return false;
+    getValue: function( cacheKey ) {
+        var fieldName = cacheKey.split( '.' )[ 1 ];
+        if ( validation.isCachingEnabled( fieldName ) ) {
+            return validation.cache.data[ cacheKey ];
+        } else {
+            return false;
+        }
     },
-    setValue: function() {
+    setValue: function( cacheKey, cached ) {
+        validation.cache.data[ cacheKey ] = cached;
     }
 };
+validation.cache.data = [];
+
+validation.isCachingEnabled = function( fieldName ) {
+    var caching = false;
+    var fieldDom = document.getElementsByName( fieldName )[ 0 ];
+    var objData = fieldDom.getAttribute( 'data-validation' );
+    objData = JSON.parse( objData );
+    if ( !objData.caching ) {
+        Object.keys( validation.validationConfig[ fieldName ] ).forEach( function( key ) {
+            if ( validation.validators[ key ].caching ) {
+                caching = true;
+                return;
+            }
+        } );
+    } else {
+        caching = true;
+    }
+    return caching;
+}
+
+
 
 validation.condition = function( field ) {
     // adjusted jQuery
     // https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
     return !!( ( field.offsetWidth || field.offsetHeight ) && field.offsetParent );
 }
+
 
 // the validation resolver is handling the validators and validation-config
 // to serve proper validation data to the ValidationService - Class
@@ -30,9 +61,8 @@ validation.resolver = {
                 resolve( function( value, validator, validationService, field ) {
                     return new Promise( function( resolve, reject ) {
                         var fieldDom = document.getElementsByName( field )[ 0 ];
-                        // console.log( 'field', field, 'fieldDom', fieldDom, validation.condition( fieldDom ) );
                         if ( validation.condition( fieldDom ) ) {
-                            validation.validators[ validatorName ]( value ).then( function( result ) {
+                            validation.validators.action[ validatorName ]( value ).then( function( result ) {
                                 resolve(
                                     {
                                         isValid: true
@@ -59,7 +89,7 @@ validation.resolver = {
                 } );
             } );
 
-        // the validator promise is giving back;
+        // the validator promise is giving back
         return validator;
     }
 };
@@ -74,9 +104,15 @@ function setValidationConfig() {
     fields.forEach( function( field ) {
         var objData = field.getAttribute( 'data-validation' );
         objData = JSON.parse( objData );
-        var validatorNames = Object.keys( objData );
-        validatorNames.forEach( function( validatorName ) {
-            config[ field.name ] = objData;
+        var objDataCleaned = {};
+        Object.keys( objData ).forEach( function( key ) {
+            if ( key !== 'caching' ) {
+                objDataCleaned[ key ] = objData[ key ];
+            }
+        } );
+        var validatorNames = Object.keys( objDataCleaned );
+        validatorNames.forEach( function( ) {
+            config[ field.name ] = objDataCleaned;
         } );
     } );
     return config;
@@ -99,8 +135,6 @@ form.addEventListener( 'submit', function( event ) {
     var validatorNames = Object.keys( validation.validationConfig );
     validatorNames.forEach( function( validatorName ) {
         var fieldValue = document.getElementsByName( validatorName )[ 0 ].value;
-        // console.log( 'fieldValue', fieldValue );
-        // validationService.setValue( validatorName, fieldValue );
         validationService.setValueByField( document.getElementsByName( validatorName )[ 0 ] );
     } );
     validationService.validateForm().then( function( result ) {
@@ -133,4 +167,5 @@ if ( addInputFieldBtn !== null ) {
     } );
 }
 
-document.getElementById( 'submit-btn' ).click();
+
+// document.getElementById( 'submit-btn' ).click();

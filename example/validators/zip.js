@@ -1,4 +1,5 @@
-validation.validators.zip = function( value ) {
+validation.validators.zip = {};
+validation.validators.zip.action = function( value ) {
     return new Promise( function( resolve, reject ) {
         var options = {};
         options.url = 'simulate-backend-scripts/validation.php?value=' + value;
