@@ -35,7 +35,8 @@ export class ValidationServiceExt extends ValidationService {
                 'HTMLInputElement, HTMLSelectElement or  HTMLTextAreaElement' );
         }
         var name = field.name;
-        var value = field.getAttribute( 'type' ) === 'checkbox' ? ( field.checked ? true : false ) : field.value;
+        var attr = field.getAttribute( 'type' );
+        var value = attr === 'checkbox' || attr === 'radio' ? ( field.checked ? true : false ) : field.value;
         super.setValue( name, value );
     }
 

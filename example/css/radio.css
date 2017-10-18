@@ -1,0 +1,52 @@
+
+
+.radio {
+    display: inline-block;
+    position: relative;
+}
+
+.radio__input {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.radio__label {
+    padding-left: 30px;
+}
+
+.radio__input + .radio__label:before {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    left: 0;
+    border: 2px solid #000;
+    border-radius: 100%;
+}
+
+.radio__input:checked + .radio__label:after {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    left: 6px;
+    top: 6px;
+    border: 6px solid #000;
+    border-radius: 100%;
+}
+
+.radio .validation-error + .radio__label:before {
+    border: 2px solid #FF0000;
+}
+
+.radio .validation-success + .radio__label:before {
+    border: 2px solid #41FF19;
+}

@@ -1,0 +1,20 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: arial;
+}
+
+.validation-error {
+    border: 1px solid #FF0000;
+}
+
+.validation-success {
+    border: 1px solid #41FF19;
+}
+
+.validation-message {
+    padding: 5px;
+    border: 2px solid #FF0000;
+}

@@ -1,35 +1,39 @@
+validation.validationServiceConstructorParam = {};
+
 // validation cache off version
-// validation.cache = {
+// validation.validationServiceConstructorParam.cache = {
 //     getValue: function() {
 //         return false;
 //     },
 //     setValue: function() {
 //     }
 // };
-// validation cache (used to avoid unnecessary validations
 
-validation.cache = {
+// validation cache (used to avoid unnecessary validations
+validation.validationServiceConstructorParam.cache = {
     getValue: function( cacheKey ) {
         var fieldName = cacheKey.split( '.' )[ 1 ];
-        if ( validation.isCachingEnabled( fieldName ) ) {
+        if ( validation.cache.isCachingEnabled( fieldName ) ) {
             return validation.cache.data[ cacheKey ];
         } else {
             return false;
         }
     },
     setValue: function( cacheKey, cached ) {
-        validation.cache.data[ cacheKey ] = cached;
-    }
-};
-validation.cache.data = [];
+        // console.log( 'cacheKey, cached', cacheKey, cached );
+        this.data[ cacheKey ] = cached;
+    },
+    data: []
+}
 
-validation.isCachingEnabled = function( fieldName ) {
+validation.cache = {};
+validation.cache.isCachingEnabled = function( fieldName ) {
     var caching = false;
     var fieldDom = document.getElementsByName( fieldName )[ 0 ];
     var objData = fieldDom.getAttribute( 'data-validation' );
     objData = JSON.parse( objData );
     if ( !objData.caching ) {
-        Object.keys( validation.validationConfig[ fieldName ] ).forEach( function( key ) {
+        Object.keys( validation.validationServiceConstructorParam.validationConfig[ fieldName ] ).forEach( function( key ) {
             if ( validation.validators[ key ].caching ) {
                 caching = true;
                 return;
@@ -39,7 +43,7 @@ validation.isCachingEnabled = function( fieldName ) {
         caching = true;
     }
     return caching;
-}
+};
 
 
 
@@ -47,12 +51,70 @@ validation.condition = function( field ) {
     // adjusted jQuery
     // https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
     return !!( ( field.offsetWidth || field.offsetHeight ) && field.offsetParent );
-}
+};
 
+validation.display = {};
+
+validation.display.getGroupFields = function( field ) {
+    var name = field.getAttribute( 'name' );
+    return document.getElementsByName( name );
+};
+
+validation.display.setGroupAction = function( field, action ) {
+    validation.display.getGroupFields( field ).forEach( function( groupMember ) {
+        // console.log( 'groupMember', groupMember );
+        action( groupMember );
+    } );
+};
+
+validation.display.setValidStatus = function( field, valid ) {
+    var validErrorClass = 'validation-error';
+    var validSuccessClass = 'validation-success';
+    var id = field.getAttribute( 'id' );
+    validation.display.setGroupAction( field, function( field ) {
+        var idLocal = field.getAttribute( 'id' );
+        if ( valid ) {
+            if ( idLocal === id ) {
+                field.classList.add( validSuccessClass );
+            }
+            field.classList.remove( validErrorClass );
+        } else {
+            field.classList.add( validErrorClass );
+            field.classList.remove( validSuccessClass );
+        }
+    } )
+};
+
+validation.display.getMessageId = function( field ) {
+    return 'validation-message-' + field.getAttribute( 'name' );
+};
+
+validation.display.showValidMessage = function( field, message ) {
+    validation.display.removeValidMessage( field );
+    var id = validation.display.getMessageId( field );
+    var  html = '<p class="validation-message" ' +
+         'id="' +
+         id +
+         '"' +
+        '>' +
+        message +
+        '</p>';
+    var attr =  field.getAttribute( 'type' );
+    var insertLoc = attr !== 'checkbox' && attr !== 'radio' ? field : field.parentNode;
+    insertLoc.insertAdjacentHTML( 'beforebegin', html );
+};
+
+validation.display.removeValidMessage = function( field ) {
+    var id = validation.display.getMessageId( field );
+    var message = document.getElementById( id );
+    if ( message !== null ) {
+        message.parentNode.removeChild( message );
+    }
+};
 
 // the validation resolver is handling the validators and validation-config
 // to serve proper validation data to the ValidationService - Class
-validation.resolver = {
+validation.validationServiceConstructorParam.resolver = {
     getValidator: function( validatorName ) {
         var validator =
             new Promise( function( resolve, reject ) {
@@ -63,6 +125,8 @@ validation.resolver = {
                         var fieldDom = document.getElementsByName( field )[ 0 ];
                         if ( validation.condition( fieldDom ) ) {
                             validation.validators[ validatorName ].action( value ).then( function( result ) {
+                                validation.display.setValidStatus( fieldDom, true );
+                                validation.display.removeValidMessage( fieldDom );
                                 resolve(
                                     {
                                         isValid: true
@@ -71,6 +135,8 @@ validation.resolver = {
                             } ).catch( function( result ) {
                                 var message = typeof validator.message !== 'undefined' ? validator.message :
                                     ( typeof result.message !== 'undefined' ? result.message : '' );
+                                validation.display.setValidStatus( fieldDom, false );
+                                validation.display.showValidMessage( fieldDom, message );
                                 reject(
                                     {
                                         isValid: false,
@@ -79,6 +145,8 @@ validation.resolver = {
                                 );
                             } );
                         } else {
+                            validation.display.setValidStatus( fieldDom, true );
+                            validation.display.removeValidMessage( fieldDom );
                             resolve(
                                 {
                                     isValid: true
@@ -94,13 +162,31 @@ validation.resolver = {
     }
 };
 
+validation.getValidationFields = function() {
+    return validation.form.querySelectorAll(
+        'input[data-validation],select[data-validation],textarea[data-validation]' );
+};
+
+validation.behavior = function() {
+    var fields = validation.getValidationFields();
+    fields.forEach( function( field ) {
+        field.addEventListener( 'blur', function() {
+            var  fieldName = field.getAttribute( 'name' );
+            validationService.setValue( fieldName, field.value );
+            validationService.validate( fieldName, 'form' ).catch( function() {});
+        } );
+    } );
+};
+
 // validationConfig
-validation.validationConfig = {};
+validation.validationServiceConstructorParam.validationConfig = {};
+
+validation.form = document.getElementById( 'form' );
 
 // fill up validation config via data attributes of fields
 function setValidationConfig() {
     var config = {};
-    var fields = document.querySelectorAll( 'input' );
+    var fields = validation.getValidationFields();
     fields.forEach( function( field ) {
         var objData = field.getAttribute( 'data-validation' );
         objData = JSON.parse( objData );
@@ -117,22 +203,23 @@ function setValidationConfig() {
     } );
     return config;
 }
-validation.validationConfig = setValidationConfig();
+validation.validationServiceConstructorParam.validationConfig = setValidationConfig();
 
-console.log( 'validation.validationConfig', validation.validationConfig );
+console.log( 'validation.validationServiceConstructorParam.validationConfig',
+    validation.validationServiceConstructorParam.validationConfig );
 
 // console.log( 'validation', validation );
-
 var validationService = new ValidationServiceExt(
-    validation.validationConfig,
-    validation.resolver,
-    validation.cache );
+    validation.validationServiceConstructorParam.validationConfig,
+    validation.validationServiceConstructorParam.resolver,
+    validation.validationServiceConstructorParam.cache );
 
 
-var form = document.getElementById( 'form' );
-form.addEventListener( 'submit', function( event ) {
+// validation.behavior();
+
+validation.form.addEventListener( 'submit', function( event ) {
     event.preventDefault();
-    var validatorNames = Object.keys( validation.validationConfig );
+    var validatorNames = Object.keys( validation.validationServiceConstructorParam.validationConfig );
     validatorNames.forEach( function( validatorName ) {
         var fieldValue = document.getElementsByName( validatorName )[ 0 ].value;
         validationService.setValueByField( document.getElementsByName( validatorName )[ 0 ] );
@@ -160,9 +247,10 @@ if ( addInputFieldBtn !== null ) {
             '><br><br>';
 
         form.insertAdjacentHTML( 'afterbegin', html );
-        validation.validationConfig = setValidationConfig();
-        validationService.setConfig( validation.validationConfig );
-        console.log( 'validation.validationConfig', validation.validationConfig );
+        validation.validationServiceConstructorParam.validationConfig = setValidationConfig();
+        validationService.setConfig( validation.validationServiceConstructorParam.validationConfig );
+        console.log( 'validation.validationServiceConstructorParam.validationConfig',
+            validation.validationServiceConstructorParam.validationConfig );
 
     } );
 }
