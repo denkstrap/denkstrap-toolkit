@@ -1,5 +1,5 @@
-validation.validators.required = {};
-validation.validators.required.action = function( value ) {
+validation.validators.requiredGroup = {};
+validation.validators.requiredGroup.action = function( value ) {
     return new Promise( function( resolve, reject ) {
         var valid = value.trim() === '' ? false : true;
         if ( valid ) {
@@ -14,4 +14,3 @@ validation.validators.required.action = function( value ) {
         }
     } );
 }
-validation.validators.required.caching = false;

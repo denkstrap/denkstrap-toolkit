@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <script type="text/javascript" src="polyfills/promise.js"></script>
+    <script type="text/javascript" src="polyfills/custom-event.js"></script>
+
 
     <!--<script type="text/javascript" src="../dist/validation/validation.service.js"></script>-->
     <script type="text/javascript" src="../dist/validation/validation.service.ext.js"></script>
@@ -14,98 +17,180 @@
 </head>
 <body>
 <form id="form">
-    <label for="name">Name</label>
-    <input name="name"
-           id="name"
-           data-validation='{
-                "required": { "message": "Required \"name\" not set" },
-                "caching" : false
-            }'
-    >
-    <!--<input name="name"-->
-           <!--id="name"-->
-           <!--data-validation='{-->
-                <!--"required": { "message": "Required \"name\" not set" }-->
-            <!--}'-->
-    <!--&gt;-->
-    <br><br>
-
 
     <label for="zip">Zip(Ajax; value !== '' -> true)</label>
     <input name="zip" id="zip"
-           data-validation='{
-                "zip": { "message": "Zip does not exist." }
-            }'
+    data-validation='{
+    "validators": { "zip": { "message": "Zip does not exist." } }
+    }'
     >
     <br><br>
     <label for="name">Name</label>
     <input name="name"
-           id="name"
-           data-validation='{
-                "required": { "message": "Required \"name\" not set" },
-                "minlength": { },
-                "caching": false
-            }'
+    id="name"
+    data-validation='{
+    "validators": {
+    "required": { "message": "Required \"name\" not set" },
+    "minlength": { }
+    },
+    "caching": false
+    }'
     >
     <br><br>
 
     <label for="name-unvisible">Name unvisible</label>
     <input style="display: none;"
-           name="name-unvisible"
-           id="name-unvisible"
-           data-validation='{
-                "required": { "message": "Required \"name\" not set" }
-            }'
+    name="name-unvisible"
+    id="name-unvisible"
+    data-validation='{
+    "validators": {"required": { "message": "Required \"name\" not set" } }
+    }'
     >
     <br><br>
 
     <label for="email">E-Mail</label>
     <input name="email" id="email"
-           data-validation='{
-                "email": {}
-            }'>
+    data-validation='{
+    "validators": {"email": {} }
+    }'>
     <br><br>
 
     <div class="checkbox">
-        <input type="checkbox" name="newsletter" id="newsletter"
-               class="checkbox__input"
-               data-validation='{
-                    "checkbox": { "message": "check this option, please." }
-                }'
-        >
-        <label class="checkbox__label" for="newsletter">Newsletter</label>
+    <input type="checkbox" name="newsletter" id="newsletter"
+    class="checkbox__input"
+    data-validation='{
+    "validators": {"checkbox": { "message": "check this option, please." } }
+    }'
+    >
+    <label class="checkbox__label" for="newsletter">Newsletter</label>
     </div>
     <br><br>
 
     <div class="radio">
-        <input type="radio" name="mode" id="mode-1"
-               class="radio__input"
-               data-validation='{
-                    "checkbox": { "message": "check this option, please." }
-                }'
-        >
-        <label class="radio__label" for="mode-1">privat</label>
+    <input type="radio" name="mode" id="mode-1"
+    class="radio__input"
+    data-validation='{
+    "validators": {"checkbox": { "message": "check this option, please." } }
+    }'
+    >
+    <label class="radio__label" for="mode-1">privat</label>
     </div>
     <div class="radio">
-        <input type="radio" name="mode" id="mode-2"
-               class="radio__input"
-               data-validation='{
-                    "checkbox": { "message": "check this option, please." }
-                }'
-        >
-        <label class="radio__label" for="mode-2">geschäftlich</label>
+    <input type="radio" name="mode" id="mode-2"
+    class="radio__input"
+    data-validation='{
+    "validators": { "checkbox": { "message": "check this option, please." } }
+    }'
+    >
+    <label class="radio__label" for="mode-2">geschäftlich</label>
     </div>
     <br><br>
 
     <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
     <br><br>
 
+    <select name="language" id="language"
+    data-validation='{
+    "validators": { "required": { "message": "Required \"language\" not set." } }
+    }'
+    >
+    <option value="" selected></option>
+    <option value="Germany">Germany</option>
+    <option value="England">England</option>
+    </select>
+    <br><br>
+
+    <label for="notice">Textarea</label>
+    <br>
+    <textarea name="notice" id="notice"
+              data-validation='{
+                "validators": { "required": { "message": "Required \"notice\" not set." } }
+            }'
+    >
+
+    </textarea>
+    <br><br>
+
+    <label for="pre-number">phone</label>
+    <br>
+
+
+    <!--<div class="phone-number">-->
+        <!--<input type="number" id="pre-number" name="pre-number" style="width:70px"-->
+               <!--data-validation='{-->
+                    <!--"validators": { "required": { "message": "Required field \"pre-number\" not set." } },-->
+                    <!--"feedbackDisplay": {-->
+                        <!--"fieldShowState": true,-->
+                        <!--"messageShow": true,-->
+                        <!--"messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number\"]" } ]-->
+                    <!--}-->
+                <!--}'-->
+        <!--&gt;-->
+        <!--<input type="number" id="number" name="number"-->
+               <!--data-validation='{-->
+                    <!--"validators": { "required": { "message": "Required field \"phone\" not set." } },-->
+                    <!--"feedbackDisplay": {-->
+                        <!--"fieldShowState": true,-->
+                        <!--"messageShow": true,-->
+                        <!--"messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number\"]" } ]-->
+                    <!--}-->
+                <!--}'-->
+        <!--&gt;-->
+    <!--</div>-->
+
+    <div class="phone-number"
+         data-validation-feedback-group-display='{
+            "message": "Required \"phone\" not set proper.",
+            "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number\"]" } ],
+            "fieldSelector": "[data-phone-number-group]"
+            }'
+         id="phone-number-group"
+    >
+
+        <input type="number" id="pre-number" name="pre-number" style="width:70px"
+               data-validation='{
+                    "validators": { "required": {} },
+                    "feedbackDisplay": {
+                        "fieldShowState": true,
+                        "messageShow": false,
+                        "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number\"]" } ]
+                    },
+                    "setEventOnValidation": true
+                }'
+               data-phone-number-group
+        >
+        <input type="number" id="number" name="number"
+               data-validation='{
+                    "validators": { "required": {} },
+                    "feedbackDisplay": {
+                        "fieldShowState": true,
+                        "messageShow": false,
+                        "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number\"]" } ]
+                    },
+                    "setEventOnValidation": true
+                }'
+               data-phone-number-group
+        >
+    </div>
+
+    <br><br>
     <button id="submit-btn" type="submit">Fomular validieren</button>
 </form>
+
+
 
 <script type="text/javascript" src="ajax.js"></script>
 
 <script type="text/javascript" src="base.js"></script>
+
+<script type="text/javascript" src="caching.js"></script>
+<script type="text/javascript" src="condition.js"></script>
+<script type="text/javascript" src="behavior.js"></script>
+<script type="text/javascript" src="feedback-display.js"></script>
+<script type="text/javascript" src="feedback-display-group.js"></script>
+<script type="text/javascript" src="events.js"></script>
+
+<script type="text/javascript" src="adds.js"></script>
 
 <script type="text/javascript" src="validators/required.js"></script>
 <script type="text/javascript" src="validators/email.js"></script>
@@ -113,7 +198,9 @@
 <script type="text/javascript" src="validators/checkbox.js"></script>
 <script type="text/javascript" src="validators/minlength.js"></script>
 
+
 <script type="text/javascript" src="index.js"></script>
+
 
 
 </body>
