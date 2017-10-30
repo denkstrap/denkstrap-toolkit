@@ -8,15 +8,38 @@ validation.validationServiceConstructorParam.resolver = {
                 // and could be taken via then
                 resolve( function( value, validator, validationService, fieldName ) {
                     return new Promise( function( resolve, reject ) {
-                        var fieldDom = document.getElementsByName( fieldName )[ 0 ];
+                        var fieldDom = validation.getDomByIdentifier( fieldName );
+                        var vaildatorData = validation.configFields[ fieldName ].validators;
+                        // objData = JSON.parse( objData );
+                        // console.log( 'fieldName', fieldName, 'validatorName', validator );
                         if ( validation.condition( fieldDom ) ) {
+                            var handleValidationFeedbackData = function( result, fieldName ) {
+                                var configFeedbackDisplayValidator = result.options && result.options.feedbackDisplay ?
+                                    result.options.feedbackDisplay : {};
+                                var configFeedbackDisplay = {};
 
-                            validation.validators[ validatorName ].action( value ).then( function( result ) {
+                                Object.keys( validation.configFields[ fieldName ].feedbackDisplay ).forEach( function( key ) {
+                                    if ( typeof configFeedbackDisplayValidator[ key ] !== 'undefined' ) {
+                                        configFeedbackDisplay[ key ] = configFeedbackDisplayValidator[ key ];
+                                    } else {
+                                        configFeedbackDisplay[ key ] = validation.configFields[ fieldName ].feedbackDisplay[ key ];
+                                    }
+                                } );
 
-                                if ( validation.configFields[ fieldName ].feedbackDisplay.fieldShowState ) {
+                                return configFeedbackDisplay;
+                            };
+
+                            validation.validators[ validatorName ].action( value, vaildatorData ).then( function( result ) {
+                                var configFeedbackDisplay = handleValidationFeedbackData( result, fieldName );
+                                // console.log( 'configFeedbackDisplayValidator', configFeedbackDisplayValidator, configFeedbackDisplay );
+
+                                if ( configFeedbackDisplay.fieldShowState ) {
                                     validation.display.setValidStatus( fieldDom, true );
+                                } else {
+                                    validation.display.removeValidStatus( fieldDom );
                                 }
-                                if ( validation.configFields[ fieldName ].feedbackDisplay.messageShow ) {
+
+                                if ( configFeedbackDisplay.messageShow ) {
                                     validation.display.removeValidMessage( fieldDom );
                                 }
 
@@ -35,11 +58,15 @@ validation.validationServiceConstructorParam.resolver = {
                                 var message = typeof validator.message !== 'undefined' ? validator.message :
                                     ( typeof result.message !== 'undefined' ? result.message : '' );
 
-                                if ( validation.configFields[ fieldName ].feedbackDisplay.fieldShowState ) {
+                                var configFeedbackDisplay = handleValidationFeedbackData( result, fieldName );
+
+                                if ( configFeedbackDisplay.fieldShowState ) {
                                     validation.display.setValidStatus( fieldDom, false );
+                                } else {
+                                    validation.display.removeValidStatus( fieldDom );
                                 }
 
-                                if ( validation.configFields[ fieldName ].feedbackDisplay.messageShow ) {
+                                if ( configFeedbackDisplay.messageShow ) {
                                     validation.display.showValidMessage( fieldDom, message );
                                 }
 
@@ -58,7 +85,10 @@ validation.validationServiceConstructorParam.resolver = {
                         } else {
                             if ( validation.configFields[ fieldName ].feedbackDisplay.fieldShowState ) {
                                 validation.display.setValidStatus( fieldDom, true );
+                            } else {
+                                validation.display.removeValidStatus( fieldDom );
                             }
+
                             if ( validation.configFields[ fieldName ].feedbackDisplay.messageShow ) {
                                 validation.display.removeValidMessage( fieldDom );
                             }
@@ -90,6 +120,15 @@ validation.getValidationFields = function() {
 // validationConfig
 validation.validationServiceConstructorParam.validationConfig = {};
 
+validation.getIdentifierByDom = function( fieldDom ) {
+    var name =  fieldDom.id;
+    return name;
+};
+
+validation.getDomByIdentifier = function( identifier ) {
+    return document.getElementById( identifier );
+};
+
 // fill up validation config via data attributes of fields
 function getValidationConfig() {
     var config = {};
@@ -99,9 +138,8 @@ function getValidationConfig() {
     Array.prototype.forEach.call(fields, function( field ) {
         var objData = field.getAttribute( 'data-validation' );
         objData = JSON.parse( objData );
-        console.log( 'objData', objData );
         var objDataField = {
-            validators: {},
+            validators: objData.validators,
             feedbackDisplay: {
                 fieldShowState: true,
                 messageShow: true,
@@ -122,8 +160,17 @@ function getValidationConfig() {
             }
         } );
 
-        configService[ field.name ] = objData.validators;
-        configFields[ field.name ] = objDataField;
+        var validators = {};
+        Object.keys( objData.validators ).forEach( function( validatorName ) {
+            var obj = {
+                message: objData.validators[ validatorName ].message
+            }
+            validators[ validatorName ] = obj;
+        } );
+
+        var identifier = validation.getIdentifierByDom( field );
+        configService[ identifier ] = validators;
+        configFields[ identifier ] = objDataField;
     } );
     config.service = configService;
     config.fields = configFields;
@@ -132,7 +179,7 @@ function getValidationConfig() {
 
 (function(window, document, undefined) {
     var config = getValidationConfig();
-    validation.validationServiceConstructorParam.validationConfig = config .service;
+    validation.validationServiceConstructorParam.validationConfig = config.service;
     validation.configFields = config.fields;
 })(this, document);
 
@@ -148,13 +195,16 @@ var validationService = new ValidationServiceExt(
     validation.validationServiceConstructorParam.cache );
 
 
-validation.setBehavior();
+// validation.setBehavior();
 
 validation.setValues = function() {
-    var validatorNames = Object.keys( validation.validationServiceConstructorParam.validationConfig );
-    validatorNames.forEach( function( validatorName ) {
-        var fieldValue = document.getElementsByName( validatorName )[ 0 ].value;
-        validationService.setValueByField( document.getElementsByName( validatorName )[ 0 ] );
+    var fieldNames = Object.keys( validation.validationServiceConstructorParam.validationConfig );
+    // console.log( 'fieldNames', fieldNames );
+    fieldNames.forEach( function( fieldName ) {
+        // console.log( 'fieldName', fieldName );
+        var el = validation.getDomByIdentifier( fieldName );
+        var fieldValue = el.value;
+        validationService.setValueByField( el );
     } );
 };
 
@@ -162,6 +212,7 @@ validation.setValues();
 
 validation.form.addEventListener( 'submit', function( event ) {
     event.preventDefault();
+    validation.setValues();
     validationService.validateForm().then( function( result ) {
         console.log( 'validateForm success', result );
     } ).catch( function( result ) {
@@ -171,4 +222,4 @@ validation.form.addEventListener( 'submit', function( event ) {
 
 
 
-// document.getElementById( 'submit-btn' ).click();
+document.getElementById( 'submit-btn' ).click();

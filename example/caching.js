@@ -27,14 +27,21 @@ validation.validationServiceConstructorParam.cache = {
 validation.cache = {};
 validation.cache.isCachingEnabled = function( fieldName ) {
     var caching = false;
-    var fieldDom = document.getElementsByName( fieldName )[ 0 ];
+    var fieldDom = validation.getDomByIdentifier( fieldName );
     var objData = fieldDom.getAttribute( 'data-validation' );
     objData = JSON.parse( objData );
     if ( !objData.caching ) {
-        Object.keys( validation.validationServiceConstructorParam.validationConfig[ fieldName ] ).forEach( function( key ) {
-            if ( validation.validators[ key ].caching ) {
-                caching = true;
-                return;
+        Object.keys( validation.validationServiceConstructorParam.validationConfig[ fieldName ] ).
+        forEach( function( key ) {
+            try {
+                if ( validation.validators[ key ].caching ) {
+                    caching = true;
+                    return;
+                }
+            } catch( error ) {
+                console.log( 'error:', error );
+                console.log( 'validation.validators', validation.validators );
+                console.log( 'key', key );
             }
         } );
     } else {

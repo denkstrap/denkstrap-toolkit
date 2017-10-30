@@ -11,11 +11,23 @@ validation.display.setGroupByNameAction = function( field, action ) {
     } );
 };
 
+validation.display.removeValidStatus = function( field ) {
+    var validErrorClass = 'validation-error';
+    var validSuccessClass = 'validation-success';
+    var id = field.getAttribute( 'id' );
+    // validation.display.setGroupByNameAction( field, function( field ) {
+    //     var idLocal = field.getAttribute( 'id' );
+            field.classList.remove( validErrorClass );
+            field.classList.remove( validSuccessClass );
+     //    }
+     // )
+};
+
 validation.display.setValidStatus = function( field, valid ) {
     var validErrorClass = 'validation-error';
     var validSuccessClass = 'validation-success';
     var id = field.getAttribute( 'id' );
-    validation.display.setGroupByNameAction( field, function( field ) {
+    // validation.display.setGroupByNameAction( field, function( field ) {
         var idLocal = field.getAttribute( 'id' );
         if ( valid ) {
             if ( idLocal === id ) {
@@ -26,7 +38,7 @@ validation.display.setValidStatus = function( field, valid ) {
             field.classList.add( validErrorClass );
             field.classList.remove( validSuccessClass );
         }
-    } )
+    // } )
 };
 
 validation.display.getMessageId = function( field ) {
@@ -34,7 +46,7 @@ validation.display.getMessageId = function( field ) {
 };
 
 validation.display.getMessageInsertLocation = function( field ) {
-    var fieldName = field.getAttribute( 'name' );
+    var fieldName = validation.getIdentifierByDom( field );
     var configField = validation.configFields[ fieldName ];
     var validBp = null;
     var insertLoc;

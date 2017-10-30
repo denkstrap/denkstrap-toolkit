@@ -21,6 +21,11 @@ export class ValidationServiceExt extends ValidationService {
         super( config, validationResolver, cache );
     }
 
+    getIdentifier( field ) {
+        var name =  field.id;
+        return name;
+    }
+
     /**
      * Set one value by field
      *
@@ -34,7 +39,7 @@ export class ValidationServiceExt extends ValidationService {
             throw new TypeError( 'The field parameter must be instance of ' +
                 'HTMLInputElement, HTMLSelectElement or  HTMLTextAreaElement' );
         }
-        var name = field.name;
+        var name = this.getIdentifier( field );
         var attr = field.getAttribute( 'type' );
         var value = attr === 'checkbox' || attr === 'radio' ? ( field.checked ? true : false ) : field.value;
         super.setValue( name, value );

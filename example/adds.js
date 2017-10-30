@@ -8,16 +8,22 @@ if ( addInputFieldBtn !== null ) {
             '  </label>' +
             '<input name="' + name + '" id="' + name + '" ' +
             'data-validation=\'{' +
-            '"required": { "message": "Required \\"' +
-            name + '\\" not set" } }' +
+            '"validators": { "required": { "message": "Required \\"' +
+            name + '\\" not set" } } }' +
             '\'' +
             '><br><br>';
 
         form.insertAdjacentHTML( 'afterbegin', html );
-        validation.validationServiceConstructorParam.validationConfig = setValidationConfig();
-        validationService.setConfig( validation.validationServiceConstructorParam.validationConfig );
-        console.log( 'validation.validationServiceConstructorParam.validationConfig',
-            validation.validationServiceConstructorParam.validationConfig );
+        var config = getValidationConfig();
+        validation.configFields = config.fields;
+
+        validation.validationServiceConstructorParam.validationConfig = config.service;
+        validationService.setConfig( config.service );
+
+        validationService.setValueByField( document.getElementsByName( name )[ 0 ] );
+
+        console.log( 'dyn config', config );
+        console.log(  'validationService.data', validationService.data );
 
     } );
 }
