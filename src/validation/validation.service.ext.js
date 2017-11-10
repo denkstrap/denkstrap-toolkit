@@ -6,7 +6,7 @@ import {ValidationService} from './validation.service';
  * This Class extends the validation.service
  * configuring the validators and a validationResolver. A config can look like this:
  *
-
+ * @extends ValidationService
  */
 export class ValidationServiceExt extends ValidationService {
 
@@ -19,11 +19,6 @@ export class ValidationServiceExt extends ValidationService {
      */
     constructor( config, validationResolver, cache ) {
         super( config, validationResolver, cache );
-    }
-
-    getIdentifier( field ) {
-        var name =  field.id;
-        return name;
     }
 
     /**
@@ -39,10 +34,12 @@ export class ValidationServiceExt extends ValidationService {
             throw new TypeError( 'The field parameter must be instance of ' +
                 'HTMLInputElement, HTMLSelectElement or  HTMLTextAreaElement' );
         }
-        var name = this.getIdentifier( field );
+        var name = field.id;
         var attr = field.getAttribute( 'type' );
         var value = attr === 'checkbox' || attr === 'radio' ? ( field.checked ? true : false ) : field.value;
         super.setValue( name, value );
     }
+
+    
 
 }

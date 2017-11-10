@@ -1,11 +1,12 @@
-validation.setGroupMessageBehavior = function() {
-    var groups = validation.form.querySelectorAll( '[data-validation-feedback-group-display]' );
+validation.setGroupMessageBehavior = function( form, validationService ) {
+    var groups = form.querySelectorAll( '[data-validation-feedback-group-display]' );
     Array.prototype.forEach.call( groups, function( group ) {
         var objData = group.getAttribute( 'data-validation-feedback-group-display' );
         objData = JSON.parse( objData );
-        var groupFields = validation.form.querySelectorAll( objData.fieldSelector );
+        var groupFields = form.querySelectorAll( objData.fieldSelector );
         var groupOkAry = [];
         var groupValidatedAry = [];
+        var groupMemberValidatedInvalid = false;
 
         Array.prototype.forEach.call( groupFields, function( field ) {
             var name = field.getAttribute( 'name' );
@@ -13,15 +14,20 @@ validation.setGroupMessageBehavior = function() {
             var index;
             group.addEventListener( eventName, function ( event ) {
                 if ( !event.detail.isValid ) {
-                    var id = group.getAttribute( 'id' ) + '-message';
-                    var message = document.getElementById( id );
-                    if ( message !== null ) {
-                        message.parentNode.removeChild( message );
+                    if ( !groupMemberValidatedInvalid ) {
+                        groupMemberValidatedInvalid = true;
+                        var id =  'validation-message-' + event.detail.field;
+                        // console.log( id, event.detail );
+                        var message = document.getElementById( id );
+                        if ( message !== null ) {
+                            message.parentNode.removeChild( message );
+                        }
+                        validationService.feedbackDisplay.showValidMessage( field, objData.message, objData.feedbackDisplay.messageLocation, validationService.validation.getIdentifier );
                     }
-                    validation.display.showValidMessage( field, objData.message, id );
                 }
 
                 if ( event.detail.isValid ) {
+                    groupMemberValidatedInvalid = false;
                     index = groupOkAry.indexOf( name );
                     if ( index === -1 ) {
                         groupOkAry.push( name );
@@ -51,5 +57,3 @@ validation.setGroupMessageBehavior = function() {
         } );
     } );
 };
-
-validation.setGroupMessageBehavior();

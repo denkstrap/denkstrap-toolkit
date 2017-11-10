@@ -32,6 +32,22 @@ var fetch = function( options ) {
         if ( options.method.toUpperCase().indexOf( 'GET' ) >= 0 ) {
             request.send();
         }
+
+
+        // else:
+        if ( !options.data ) {
+            console.error( 'Error: No data given for request' );
+            return false;
+        }
+
+        if ( options.contentType !== 'html' ) {
+            request.setRequestHeader( 'Content-Type', 'application/json' );
+        } else {
+            request.setRequestHeader( 'Content-Type', 'text/plain;charset=UTF-8' );
+        }
+
+        request.send( options.data );
+
     } )
 
 };

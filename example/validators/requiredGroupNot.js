@@ -1,5 +1,4 @@
-validation.validators.requiredGroupNot = {};
-validation.validators.requiredGroupNot.action = function( value, config ) {
+validation.validators.requiredGroupNot = function( value ) {
     return new Promise( function( resolve, reject ) {
 
         var options;
@@ -13,7 +12,7 @@ validation.validators.requiredGroupNot.action = function( value, config ) {
             }
             resolve( {
                 options: options,
-                valid: valid
+                isValid: valid
             } );
         } else {
             options = {
@@ -23,7 +22,7 @@ validation.validators.requiredGroupNot.action = function( value, config ) {
             }
             reject( {
                 options: options,
-                valid: valid,
+                isValid: valid,
                 message: 'Do not check this field.'
             } );
         }

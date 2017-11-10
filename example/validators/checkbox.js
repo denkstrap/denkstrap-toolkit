@@ -1,14 +1,13 @@
-validation.validators.checkbox = {};
-validation.validators.checkbox.action = function( value ) {
+validation.validators.checkbox = function( value ) {
     return new Promise( function( resolve, reject ) {
         var valid = value;
         if ( valid ) {
             resolve( {
-                valid: valid
+                isValid: valid
             } );
         } else {
             reject( {
-                valid: valid,
+                isValid: valid,
                 message: 'Enter a valid email, please.'
             } );
         }
