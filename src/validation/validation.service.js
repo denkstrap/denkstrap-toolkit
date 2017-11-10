@@ -179,44 +179,43 @@ export class ValidationService {
                     results: {}
                 };
 
-            var callNextValidator = function( index ) {
-                if ( validatorNames[ index ] !== undefined ) {
-                    var validatorName = validatorNames[ index ];
-
-                    if ( cached.value === value && cached.results[ validatorName ] !== undefined ) {
-                        if ( cached.results[ validatorName ].isValid === false ) {
-                            hasError = true;
-                        }
-                        handleValidationResult( cached.results[ validatorName ], validatorName );
-                        return;
+            validatorNames.forEach( function( validatorName ) {
+                if ( cached.value === value && cached.results[ validatorName ] !== undefined ) {
+                    if ( cached.results[ validatorName ].isValid === false ) {
+                        hasError = true;
                     }
-
-                    this.validationResolver.getValidator( validatorName ).then( function( validator ) {
-                        return validator(
-                            value,
-                            validators[ validatorName ],
-                            this,
-                            field
-                        ).then( function( validationResult ) {
-                            cached.results[ validatorName ] = validationResult;
-                            this.cache.setValue( cacheKey, cached );
-                            handleValidationResult( validationResult, validatorName );
-                            callNextValidator( index + 1 );
-
-                        }.bind( this ) ).catch( function( validationResult ) {
-                            cached.results[ validatorName ] = validationResult;
-                            this.cache.setValue( cacheKey, cached );
-
-                            hasError = true;
-                            resolvedCount = validatorNames.length - 1;
-                            handleValidationResult( validationResult, validatorName );
-                        }.bind( this ) );
-                    }.bind( this ) );
+                    handleValidationResult( cached.results[ validatorName ], validatorName );
+                    return;
                 }
-            }.bind( this );
 
-            callNextValidator( 0 );
+                this.validationResolver.getValidator( validatorName ).then( function( validator ) {
+                    return validator(
+                        value,
+                        validators[ validatorName ],
+                        this,
+                        field
+                    ).then( function( validationResult ) {
+                        cached.results[ validatorName ] = validationResult;
+                        this.cache.setValue( cacheKey, cached );
 
+                        return new Promise( function( resolve ) {
+                            resolve( validationResult );
+                        } );
+                    }.bind( this ) ).catch( function( validationResult ) {
+                        cached.results[ validatorName ] = validationResult;
+                        this.cache.setValue( cacheKey, cached );
+
+                        return new Promise( function( resolve, reject ) {
+                            reject( validationResult );
+                        } );
+                    }.bind( this ) );
+                }.bind( this ) ).then( function( validationResult ) {
+                    handleValidationResult( validationResult, validatorName );
+                } ).catch( function( validationResult ) {
+                    hasError = true;
+                    handleValidationResult( validationResult, validatorName );
+                } );
+            }.bind( this ) );
         }.bind( this ) );
     }
 
@@ -230,10 +229,6 @@ export class ValidationService {
         formId = formId || '';
         return new Promise( function( resolve, reject ) {
             var fieldNames = this.getFields();
-            
-            if ( fieldNames.length === 0 ) {
-                resolve( 'no fields to validate' );
-            }
 
             var resolvedCount = 0;
             var hasError = false;
