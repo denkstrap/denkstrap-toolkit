@@ -6,7 +6,8 @@
   "author": "Marius Büscher <marius.buescher@denkwerk.com>",
   "license": "MIT",
   "scripts": {
-    "test": "karma start --single-run"
+    "test": "karma start --single-run",
+    "doc": "jsdoc -c jsdoc.conf.json"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -19,6 +20,7 @@
     "istanbul-instrumenter-loader": "^2.0.0",
     "jasmine": "^2.6.0",
     "jasmine-core": "^2.6.2",
+    "jsdoc": "^3.5.5",
     "karma": "^1.7.0",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-coverage": "^1.1.1",
