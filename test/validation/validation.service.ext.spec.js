@@ -1,4 +1,5 @@
 import { ValidationService } from '../../src/validation/validation.service.ext';
+/** @test {ValidationServiceExt} */
 
 describe( 'Validation Service Ext', function() {
 

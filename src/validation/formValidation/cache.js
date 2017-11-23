@@ -33,7 +33,6 @@ export class Cache {
                 }
             }.bind( this ),
             setValue: function( cacheKey, cached ) {
-                // console.log( 'cacheKey, cached', cacheKey, cached );
                 this.data[ cacheKey ] = cached;
             },
             data: []

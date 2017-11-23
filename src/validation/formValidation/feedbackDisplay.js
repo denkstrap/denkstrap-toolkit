@@ -5,7 +5,7 @@
 export class FeedbackDisplay {
 
     /**
-     * @param {Object}
+     * @param {Object} options
      * @constructor
      */
     constructor( options ) {

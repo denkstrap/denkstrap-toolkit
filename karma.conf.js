@@ -14,6 +14,9 @@ module.exports = function( config ) {
         // List of files / patterns to load in the browser
         files: [
             'node_modules/babel-polyfill/dist/polyfill.js',
+            // 'example/polyfills/custom-event.js',
+            // 'example/polyfills/object-assign.js',
+            // 'example/polyfills/promise.js',
             'src/**/*.js',
             'test/**/*.js',
             {

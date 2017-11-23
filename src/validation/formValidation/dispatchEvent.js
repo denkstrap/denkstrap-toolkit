@@ -1,4 +1,5 @@
 /**
+ *  @memberof formValidation
  * The eventDispatch function triggers events after each validation of a field
  */
 

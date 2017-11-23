@@ -1,4 +1,5 @@
 import { ValidationService } from '../../src/validation/validation.service';
+/** @test {ValidationService} */
 
 describe( 'Validation Service', function() {
 
