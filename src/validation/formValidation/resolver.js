@@ -31,7 +31,7 @@ export default function resolver( thisValidationServiceExtAdaption, validActionV
                             // console.log( 'fieldName', fieldName, 'validatorName', validator, 'value', value );
 
                             // console.log( 'thisValidationServiceExtAdaption.options.validators', thisValidationServiceExtAdaption.options.validators );
-                            console.log( 'resolver vaildatorData', fieldName, value, validatorName, vaildatorData );
+                            // console.log( 'resolver vaildatorData', fieldName, value, validatorName, vaildatorData );
                             if ( typeof thisValidationServiceExtAdaption.options.validators[ validatorName ] === 'undefined' ) {
                                console.log( 'ERROR: Validator', validatorName, 'not defined' );
                             }

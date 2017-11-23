@@ -39,7 +39,7 @@ validation.setGroupMessageBehavior = function( form, validationService ) {
                     }
                 }
                 if ( groupOkAry.length === groupFields.length ) {
-                    console.log( 'group is valid', groupOkAry );
+                    // console.log( 'group is valid', groupOkAry );
                     var id = group.getAttribute( 'id' ) + '-message';
                     var message = document.getElementById( id );
                     if ( message !== null ) {

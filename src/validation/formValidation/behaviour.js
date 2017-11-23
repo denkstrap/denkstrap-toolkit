@@ -18,7 +18,7 @@ export default function behaviour() {
             if ( this.configFields[ fieldIdentifier ].groupSel !== null ) {
                 fields = document.querySelectorAll( this.configFields[ fieldIdentifier ].groupSel );
                 Array.prototype.forEach.call( fields, function( field ) {
-                    var fieldIdentifierGroupMember = this.validation.getIdentifier( field );
+                    var fieldIdentifierGroupMember = field.id;
                     if ( fieldIdentifierGroupMember !== fieldIdentifier ) {
                         this.validation.setValueByField( field );
                         this.validation.validate( fieldIdentifierGroupMember, this.options.formId ).catch( function() {} );

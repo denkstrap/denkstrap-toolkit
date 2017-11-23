@@ -19,7 +19,6 @@ export class ValidationServiceExt extends ValidationService {
      * @constructor
      */
     constructor( config, validationResolver, cache, stopValidationOnFirstFail ) {
-        console.log( 2, stopValidationOnFirstFail );
         super( config, validationResolver, cache, stopValidationOnFirstFail );
     }
 

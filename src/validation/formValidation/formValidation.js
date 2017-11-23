@@ -61,7 +61,6 @@ export class FormValidation {
         this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplay );
 
         var resolver = this.getValidationResolver();
-        console.log( 1, this.options.stopValidationOnFirstFail );
         this.validation = new ValidationServiceExt( this.config, resolver, cache, this.options.stopValidationOnFirstFail );
 
         this.dispatchEvent = dispatchEvent;
