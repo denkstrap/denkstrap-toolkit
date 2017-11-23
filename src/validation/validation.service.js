@@ -1,7 +1,7 @@
 /**
  * # The validator service
  *
- * This service dispatches several validaitons to the right validators. It accepts a config for each field
+ * This service dispatches several validations to the right validators. It accepts a config for each field
  * configuring the validators and a validationResolver. A config can look like this:
  *
  * ```
@@ -52,10 +52,11 @@ export class ValidationService {
      * @param {Object} config
      * @param {Object} validationResolver
      * @param {Object} cache
+     * @param {Boolean} stopValidationOnFirstFail
      * @throws {TypeError}
      * @constructor
      */
-    constructor( config, validationResolver, cache ) {
+    constructor( config, validationResolver, cache, stopValidationOnFirstFail ) {
         if ( config === undefined || typeof config !== 'object' || Array.isArray( config ) ) {
             throw new TypeError( 'Config must be an object' );
         }
@@ -68,10 +69,17 @@ export class ValidationService {
             throw new TypeError( 'The cache must be implement the cache interface' );
         }
 
+        if ( typeof stopValidationOnFirstFail !== 'undefined' && typeof stopValidationOnFirstFail !== 'boolean' ) {
+            throw new TypeError( 'The stopValidationOnFirstFail param must be of type boolean if set' );
+        } else {
+            this.stopValidationOnFirstFail = false;
+        }
+
         this.validationResolver = validationResolver;
         this.config = config;
         this.data = {};
         this.cache = cache;
+        this.stopValidationOnFirstFail = stopValidationOnFirstFail ;
     }
 
     /**
@@ -167,6 +175,10 @@ export class ValidationService {
                         isValid: false,
                         results: validationResults
                     } );
+                } else {
+                    if ( ( !this.stopValidationOnFirstFail || hasError === false ) ) {
+                        handleValidation( validatorNames[ resolvedCount ] );
+                    }
                 }
             }.bind( this );
 
@@ -179,7 +191,8 @@ export class ValidationService {
                     results: {}
                 };
 
-            validatorNames.forEach( function( validatorName ) {
+            var handleValidation = function( validatorName ) {
+
                 if ( cached.value === value && cached.results[ validatorName ] !== undefined ) {
                     if ( cached.results[ validatorName ].isValid === false ) {
                         hasError = true;
@@ -189,6 +202,7 @@ export class ValidationService {
                 }
 
                 this.validationResolver.getValidator( validatorName ).then( function( validator ) {
+
                     return validator(
                         value,
                         validators[ validatorName ],
@@ -198,24 +212,24 @@ export class ValidationService {
                         cached.results[ validatorName ] = validationResult;
                         this.cache.setValue( cacheKey, cached );
 
-                        return new Promise( function( resolve ) {
-                            resolve( validationResult );
-                        } );
+                        handleValidationResult( validationResult, validatorName );
+
                     }.bind( this ) ).catch( function( validationResult ) {
                         cached.results[ validatorName ] = validationResult;
                         this.cache.setValue( cacheKey, cached );
 
-                        return new Promise( function( resolve, reject ) {
-                            reject( validationResult );
-                        } );
+                        hasError = true;
+                        handleValidationResult( validationResult, validatorName );
+
                     }.bind( this ) );
-                }.bind( this ) ).then( function( validationResult ) {
-                    handleValidationResult( validationResult, validatorName );
-                } ).catch( function( validationResult ) {
-                    hasError = true;
-                    handleValidationResult( validationResult, validatorName );
-                } );
-            }.bind( this ) );
+
+                }.bind( this ) );
+
+
+            }.bind( this );
+
+            handleValidation( validatorNames[ resolvedCount ] );
+
         }.bind( this ) );
     }
 

@@ -14,11 +14,13 @@ export class ValidationServiceExt extends ValidationService {
      * @param {Object} config
      * @param {Object} validationResolver
      * @param {Object} cache
+     * @param {Boolean} stopValidationOnFirstFail
      * @throws {TypeError}
      * @constructor
      */
-    constructor( config, validationResolver, cache ) {
-        super( config, validationResolver, cache );
+    constructor( config, validationResolver, cache, stopValidationOnFirstFail ) {
+        console.log( 2, stopValidationOnFirstFail );
+        super( config, validationResolver, cache, stopValidationOnFirstFail );
     }
 
     /**
