@@ -10,7 +10,7 @@ export class Cache {
     constructor() {
     }
 
-// validation cache off version
+    // validation cache off version
     getValidationOffCache() {
         return {
             getValue: function() {
@@ -18,10 +18,10 @@ export class Cache {
             },
             setValue: function() {
             }
-        }
+        };
     }
 
-// validation cache (used to avoid unnecessary validations
+    // validation cache (used to avoid unnecessary validations
     getValidationCache() {
         return {
             getValue: function( cacheKey ) {
@@ -36,7 +36,7 @@ export class Cache {
                 this.data[ cacheKey ] = cached;
             },
             data: []
-        }
+        };
     }
 
     isCachingEnabled( fieldName ) {

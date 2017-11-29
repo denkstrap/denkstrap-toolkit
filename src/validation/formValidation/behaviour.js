@@ -21,7 +21,8 @@ export default function behaviour() {
                     var fieldIdentifierGroupMember = field.id;
                     if ( fieldIdentifierGroupMember !== fieldIdentifier ) {
                         this.validation.setValueByField( field );
-                        this.validation.validate( fieldIdentifierGroupMember, this.options.formId ).catch( function() {} );
+                        this.validation.validate( fieldIdentifierGroupMember, this.options.formId )
+                            .catch( function() {} );
                     }
                 }.bind( this ) );
             }

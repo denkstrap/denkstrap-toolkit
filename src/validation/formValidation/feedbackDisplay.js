@@ -16,7 +16,8 @@ export class FeedbackDisplay {
         var opt = {
             fieldErrorClass: 'validation-error',
             fieldSuccessClass: 'validation-success',
-            messageTemplate:'<p id="{{ id }}" class="validation-message" aria-live="assertive" role="alert"><label for="{{ id-for }}">{{ message }}</label></p>',
+            messageTemplate: '<p id="{{ id }}" class="validation-message" aria-live="assertive" role="alert">' +
+                             '<label for="{{ id-for }}">{{ message }}</label></p>',
             messageCreateFunction: null
         };
         return opt;
@@ -44,7 +45,7 @@ export class FeedbackDisplay {
             field.classList.remove( validSuccessClass );
             this.setValidStatusAria( field, messageUseMessageOfFieldSel );
         }
- }
+    }
 
     removeValidStatusAria( field ) {
         field.removeAttribute( 'aria-invalid' );
@@ -53,7 +54,6 @@ export class FeedbackDisplay {
 
 
     setValidStatusAria( field, messageUseMessageOfFieldSel ) {
-        var field = field;
         var fieldUse = field;
         var id;
         if  ( messageUseMessageOfFieldSel !== null ) {
@@ -71,7 +71,8 @@ export class FeedbackDisplay {
 
     getDefaultInsertLoc( field ) {
         var attr = field.getAttribute( 'type' );
-        var insertLoc = attr !== 'checkbox' && attr !== 'radio' ? field.previousElementSibling || field : field.parentNode;
+        var insertLoc = attr !== 'checkbox' && attr !== 'radio' ? field.previousElementSibling ||
+        field : field.parentNode;
         return insertLoc;
     }
 
@@ -117,7 +118,8 @@ export class FeedbackDisplay {
     showValidMessage( field, message, messageLocation ) {
         this.removeValidMessage( field );
         var id = typeof id === 'undefined' ? this.getMessageId( field ) : id;
-        var html = this.options.messageTemplate.replace( '{{ id }}', id ).replace( '{{ id-for }}', field.id ).replace( '{{ message }}', message );
+        var html = this.options.messageTemplate.replace( '{{ id }}', id )
+            .replace( '{{ id-for }}', field.id ).replace( '{{ message }}', message );
 
         var messageInfoData = this.getMessageInfoData( field, messageLocation );
         var insertLoc = messageInfoData.insertLoc;

@@ -1,5 +1,6 @@
 /**
  * The condition function provides conditions for validation of each field.
+ * @param {Object} field - Reference to dom objec
  */
 
 export default function condition( field ) {

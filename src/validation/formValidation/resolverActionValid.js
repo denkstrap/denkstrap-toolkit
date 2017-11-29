@@ -1,11 +1,15 @@
 /**
  * This function provides validation valid actions.
- *
+ * @param {Object} result
+ * @param {String} fieldName
+ * @param {Function} handleValidationFeedbackData
+ * @param {Function} feedbackDisplay
  */
 export default function resolverActionValid( result, fieldName, handleValidationFeedbackData, feedbackDisplay ) {
     var fieldDom = document.getElementById( fieldName );
     var fields;
     var configFeedbackDisplay = handleValidationFeedbackData( result, fieldName );
+    var messages;
     // console.log( 'configFeedbackDisplay valid', configFeedbackDisplay );
 
     if ( configFeedbackDisplay.fieldShowState ) {

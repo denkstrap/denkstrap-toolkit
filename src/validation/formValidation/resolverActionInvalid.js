@@ -3,7 +3,8 @@
  *
  */
 
-export default function resolverActionInvalid( result, fieldName, validator, handleValidationFeedbackData, feedbackDisplay ) {
+export default function resolverActionInvalid( result, fieldName, validator,
+    handleValidationFeedbackData, feedbackDisplay ) {
     var fieldDom = document.getElementById( fieldName );
     var configFeedbackDisplay = handleValidationFeedbackData( result, fieldName );
 
@@ -11,7 +12,8 @@ export default function resolverActionInvalid( result, fieldName, validator, han
     ( configFeedbackDisplay.preferHTMLValidatorMessage || result.message === 'undefined' ) ? validator.message :
         ( typeof result.message !== 'undefined' ? result.message : '' );
 
-    // console.log( 'result.message, validator.message, message', result.message, validator.message, message, configFeedbackDisplay.preferHTMLValidatorMessage );
+    // console.log( 'result.message, validator.message, message', result.message, validator.message, message,
+    // configFeedbackDisplay.preferHTMLValidatorMessage );
     // console.log( 'configFeedbackDisplay', configFeedbackDisplay, result.message, message );
     var fields;
     var messages;

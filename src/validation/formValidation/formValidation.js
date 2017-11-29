@@ -19,7 +19,6 @@ import resolverActionInvalid from './resolverActionInvalid';
 import defaultValidatorRequired from './validators/required';
 import defaultValidatorEmail from './validators/email';
 
-
 /**
  * This Class uses the validation.service.ext
  *
@@ -27,27 +26,14 @@ import defaultValidatorEmail from './validators/email';
 export class FormValidation {
 
     /**
-     * This behaviour function is setting up the validation behaviour.
+     * @param {Object} options - Includes formId,
+     * optional params (caching, condition, behaviour, validators)
      *
-     * @callback behaviour
-     */
-
-    /**
-     * This condition function provide a condition for each field validation.
-     *
-     * @callback condition
-     * @param {Object) field - Reference to dom object.
-     *
-     */
-
-
-    /**
-     * @param {Object} options
      * @param {Boolean} caching - Enabling/disabling caching of form validation.
      * @param {String} formId - Id of the Form.
-     * @callback condition
-     * @callback behaviour
-     * @param {Object] validators - The customized validators.
+     * @param {Function} condition - This condition function provide a condition for each field validation.
+     * @param {Function} behaviour - This behaviour function is setting up the validation behaviour.
+     * @param {Object} validators - The customized validators.
      */
 
     constructor( options ) {
@@ -55,13 +41,14 @@ export class FormValidation {
         this.options.validators = Object.assign( this.getOptions().validators, options.validators );
 
         this.config = this.getValidationConfig();
-        var cacheClass = new Cache( this.getDomByIdentifier );
+        var cacheClass = new Cache();
         var cache = this.options.caching ? cacheClass.getValidationCache() : cacheClass.getValidationOffCache();
 
         this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplay );
 
         var resolver = this.getValidationResolver();
-        this.validation = new ValidationServiceExt( this.config, resolver, cache, this.options.stopValidationOnFirstFail );
+        this.validation = new ValidationServiceExt( this.config, resolver, cache,
+            this.options.stopValidationOnFirstFail );
 
         this.dispatchEvent = dispatchEvent;
 
@@ -84,7 +71,7 @@ export class FormValidation {
                 required: defaultValidatorRequired,
                 email: defaultValidatorEmail
             }
-        }
+        };
     }
 
     updateConfigAndValuesAndBehaviour() {
@@ -136,7 +123,7 @@ export class FormValidation {
             Object.keys( objData.validators ).forEach( function( validatorName ) {
                 var obj = {
                     message: objData.validators[ validatorName ].message
-                }
+                };
                 validators[ validatorName ] = obj;
             } );
 
@@ -213,8 +200,10 @@ export class FormValidation {
                 } else {
                     configFeedbackDisplay[ key ] = this.configFields[ fieldName ].feedbackDisplay[ key ];
                 }
-                // configFeedbackDisplay[ key ] = Object.assign( this.configFields[ fieldName ].feedbackDisplay[ key ] || {}, configFeedbackDisplayValidator[ key ] || {} );
-                // console.log( 'key:', key, 'this.configFields[ fieldName ].feedbackDisplay[ key ]:', this.configFields[ fieldName ].feedbackDisplay[ key ],
+                // configFeedbackDisplay[ key ] = Object.assign( this.configFields[ fieldName ].feedbackDisplay[ key ]
+                // || {}, configFeedbackDisplayValidator[ key ] || {} );
+                // console.log( 'key:', key, 'this.configFields[ fieldName ].feedbackDisplay[ key ]:',
+                // this.configFields[ fieldName ].feedbackDisplay[ key ],
                 //     'configFeedbackDisplay[ key ]:', configFeedbackDisplay[ key ]);
             }.bind( this ) );
 
@@ -223,7 +212,8 @@ export class FormValidation {
             return configFeedbackDisplay;
         }.bind( this );
 
-        return resolver( this, resolverActionValid, resolverActionInvalid, handleValidationFeedbackData, feedbackDisplay );
+        return resolver( this, resolverActionValid, resolverActionInvalid, handleValidationFeedbackData,
+            feedbackDisplay );
 
     }
 

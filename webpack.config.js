@@ -20,18 +20,15 @@ module.exports = (config) => {
                 );
             });
         },
-        // entry: {
-        //     'validation.service': './src/validation/validation.service.js',
-        //     'validation.service.ext': './src/validation/validation.service.ext.js',
-        //     'cache.service': './src/cache/cache.service.js'
-        // },
-
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.js$/,
                     exclude: /(node_modules|test|__*\.js)/,
-                    loader: 'babel-loader'
+                    use: [
+                        "babel-loader",
+                        "eslint-loader"
+                    ]
                 }
             ]
         },
