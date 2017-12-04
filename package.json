@@ -9,6 +9,7 @@
     "test": "karma start --single-run",
     "doc": "esdoc",
     "watch": "webpack --progress --watch --colors",
+    "start": "webpack-dev-server TODO: The web-dev-server is not running proper, have a look on the outcommented webpack.config part",
     "build": "webpack",
     "lint": "eslint src/**",
     "lint-report": "eslint src/** -o artifacts/eslint.html -f html",
