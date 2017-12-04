@@ -7,7 +7,7 @@ var options = {
         ajax: validation.validators.ajax
     },
     formId: 'form',
-    cache: true
+    caching: true
 }
 
 var validationService = new FormValidation(

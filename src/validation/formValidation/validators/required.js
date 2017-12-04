@@ -1,3 +1,8 @@
+/**
+ * The required validator.
+ * @param value
+ * @returns {Promise}
+ */
 export default function required( value ) {
     return new Promise( function( resolve, reject ) {
         var valid;
@@ -9,11 +14,11 @@ export default function required( value ) {
 
         if ( valid ) {
             resolve( {
-                isValid: valid
+                isValid: true
             } );
         } else {
             reject( {
-                isValid: valid,
+                isValid: false,
                 message: 'This field is mandatory.'
             } );
         }

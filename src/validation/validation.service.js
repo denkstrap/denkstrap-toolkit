@@ -69,17 +69,39 @@ export class ValidationService {
             throw new TypeError( 'The cache must be implement the cache interface' );
         }
 
+        /**
+         *
+         * @type {boolean}
+         */
+        this.stopValidationOnFirstFail = false;
         if ( typeof stopValidationOnFirstFail !== 'undefined' && typeof stopValidationOnFirstFail !== 'boolean' ) {
-            throw new TypeError( 'The stopValidationOnFirstFail param must be of type boolean if set' );
+            throw new TypeError( 'The stopValidationOnFirstFail param must be of type boolean if set.' );
         } else {
-            this.stopValidationOnFirstFail = false;
+            if ( typeof stopValidationOnFirstFail !== 'undefined' ) {
+                this.stopValidationOnFirstFail = stopValidationOnFirstFail ;
+            }
         }
 
+        /**
+         *
+         * @type {Object}
+         */
         this.validationResolver = validationResolver;
+        /**
+         *
+         * @type {Object}
+         */
         this.config = config;
+        /**
+         *
+         * @type {Object}
+         */
         this.data = {};
+        /**
+         *
+         * @type {Object}
+         */
         this.cache = cache;
-        this.stopValidationOnFirstFail = stopValidationOnFirstFail ;
     }
 
     /**
@@ -93,6 +115,11 @@ export class ValidationService {
 
     /**
      * Set all values
+     * @example
+     * validationService.setValues( {
+            name: 'Elvis',
+            nickname: 'The Pelvis'
+        } );
      *
      * @param {Object} data
      */
@@ -102,6 +129,8 @@ export class ValidationService {
 
     /**
      * Set one value
+     * @example
+     * validationService.setValue( 'name', 'Elvis' );
      *
      * @param {String} name
      * @param {String|Array} value

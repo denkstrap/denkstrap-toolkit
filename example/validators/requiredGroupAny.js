@@ -14,7 +14,7 @@ validation.validators.requiredGroupAny = function( value, config ) {
 
 
         config.addInfo.groupMembers.forEach( function( el ) {
-            var field = document.getElementById( el.identifier );
+            var field = document.getElementById( el.id );
             // console.log( 111, el.identifier, field.checked );
             otherValid = !otherValid && !field.checked ? false : true;
         }.bind( this ) );

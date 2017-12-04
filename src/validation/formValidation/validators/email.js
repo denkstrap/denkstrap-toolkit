@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {String} value
+ * @returns {Promise}
+ */
 export default function email( value ) {
     return new Promise( function( resolve, reject ) {
         // eslint-disable-next-line

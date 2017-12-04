@@ -38,6 +38,9 @@ export class ValidationServiceExt extends ValidationService {
         var name = field.id;
         var attr = field.getAttribute( 'type' );
         var value = attr === 'checkbox' || attr === 'radio' ? ( field.checked ? true : false ) : field.value;
+        /**
+         * {@link setValue}
+         */
         super.setValue( name, value );
     }
 

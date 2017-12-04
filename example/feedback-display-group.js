@@ -22,7 +22,7 @@ validation.setGroupMessageBehavior = function( form, validationService ) {
                         if ( message !== null ) {
                             message.parentNode.removeChild( message );
                         }
-                        validationService.feedbackDisplay.showValidMessage( field, objData.message, objData.feedbackDisplay.messageLocation, validationService.validation.getIdentifier );
+                        validationService.feedbackDisplay.showMessage( field, objData.message, objData.feedbackDisplay.messageLocation );
                     }
                 }
 
