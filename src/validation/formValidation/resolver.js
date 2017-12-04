@@ -95,7 +95,6 @@ export class Resolver {
      *
      * @param {Object} fieldDom
      * @param {Object} configFeedbackDisplay
-     * @param {Function} feedbackDisplay
      */
     displayActionValid( fieldDom, configFeedbackDisplay ) {
         if ( configFeedbackDisplay.fieldShowState ) {
@@ -110,7 +109,6 @@ export class Resolver {
 
     /**
      *
-     * @param {Object} feedbackDisplay
      * @param {Object} setByValidatorOnly
      */
     displayActionSetByValidatorOnly( setByValidatorOnly ) {
@@ -124,9 +122,9 @@ export class Resolver {
      * @param {String} fieldName
      * @param {Object} configFields
      *
-     * @returns {Object} addInfo
+     * @return {Object} addInfo
      * @property {Array} groupMembers
-     * @property {Object}
+     * @property {Object} {}
      * @property {String} id
      * @propery {String} value
      */

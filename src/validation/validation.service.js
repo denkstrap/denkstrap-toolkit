@@ -71,7 +71,7 @@ export class ValidationService {
 
         /**
          *
-         * @type {boolean}
+         * @type {Boolean}
          */
         this.stopValidationOnFirstFail = false;
         if ( typeof stopValidationOnFirstFail !== 'undefined' && typeof stopValidationOnFirstFail !== 'boolean' ) {
