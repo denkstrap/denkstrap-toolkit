@@ -68,17 +68,32 @@ export class FormValidation {
      * Stops further validation of field if one validator fails.
      * @param {Function} [options.condition] - (default={@link condition})
      * This condition function provides a condition for each field validation.
-     * @param {Class} [options.behaviour] - (default={@link Behaviour})
+     * @param {Class} [options.Behaviour] - (default={@link Behaviour})
      * This Behaviour Class is setting up the validation behaviour for each field.
      * @param {Object} [options.validators] - (default={@link defaultValidatorRequired}, {@link defaultValidatorEmail})
      * @param {Object} [options.feedbackDisplayOptions] - (default={@link FeedbackDisplay.getOptions})
      */
     constructor( options ) {
+        if ( typeof options === 'undefined' || typeof options !== 'object' ) {
+            throw new TypeError( 'Options must be an object.' );
+        }
+
+        if ( typeof options === 'object' ) {
+            if ( typeof options.formId !== 'string' ) {
+                throw new TypeError( 'Options formID must be String.' );
+            }
+        }
+
         /**
          * The options merged by default options and param options.
          * @type {Object}
          */
         this.options = Object.assign( this.getOptions(), options );
+        /**
+         * Merging via assign is not working proper on subobjects.
+         * So we have to merge separately.
+         * @type {Object}
+         */
         this.options.validators = Object.assign( this.getOptions().validators, options.validators );
 
         /**
@@ -105,19 +120,30 @@ export class FormValidation {
          */
         this.validation = new ValidationServiceExt(
             this.config,
-            new Resolver( this.configFields, this.options.validators, this.feedbackDisplay ).resolver(),
+            new Resolver(
+                this.configFields,
+                this.options.validators,
+                this.feedbackDisplay ).resolver(),
             this.options.caching ? new Cache().getValidationCache() : new Cache().getValidationOffCache(),
             this.options.stopValidationOnFirstFail );
 
         /**
          *
-         * @type {Behaviour} {@link Behaviour}
+         * @type {Object} behaviour {@link Behaviour}
          */
-        this.behaviour = new Behaviour(
-            this.options.formId,
-            this.options.condition,
-            this.configFields,
-            this.validation );
+        try {
+            this.behaviour = new this.options.Behaviour(
+                this.options.formId,
+                this.options.condition,
+                this.configFields,
+                this.validation );
+
+            if ( !(this.behaviour instanceof this.options.Behaviour ) ) {
+                throw new TypeError( 'Options Behaviour must be a class/prototype' );
+            }
+        } catch( error ) {
+            throw new TypeError( 'Error on instantiating Behaviour class.')
+        }
     }
 
     /**
@@ -127,7 +153,7 @@ export class FormValidation {
      * @property {String} formID : null
      * @property {Boolean} stopValidationOnFirstFail : true
      * @property {Function} condition {@link condition}
-     * @property {Function} behaviour  {@link behaviour}
+     * @property {Class} Behaviour  {@link behaviour}
      * @property {Object} validators
      * @property {Promise} validators.required {@link defaultValidatorRequired}
      * @property {Promise} validators.email {@link defaultValidatorEmail}
@@ -138,7 +164,7 @@ export class FormValidation {
             formId: null,
             stopValidationOnFirstFail: true,
             condition: condition,
-            behaviour: Behaviour,
+            Behaviour: Behaviour,
 
             validators: {
                 required: defaultValidatorRequired,

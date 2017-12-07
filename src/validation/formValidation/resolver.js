@@ -12,6 +12,10 @@ export class Resolver {
      * @param {Object} feedbackDisplay
      */
     constructor( configFields, validators, feedbackDisplay ) {
+        /**
+         *
+         * @type {Object}
+         */
         this.validators = validators
         /**
          *
