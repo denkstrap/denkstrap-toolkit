@@ -25,7 +25,7 @@ export class Resolver {
          *
          * @type {Object}
          */
-        if ( typeof configFields !== 'validators' ) {
+        if ( typeof validators !== 'object' ) {
             throw new TypeError( 'validators is not of type object' );
         }
         this.validators = validators

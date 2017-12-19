@@ -159,10 +159,7 @@ describe( 'FeedbackDisplay', function() {
             expect( function() {
                 var feedbackDisplay = new FeedbackDisplay();
                 var id = 'name';
-                var field = document.getElementById( id );
                 var selector = '#name, #nameWithFeedbackDisplay';
-                var fieldErrorClass = feedbackDisplay.options.fieldErrorClass;
-                var fieldSuccessClass = feedbackDisplay.options.fieldSuccessClass;
                 var ariaInvalidAttr = 'aria-invalid';
                 var ariaDescribedby = 'aria-describedby';
 
@@ -170,6 +167,27 @@ describe( 'FeedbackDisplay', function() {
 
                 var fieldsLength = document.querySelectorAll( '#form input[' + ariaInvalidAttr + ']' ).length;
                 var r = fieldsLength === 2 ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+    describe( 'removeStatusBySelector( selector )', function() {
+
+        it( 'should have cleaned html depending on validation result', function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var id = 'name';
+                var field = document.getElementById( id );
+                var selector = '#name, #nameWithFeedbackDisplay';
+                var ariaInvalidAttr = 'aria-invalid';
+                var ariaDescribedby = 'aria-describedby';
+
+                feedbackDisplay.removeStatusBySelector( selector );
+
+                var fieldsLength = document.querySelectorAll( '#form input[' + ariaInvalidAttr + ']' ).length;
+                var r = fieldsLength === 0 ? true : false;
                 return r;
             }() ).toBeTruthy();
         } );

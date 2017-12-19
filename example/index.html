@@ -123,7 +123,11 @@
                "validators": {
                "required": { "message": "Check \"accept legal terms\" to proceed."}
                },
-               "groupSel": "[name=\"legal-terms\"]"
+               "groupSel": "[name=\"legal-terms\"]",
+
+               "feedbackDisplay": {
+               "fieldShowState": true
+               }
                }'
         >
         <label class="radio__label" for="legal-terms-1">accept legal terms</label>
@@ -138,7 +142,7 @@
                }
                },
                "feedbackDisplay": {
-               "fieldShowState": true,
+               "fieldShowState": false,
                "messageShow": true,
                "fieldRemoveStateInvalidSel": "#legal-terms-1",
                "messageRemoveInvalidSel": "#legal-terms-1",
