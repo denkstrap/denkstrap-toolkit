@@ -74,6 +74,102 @@ export class FormValidation {
      * @param {Object} [options.feedbackDisplayOptions] - (default={@link FeedbackDisplay.getOptions})
      */
     constructor( options ) {
+
+        /**
+         *
+         * @type {Object} - merged options
+         */
+        this.options = this.getMergedOptions( options );
+
+        /**
+         * @type {Array} - Field dom references
+         */
+        var fields = this.getValidationFields();
+
+        /**
+         * {@link getValidationConfig}
+         * @type {Object}
+         */
+        this.config = this.getValidationConfig( fields );
+
+        /**
+         * {@link getValidationFieldConfig}
+         * @type {Object}
+         */
+        this.configFields = this.getValidationFieldConfig( fields );
+
+        /**
+         * {@link FeedbackDisplay}
+         * @type {Class}
+         */
+        this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplayOptions );
+
+        /**
+         * {@link ValidationServiceExt}
+         * @type {Class}
+         */
+        this.validation = new ValidationServiceExt(
+            this.config,
+            new Resolver(
+                this.configFields,
+                this.options.validators,
+                this.feedbackDisplay ).resolver(),
+            this.options.caching ? new Cache( this.options.validationAttr ).getValidationCache() : new Cache().getValidationOffCache(),
+            this.options.stopValidationOnFirstFail );
+
+        /**
+         *
+         * @type {Object} behaviour {@link Behaviour}
+         */
+        try {
+            this.behaviour = new this.options.Behaviour(
+                this.options.formId,
+                this.options.validationAttr,
+                this.options.condition,
+                this.configFields,
+                this.validation );
+
+        } catch( error ) {
+            // console.log( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
+            throw new Error( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
+        }
+    }
+
+    /**
+     *
+     * @return {Object}
+     * @property {Boolean} caching : true
+     * @property {String} formID : null
+     * @property {String} validationAttr: 'data-validation'
+     * @property {Boolean} stopValidationOnFirstFail : true
+     * @property {Function} condition {@link condition}
+     * @property {Class} Behaviour  {@link behaviour}
+     * @property {Object} validators
+     * @property {Promise} validators.required {@link defaultValidatorRequired}
+     * @property {Promise} validators.email {@link defaultValidatorEmail}
+     * */
+    getDefaultOptions() {
+        return {
+            caching: true,
+            formId: null,
+            validationAttr: 'data-validation',
+            stopValidationOnFirstFail: true,
+            condition: condition,
+            Behaviour: Behaviour,
+
+            validators: {
+                required: defaultValidatorRequired,
+                email: defaultValidatorEmail
+            }
+        };
+    }
+
+    /**
+     * Merges default options given options
+     * @param {Object} options
+     * @returns {Object}
+     */
+    getMergedOptions( options ) {
         if ( typeof options === 'undefined' || typeof options !== 'object' ) {
             throw new TypeError( 'Options must be an object.' );
         }
@@ -88,89 +184,36 @@ export class FormValidation {
          * The options merged by default options and param options.
          * @type {Object}
          */
-        this.options = Object.assign( this.getOptions(), options );
+        var opt = Object.assign( this.getDefaultOptions(), options );
         /**
          * Merging via assign is not working proper on subobjects.
          * So we have to merge separately.
          * @type {Object}
          */
-        this.options.validators = Object.assign( this.getOptions().validators, options.validators );
-
-        /**
-         * {@link getValidationConfig}
-         * @type {Object}
-         */
-        this.config = this.getValidationConfig();
-
-        /**
-         * {@link FeedbackDisplay}
-         * @type {Class}
-         */
-        this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplayOptions );
-
-        /**
-         * {@link getValidationFieldConfig}
-         * @type {Object}
-         */
-        this.configFields = this.getValidationFieldConfig();
-
-        /**
-         * {@link ValidationServiceExt}
-         * @type {Class}
-         */
-        this.validation = new ValidationServiceExt(
-            this.config,
-            new Resolver(
-                this.configFields,
-                this.options.validators,
-                this.feedbackDisplay ).resolver(),
-            this.options.caching ? new Cache().getValidationCache() : new Cache().getValidationOffCache(),
-            this.options.stopValidationOnFirstFail );
-
-        /**
-         *
-         * @type {Object} behaviour {@link Behaviour}
-         */
-        try {
-            this.behaviour = new this.options.Behaviour(
-                this.options.formId,
-                this.options.condition,
-                this.configFields,
-                this.validation );
-
-            if ( !(this.behaviour instanceof this.options.Behaviour ) ) {
-                throw new TypeError( 'Options Behaviour must be a class/prototype' );
-            }
-        } catch( error ) {
-            throw new TypeError( 'Error on instantiating Behaviour class.')
-        }
+        opt.validators = Object.assign( this.getDefaultOptions().validators, options.validators );
+        return opt;
     }
 
     /**
-     *
-     * @return {Object}
-     * @property {Boolean} caching : true
-     * @property {String} formID : null
-     * @property {Boolean} stopValidationOnFirstFail : true
-     * @property {Function} condition {@link condition}
-     * @property {Class} Behaviour  {@link behaviour}
-     * @property {Object} validators
-     * @property {Promise} validators.required {@link defaultValidatorRequired}
-     * @property {Promise} validators.email {@link defaultValidatorEmail}
-     * */
-    getOptions() {
-        return {
-            caching: true,
-            formId: null,
-            stopValidationOnFirstFail: true,
-            condition: condition,
-            Behaviour: Behaviour,
+     * @link {getValidationFields}
+     * @returns {Array}
+     */
+    getValidationFields() {
+        return getValidationFields(
+            this.options.formId,
+            this.options.validationAttr,
+            this.options.condition );
+    }
 
-            validators: {
-                required: defaultValidatorRequired,
-                email: defaultValidatorEmail
-            }
-        };
+    getFieldData( field ) {
+        var objData = field.getAttribute( this.options.validationAttr );
+        try {
+            objData = JSON.parse( objData );
+        } catch( error ) {
+            console.log( 'Error while trying to parse objData:' + objData );
+            console.log( 'Error:' + error );
+        }
+        return objData;
     }
 
     /**
@@ -188,17 +231,19 @@ export class FormValidation {
      *         required: { message: 'This field is required' }
      *     }
      * }
-     *
+     * @param {Array} fields - Array of field references to dom
      * @returns {Object}
      */
-    getValidationConfig() {
-        var config = {};
+    getValidationConfig( fields ) {
         var configService = {};
-        var fields = getValidationFields( this.options.formId, this.options.condition, this.validation );
+
         fields.forEach( function( field ) {
-            var objData = field.getAttribute( 'data-validation' );
-            objData = JSON.parse( objData );
+            var objData = this.getFieldData( field );
+
             var validators = {};
+            if ( typeof objData.validators !== 'object' ) {
+                throw new TypeError( 'validators must be of type object' );
+            }
             Object.keys( objData.validators ).forEach( function( validatorName ) {
                 var obj = {
                     message: objData.validators[ validatorName ].message
@@ -206,10 +251,13 @@ export class FormValidation {
                 validators[ validatorName ] = obj;
             } );
 
+            if ( Object.keys( objData.validators ).length < 1 ) {
+                throw new Error( 'no validators specified' );
+            }
+
             configService[ field.id ] = validators;
         }.bind( this ) );
-        config.service = configService;
-        return config.service;
+        return configService;
     }
 
     /**
@@ -233,8 +281,13 @@ export class FormValidation {
      * this function should be called (Its called by {@link validateForm} )
      */
     updateConfigAndValuesAndBehaviour() {
-        this.config = this.getValidationConfig();
-        this.configFields = this.getValidationFieldConfig();
+        /**
+         * @type {Array} - Field dom references
+         */
+        var fields = this.getValidationFields();
+
+        this.config = this.getValidationConfig( fields );
+        this.configFields = this.getValidationFieldConfig( fields );
         this.validation.setConfig( this.config );
         this.setValues();
         this.behaviour.behaviour();
@@ -261,7 +314,7 @@ export class FormValidation {
     getDefaultValidationFieldConfig() {
         return {
             validators: null,
-            feedbackDisplay: this.feedbackDisplay.getDefaultFieldOptions(),
+            feedbackDisplay: FeedbackDisplay.getDefaultFieldOptions(),
             caching: true,
             setEventOnValidation: false,
             groupSel: null
@@ -271,6 +324,7 @@ export class FormValidation {
     /**
      * Merges the default field config {@link getDefaultValidationFieldConfig}
      * for each field with the HTML given config.
+     * @param {Array} fields - Array of field references to dom
      * @return {Object}
      * @property {null|Object} validators : null|Object
      * @property {Object} feedbackDisplay
@@ -279,26 +333,27 @@ export class FormValidation {
      * @property {String} groupSel : null|*css selector*
      *
      */
-    getValidationFieldConfig() {
+    getValidationFieldConfig( fields ) {
         var config = {};
         var configFields = {};
-        var fields = getValidationFields( this.options.formId, this.options.condition, this.validation );
         fields.forEach( function( field ) {
-            var objData = field.getAttribute( 'data-validation' );
-            objData = JSON.parse( objData );
+            var objData = this.getFieldData( field );
             var objDataField = this.getDefaultValidationFieldConfig();
             objDataField.validators = objData.validators;
             Object.keys( objData ).forEach( function( key ) {
                 if ( key !== 'validators' ) {
                     if ( key === 'feedbackDisplay' ) {
-                        Object.keys( objData.feedbackDisplay ).forEach( function( key2 ) {
-                            objDataField.feedbackDisplay[ key2 ] = objData.feedbackDisplay[ key2 ];
-                        } );
+                        Object.keys( objData.feedbackDisplay ).forEach( function( key ) {
+                            if ( key === 'messageLocation' ) {
+                                FeedbackDisplay.checkMessageLocationDataFormat( objData.feedbackDisplay[ key ] );
+                            }
+                            objDataField.feedbackDisplay[ key ] = objData.feedbackDisplay[ key ];
+                        }.bind( this ) );
                     } else {
                         objDataField[ key ] = objData[ key ];
                     }
                 }
-            } );
+            }.bind( this ) );
 
             configFields[ field.id ] = objDataField;
         }.bind( this ) );

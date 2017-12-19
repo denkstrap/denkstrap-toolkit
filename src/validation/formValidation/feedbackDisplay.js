@@ -14,7 +14,24 @@ export class FeedbackDisplay {
          * {@link getOptions}
          * @type {Object}
          */
-        this.options = Object.assign( this.getOptions(), options );
+        if ( typeof options !== 'undefined' ) {
+            this.options = Object.assign( this.getOptions(), options );
+            if ( typeof this.options.fieldErrorClass !== 'string' ) {
+                throw new TypeError( 'option fieldErrorClass is not of type String' );
+            }
+            if ( typeof this.options.fieldSuccessClass !== 'string' ) {
+                throw new TypeError( 'option fieldSuccessClass is not of type String' );
+            }
+            if ( typeof this.options.messageTemplate !== 'string' ) {
+                throw new TypeError( 'option messageTemplate is not of type String' );
+            }
+            if ( this.options.messageCreateFunction !== null &&
+                typeof this.options.messageCreateFunction !== 'function' ) {
+                throw new TypeError( 'optionmessageCreateFunction is not of type Null or Function' );
+            }
+        } else {
+            this.options = this.getOptions();
+        }
     }
 
     /**
@@ -59,7 +76,7 @@ export class FeedbackDisplay {
      * @property {null} setByValidatorOnly.fieldRemoveStateSel -
      * The given validator should sent a valid CSS selector String.
      */
-    getDefaultFieldOptions() {
+    static getDefaultFieldOptions() {
         return {
             // importance depend on validation results
             fieldShowState: true, // Shows state on true, Removes state on false
@@ -79,6 +96,34 @@ export class FeedbackDisplay {
             }
 
         }
+    }
+
+    /**
+     * Manages aria status of field (WCAG).
+     * @see https://www.w3.org/TR/WCAG20-TECHS/ARIA21.html
+     * used only if validation result is false
+     * @param {Object} field - Reference to dom object.
+     * @param {String|null} fieldIdForAriaUsage - This could be necessary to define
+     * if one message is used for several form fields.
+     */
+    setStatusInvalidAria( field, fieldIdForAriaUsage ) {
+        var fieldUse = field;
+        if ( fieldIdForAriaUsage !== null ) {
+            fieldUse = document.getElementById( fieldIdForAriaUsage );
+        }
+        var id = this.getMessageId( fieldUse );
+        field.setAttribute( 'aria-invalid', 'true' );
+        field.setAttribute( 'aria-describedby', id );
+    }
+
+    /**
+     * Manages aria status of field (WCAG).
+     * @see https://www.w3.org/TR/WCAG20-TECHS/ARIA21.html
+     * @param {Object} field - Dom reference.
+     */
+    removeStatusAria( field ) {
+        field.removeAttribute( 'aria-invalid' );
+        field.removeAttribute( 'aria-describedby' );
     }
 
     /**
@@ -107,7 +152,7 @@ export class FeedbackDisplay {
         } else {
             field.classList.add( validErrorClass );
             field.classList.remove( validSuccessClass );
-            this.setStatusAria( field, fieldIdForAriaUsage );
+            this.setStatusInvalidAria( field, fieldIdForAriaUsage );
         }
     }
 
@@ -120,20 +165,11 @@ export class FeedbackDisplay {
         if ( selector !== null ) {
             var fields = document.querySelectorAll( selector );
             Array.prototype.forEach.call( fields, function( field ) {
-                this.setStatus( field, status );
+                this.setStatus( field, status, null );
             }.bind( this ) );
         }
     }
 
-    /**
-     * Manages aria status of field (WCAG).
-     * @see https://www.w3.org/TR/WCAG20-TECHS/ARIA21.html
-     * @param {Object} field - Dom reference.
-     */
-    removeStatusAria( field ) {
-        field.removeAttribute( 'aria-invalid' );
-        field.removeAttribute( 'aria-describedby' );
-    }
 
     /**
      * Removes staus classes and aria attributes of dom elements.
@@ -146,24 +182,6 @@ export class FeedbackDisplay {
                 this.removeStatus( field );
             }.bind( this ) );
         }
-    }
-
-    /**
-     * Manages aria status of field (WCAG).
-     * @see https://www.w3.org/TR/WCAG20-TECHS/ARIA21.html
-     * @param {Object} field - Reference to dom object.
-     * @param {String|null} fieldIdForAriaUsage - This could be necessary to define
-     * if one message is used for several form fields.
-     */
-    setStatusAria( field, fieldIdForAriaUsage ) {
-        var fieldUse = field;
-        var id;
-        if ( fieldIdForAriaUsage !== null ) {
-            fieldUse = document.getElementById( fieldIdForAriaUsage );
-        }
-        id = this.getMessageId( fieldUse );
-        field.setAttribute( 'aria-invalid', 'true' );
-        field.setAttribute( 'aria-describedby', id );
     }
 
     /**
@@ -184,6 +202,42 @@ export class FeedbackDisplay {
         var attr = field.getAttribute( 'type' );
         var insertLoc = attr !== 'checkbox' && attr !== 'radio' ? field.previousElementSibling || field : field.parentNode;
         return insertLoc;
+    }
+
+    /**
+     * Checks messageLocation data for its validity
+     * @example
+     * "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ]
+     * @param messageLocation
+     */
+    static checkMessageLocationDataFormat( messageLocation ) {
+
+        if ( messageLocation !== null && !Array.isArray( messageLocation ) ) {
+            throw new TypeError( 'messageLocation should be null or of type Array' )
+        }
+
+        if ( Array.isArray( messageLocation ) ) {
+            var length = messageLocation.length;
+            var bP;
+            for ( var i = 0; i < length; i++ ) {
+                bP = messageLocation[ i ];
+
+                if ( typeof bP.minWidth !== 'number' ) {
+                    throw new TypeError( 'messageLocation needs for each entry a minWidth property of type Number' );
+                }
+
+                if ( typeof bP.insertTargetSelector !== 'string' ) {
+                    throw new TypeError( 'messageLocation needs for each entry ' +
+                        'a insertTargetSelector property of type String' );
+                }
+
+                var insertLoc = document.querySelector( bP.insertTargetSelector );
+                if ( typeof insertLoc === null ) {
+                    throw new TypeError( 'messageLocation needs for each entry a insertTargetSelector not resulting in null' );
+                }
+
+            }
+        }
     }
 
     /**
@@ -266,7 +320,8 @@ export class FeedbackDisplay {
      */
     showMessage( field, message, messageLocation ) {
         this.removeMessageAndAccordingAriaAttrOfField( field );
-        var html = this.options.messageTemplate.replace( '{{ id }}', this.getMessageId( field ) ).replace( '{{ id-for }}', field.id )
+        var html = this.options.messageTemplate.replace( '{{ id }}',
+            this.getMessageId( field ) ).replace( '{{ id-for }}', field.id )
             .replace( '{{ message }}', message );
 
         var insertLocData = this.getMessageInsertLocationData( field, messageLocation );

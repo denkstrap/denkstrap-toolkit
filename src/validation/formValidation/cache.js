@@ -6,8 +6,13 @@ export class Cache {
 
     /**
      * @constructor
+     * @param {String} validationAttr - validation attr (where validation data is stored)
      */
-    constructor() {
+    constructor( validationAttr ) {
+        if ( typeof validationAttr !== 'string' ) {
+            throw new TypeError( 'validationAttr must be of type String' );
+        }
+        this.validationAttr = validationAttr;
     }
 
     /**
@@ -53,7 +58,7 @@ export class Cache {
      */
     isCachingEnabled( fieldName ) {
         var fieldDom = document.getElementById( fieldName );
-        var objData = fieldDom.getAttribute( 'data-validation' );
+        var objData = fieldDom.getAttribute( this.validationAttr );
         objData = JSON.parse( objData );
         return objData.caching ? true : false;
     }

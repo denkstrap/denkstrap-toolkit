@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------------------------------------------
+classList
+-------------------------------------------------------------------------------------------------------------------
+for using classList with < ie 10
+https://caniuse.com/#feat=classlist
+https://developer.mozilla.org/de/docs/Web/API/Element/classList#Browserkompatibilit%C3%A4t
+
+use a polyfill.js
+https://cdn.polyfill.io/v2/docs/examples
+https://cdn.polyfill.io/v2/polyfill.js?features=Element.prototype.classList&flags=always,gated

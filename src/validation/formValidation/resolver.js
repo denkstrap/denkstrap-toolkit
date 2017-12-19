@@ -16,17 +16,27 @@ export class Resolver {
          *
          * @type {Object}
          */
-        this.validators = validators
-        /**
-         *
-         * @type {Object}
-         */
+        if ( typeof configFields !== 'object' ) {
+            throw new TypeError( 'configField is not of type object' );
+        }
         this.configFields = configFields;
 
         /**
          *
          * @type {Object}
          */
+        if ( typeof configFields !== 'validators' ) {
+            throw new TypeError( 'validators is not of type object' );
+        }
+        this.validators = validators
+
+        /**
+         *
+         * @type {Object}
+         */
+        if ( typeof configFields !== 'object' ) {
+            throw new TypeError( 'feedbackDisplay is not of type object' );
+        }
         this.feedbackDisplay = feedbackDisplay;
         /**
          * {@link dispatchEvent}

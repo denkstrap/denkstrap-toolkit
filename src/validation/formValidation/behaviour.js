@@ -9,17 +9,24 @@ export class Behaviour {
     /**
      *
      * @param {String} formId - The id of the form.
+     * @property {String} validationAttr     *
      * @param {Function} condition - The condition for to collect the validating fields
      * @param {configFields} configFields - The config of fields
      * @param {Object} The validation service object
      */
-    constructor( formId, condition, configFields, validation ) {
+    constructor( formId, validationAttr, condition, configFields, validation ) {
 
         /**
          *
          * @type {String}
          */
         this.formId = formId;
+
+        /**
+         * @type {String}
+         */
+        this.validationAttr = validationAttr;
+
         /**
          *
          * @type {Function}
@@ -45,7 +52,7 @@ export class Behaviour {
      * The behaviour for each field
      */
     behaviour() {
-        var fields = getValidationFields( this.formId, this.condition );
+        var fields = getValidationFields( this.formId, this.validationAttr, this.condition );
         Array.prototype.forEach.call( fields, function( field ) {
             var type = field.getAttribute( 'type' );
             var tagName = field.tagName.toLowerCase();

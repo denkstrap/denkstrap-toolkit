@@ -1,4 +1,5 @@
 <form id="form">
+
     <label for="name">Name</label>
     <input name="name"
            id="name"
@@ -10,5 +11,94 @@
             }'
     >
 
+    <label for="nameHidden">Name Hidden</label>
+    <input style="display: none;"
+           name="nameHidden"
+           id="nameHidden"
+           value="testnameHidden"
+           data-validation='{
+                "validators": {
+                    "required": { "message": "Required \"nameHidden\" not set" }
+                }
+            }'
+    >
+
+    <label for="nameWithFeedbackDisplay">Name nameWithFeedbackDisplay</label>
+    <input name="nameWithFeedbackDisplay"
+           id="nameWithFeedbackDisplay"
+           value="nameWithFeedbackDisplay"
+           data-validation='{
+                "validators": {
+                    "required": { "message": "Required \"name\" not set" }
+                },
+                "feedbackDisplay": {
+                    "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ]
+                }
+            }'
+    >
+
+</form>
+
+
+<form id="formNoValidatorAttributes">
+
+    <label for="formNoValidatorsName">Name</label>
+    <input name="formNoValidatorsName"
+           id="formNoValidatorsName"
+           value="formNoValidatorsTestname"
+
+    >
+
+    <label for="formNoValidatorsNameHidden">Name Hidden</label>
+    <input style="display: none;"
+           name="formNoValidatorsNameHidden"
+           id="formNoValidatorsNameHidden"
+           value="formNoValidatorsNTestnameHidden"
+    >
+
+</form>
+
+<form id="formInvalidDataAttrData">
+
+    <label for="formInvalidDataAttrDataName">Name</label>
+    <input name="formInvalidDataAttrDataName"
+           id="formInvalidDataAttrDataName"
+           value="formInvalidDataAttrDataTestname"
+           data-validation='
+                "validators": {
+                    "required": { "message": "Required \"name\" not set" }
+                }
+            }'
+    >
+
+</form>
+
+<form id="formDataAttrDataWithoutValidators">
+
+    <label for="formDataAttrDataWithoutValidatorsName">Name</label>
+    <input name="formDataAttrDataWithoutValidatorsName"
+           id="formDataAttrDataWithoutValidatorsName"
+           value="formDataAttrDataWithoutValidatorsTestname"
+           data-validation='{
+            }'
+    >
+
+</form>
+
+<form id="formInvalidMessageLocationData">
+
+    <label for="formInvalidMessageLocationData">Name</label>
+    <input name="formInvalidMessageLocationData"
+           id="InvalidMessageLocationData"
+           value="formInvalidMessageLocationData"
+           data-validation='{
+                "validators": {
+                    "required": { "message": "Required \"name\" not set" }
+                },
+                "feedbackDisplay": {
+                    "messageLocation": [ { "minWidthXXX": 0, "insertTargetSelector": "#formInvalidMessageLocationData" } ]
+                }
+            }'
+    >
 
 </form>
