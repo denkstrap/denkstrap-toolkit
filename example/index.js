@@ -31,7 +31,7 @@ form.addEventListener( 'submit', function( event ) {
         console.log( '----->validateForm fail', result );
     } );
 } );
-document.getElementById( 'submit-btn' ).click();
+// document.getElementById( 'submit-btn' ).click();
 
 
 
@@ -63,4 +63,4 @@ form2.addEventListener( 'submit', function( event ) {
         console.log( '----->validateForm fail', result );
     } );
 } );
-document.getElementById( 'submit-btn-2' ).click();
+// document.getElementById( 'submit-btn-2' ).click();

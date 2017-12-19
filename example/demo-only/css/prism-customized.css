@@ -1,0 +1,19 @@
+ 
+/* .prism-custom-pre {
+    padding: 0 !important;
+    margin: 0 0 0 -4em !important;
+} */
+.prism-custom-wp {
+    overflow: hidden;
+    border-radius: 1em;
+    margin-top: 1em;
+}
+
+.prism-custom-wp__inner {
+    padding: 0 !important;
+    margin: -2.1em 0 -2.1em -4.5em !important;
+}
+
+.data-prism-script + .prism-custom-wp .prism-custom-wp__inner {
+    margin: -2.1em 0 -2.1em -2.5em !important;
+}

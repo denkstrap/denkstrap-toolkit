@@ -6,10 +6,15 @@
     <script type="text/javascript" src="polyfills/promise.js"></script>
     <script type="text/javascript" src="polyfills/custom-event.js"></script>
     <script type="text/javascript" src="polyfills/object-assign.js"></script>
+
     <script type="text/javascript" src="/dist/validation/formValidation/formValidation.js"></script>
     <link rel="stylesheet" href="css/validation.css">
     <link rel="stylesheet" href="css/checkbox.css">
     <link rel="stylesheet" href="css/radio.css">
+
+    <link rel="stylesheet" href="demo-only/vendor/css/prism.css">
+    <link rel="stylesheet" href="demo-only/css/prism-customized.css">
+
 </head>
 <body>
 <h1>Form Validation Examples</h1>
@@ -21,10 +26,11 @@
     <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
     <br><br>
     <h3>Validate Not Empty</h3>
-    <label for="name">Name</label>
-    <input name="name"
-           id="name"
-           data-validation='{
+    <div data-prism>
+        <label for="name">Name</label>
+        <input name="name"
+               id="name"
+               data-validation='{
             "validators": {
             "required": { "message": "Required \"name\" not set" }
             },
@@ -32,13 +38,14 @@
             "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"name\"]" } ]
             }
             }'
-    >
-
+        >
+    </div>
     <h3>Validate Positive If Any Radio Clicked</h3>
-    <div class="radio" id="radio-insert-loc">
-        <input type="radio" name="mode" id="mode-1"
-               class="radio__input"
-               data-validation='{
+    <div data-prism>
+        <div class="radio" id="radio-insert-loc">
+            <input type="radio" name="mode" id="mode-1"
+                   class="radio__input"
+                   data-validation='{
                "validators": {
                "requiredGroupAny": {
                "message": "check any option, please."
@@ -51,13 +58,13 @@
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#radio-insert-loc" } ]
                }
                }'
-        >
-        <label class="radio__label" for="mode-1">private</label>
-    </div>
-    <div class="radio">
-        <input type="radio" name="mode" id="mode-2"
-               class="radio__input"
-               data-validation='{
+            >
+            <label class="radio__label" for="mode-1">private</label>
+        </div>
+        <div class="radio">
+            <input type="radio" name="mode" id="mode-2"
+                   class="radio__input"
+                   data-validation='{
                "validators": {
                "requiredGroupAny": {
                "message": "Check any option, please."
@@ -70,56 +77,64 @@
                "messageShow": false
                }
                }'
-        >
-        <label class="radio__label" for="mode-2">business</label>
+            >
+            <label class="radio__label" for="mode-2">business</label>
+        </div>
     </div>
     <br><br>
     <h3>Validation Ajax With Manipulating Message ({ name }}</h3>
-    <label for="zip">Zip</label>
-    <input name="zip" id="zip"
-           data-validation='{
+    <div data-prism>
+        <label for="zip">Zip</label>
+        <input name="zip" id="zip"
+               data-validation='{
             "validators": {
             "ajax": {
             "message": "Zip does not exist, Mr {{ name }}.",
-            "url": "simulate-backend-scripts/validation.php"
+            "url": "demo-only/simulate-backend-scripts/validation.php"
             }
             },
             "feedbackDisplay": {
             "preferHTMLValidatorMessage": false
             }
             }'
-    >
+        >
+    </div>
     <br><br>
 
-    <h3> Validate EMail</h3>
-    <label for="email">E-Mail</label>
-    <input name="email" id="email"
-           data-validation='{
+    <h3>Validate EMail</h3>
+    <div data-prism>
+        <label for="email">E-Mail</label>
+        <input name="email" id="email"
+               data-validation='{
 
             "validators": {
                 "required": {},
                 "email": {}
                 }
             }'>
+    </div>
     <br><br>
 
 
     <h3>Validate A Checkbox</h3>
-    <div class="checkbox">
-        <input type="checkbox" name="newsletter" id="newsletter"
-               class="checkbox__input"
-               data-validation='{
+    <div data-prism>
+        <div class="checkbox">
+            <input type="checkbox" name="newsletter" id="newsletter"
+                   class="checkbox__input"
+                   data-validation='{
                "validators": {"checkbox": { "message": "check this option, please." } }
                }'
-        >
-        <label class="checkbox__label" for="newsletter">Newsletter</label>
+            >
+            <label class="checkbox__label" for="newsletter">Newsletter</label>
+        </div>
     </div>
     <br><br>
     <h3>Validate Group With Needing Single Choice</h3>
-    <div class="radio" id="radio-insert-loc-2">
-        <input type="radio" name="legal-terms" id="legal-terms-1"
-               class="radio__input"
-               data-validation='{
+    <div data-prism>
+        <div class="radio" id="radio-insert-loc-2">
+            <input type="radio" name="legal-terms" id="legal-terms-1"
+                   class="radio__input"
+                   data-validation='{
                "validators": {
                "required": { "message": "Check \"accept legal terms\" to proceed."}
                },
@@ -129,13 +144,13 @@
                "fieldShowState": true
                }
                }'
-        >
-        <label class="radio__label" for="legal-terms-1">accept legal terms</label>
-    </div>
-    <div class="radio">
-        <input type="radio" name="legal-terms" id="legal-terms-2"
-               class="radio__input"
-               data-validation='{
+            >
+            <label class="radio__label" for="legal-terms-1">accept legal terms</label>
+        </div>
+        <div class="radio">
+            <input type="radio" name="legal-terms" id="legal-terms-2"
+                   class="radio__input"
+                   data-validation='{
                "validators": {
                "requiredGroupNot": {
                "message": "Uncheck \"do NOT accept legal terms\", please."
@@ -150,38 +165,43 @@
                },
                "groupSel": "[name=\"legal-terms\"]"
                }'
-        >
-        <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
+            >
+            <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
+        </div>
     </div>
     <br><br>
     <h3>Validate A Select Field</h3>
-    <select name="language" id="language"
-            data-validation='{
+    <div data-prism>
+        <select name="language" id="language"
+                data-validation='{
             "validators": { "required": { "message": "Required \"language\" not set." } }
             }'
-    >
-        <option value="" selected></option>
-        <option value="Germany">Germany</option>
-        <option value="England">England</option>
-    </select>
+        >
+            <option value="" selected></option>
+            <option value="Germany">Germany</option>
+            <option value="England">England</option>
+        </select>
+    </div>
     <br><br>
     <h3>Validate An Textarea</h3>
-    <label for="notice">Textarea</label>
-    <br>
+    <div data-prism>
+        <label for="notice">Textarea</label>
+        <br>
          <textarea name="notice" id="notice"
                    data-validation='{
             "validators": { "required": { "message": "Required \"notice\" not set." } }
             }'
          >
-
     </textarea>
+    </div>
     <br><br>
     <h3>Validate A Phone Field</h3>
-    <label for="pre-number" id="pre-number-loc">phone</label>
-    <br>
-    <div class="phone-number">
-        <input type="number" id="pre-number" name="pre-number" style="width:70px"
-               data-validation='{
+    <div data-prism>
+        <label for="pre-number" id="pre-number-loc">phone</label>
+        <br>
+        <div class="phone-number">
+            <input type="number" id="pre-number" name="pre-number" style="width:70px"
+                   data-validation='{
                "validators": { "required": { "message": "Required field \"pre-number\" not set." } },
                "feedbackDisplay": {
                "fieldShowState": true,
@@ -190,10 +210,10 @@
                },
                "groupSel": "[data-pre-number-number-group]"
                }'
-               data-pre-number-number-group
-        >
-        <input type="number" id="number" name="number"
-               data-validation='{
+                   data-pre-number-number-group
+            >
+            <input type="number" id="number" name="number"
+                   data-validation='{
                "validators": { "required": { "message": "Required field \"phone\" not set." } },
                "feedbackDisplay": {
                "fieldShowState": true,
@@ -202,24 +222,26 @@
                },
                "groupSel": "[data-pre-number-number-group]"
                }'
-               data-pre-number-number-group
-        >
+                   data-pre-number-number-group
+            >
+        </div>
     </div>
     <h3>Validate A Phone Field With Customized Group Validation Display Using Events</h3>
-    <label for="pre-number-2">phone</label>
-    <br>
-    <div class="phone-number"
-         data-validation-feedback-group-display='{
+    <div data-prism>
+        <label for="pre-number-2">phone</label>
+        <br>
+        <div class="phone-number"
+             data-validation-feedback-group-display='{
             "message": "Required \"phone\" not set proper.",
             "feedbackDisplay": {
             "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number-2\"]" } ]
             },
             "fieldSelector": "[data-phone-number-group]"
             }'
-         id="phone-number-group"
-    >
-        <input type="number" id="pre-number-2" name="pre-number-2" style="width:70px"
-               data-validation='{
+             id="phone-number-group"
+        >
+            <input type="number" id="pre-number-2" name="pre-number-2" style="width:70px"
+                   data-validation='{
                "validators": {
                "required": { "message": {} }
                },
@@ -230,10 +252,10 @@
                "setEventOnValidation": true,
                "groupSel": "[data-phone-number-group]"
                }'
-               data-phone-number-group
-        >
-        <input type="number" id="number-2" name="number-2"
-               data-validation='{
+                   data-phone-number-group
+            >
+            <input type="number" id="number-2" name="number-2"
+                   data-validation='{
                "validators": { "required": {} },
                "feedbackDisplay": {
                "fieldShowState": true,
@@ -242,27 +264,26 @@
                "setEventOnValidation": true,
                "groupSel": "[data-phone-number-group]"
                }'
-               data-phone-number-group
-        >
+                   data-phone-number-group
+            >
+        </div>
     </div>
     <br><br>
     <button id="submit-btn" type="submit">Fomular validieren</button>
 </form>
 
 
-
-
-
 <h2>Second Form</h2>
 <form id="form-2">
 
     <h3>Validation With Message In Customized Col Left/Right Responsive Layout Container</h3>
-    <div class="col" id="name-name-second-insert-point">
-        <label for="name-first">Name</label>
-        <br>
-        <input name="name-first"
-               id="name-first"
-               data-validation='{
+    <div data-prism class="clearfix">
+        <div class="col" id="name-name-second-insert-point">
+            <label for="name-first">Name</label>
+            <br>
+            <input name="name-first"
+                   id="name-first"
+                   data-validation='{
                "validators": {
                "required": { "message": "Required \"name\" not set" }
                },
@@ -283,13 +304,13 @@
                ]
                }
                }'>
-    </div>
-    <div class="col">
-        <label for="name-second">Second Name</label>
-        <br>
-        <input name="name-second"
-               id="name-second"
-               data-validation='{
+        </div>
+        <div class="col">
+            <label for="name-second">Second Name</label>
+            <br>
+            <input name="name-second"
+                   id="name-second"
+                   data-validation='{
                "validators": {
                "required": { "message": "Required \"name second\" not set" }
                },
@@ -311,30 +332,36 @@
                ]
                }
                }'
-        >
+            >
+        </div>
     </div>
+
     <br><br>
 
     <h3>Validate Not Empty With Minimum Config</h3>
-    <label for="name-2">Name</label>
-    <input name="name-2"
-           id="name-2"
-           data-validation='{
+    <div data-prism>
+        <label for="name-2">Name</label>
+        <input name="name-2"
+               id="name-2"
+               data-validation='{
             "validators": {
             "required": {}
             }
             }'>
+    </div>
     <br><br>
 
     <h3>Do Not Validate Name Unvisible</h3>
-    <label for="name-unvisible">Name unvisible</label>
-    <input style="display: none;"
-           name="name-unvisible"
-           id="name-unvisible"
-           data-validation='{
+    <div data-prism>
+        <label for="name-unvisible">Name unvisible</label>
+        <input style="display: none;"
+               name="name-unvisible"
+               id="name-unvisible"
+               data-validation='{
             "validators": {"required": { "message": "Required \"name\" not set" } }
             }'
-    >
+        >
+    </div>
     <br><br>
 
     <button id="submit-btn-2" type="submit">Fomular validieren</button>
@@ -353,7 +380,76 @@
 <script type="text/javascript" src="feedback-display-group.js"></script>
 <script type="text/javascript" src="feedback-display-layout.js"></script>
 
-<script type="text/javascript" src="index.js"></script>
+<!--<script type="text/javascript" src="index.js"></script>-->
+<div data-prism class="data-prism-script">
+    <script type="text/javascript">
+        var options = {
+            validators: {
+                checkbox: validation.validators.checkbox,
+                minLength: validation.validators.minLength,
+                requiredGroupAny: validation.validators.requiredGroupAny,
+                requiredGroupNot: validation.validators.requiredGroupNot,
+                ajax: validation.validators.ajax
+            },
+            formId: 'form',
+            caching: true
+        }
 
+        var validationService = new FormValidation(
+                options );
+
+
+        console.log( 'validationService', validationService );
+
+        validationService.setValues();
+
+        var form = document.getElementById( 'form' );
+
+        validation.setGroupMessageBehavior( form, validationService );
+
+        form.addEventListener( 'submit', function( event ) {
+            event.preventDefault();
+            // console.log( '#submit', validationService.setValues );
+            validationService.validateForm().then( function( result ) {
+                console.log( '----->validateForm success', result );
+            } ).catch( function( result ) {
+                console.log( '----->validateForm fail', result );
+            } );
+        } );
+        // document.getElementById( 'submit-btn' ).click();
+
+
+        var options2 = {
+            formId: 'form-2'
+        }
+
+        var validationService2 = new FormValidation(
+                options2 );
+
+
+        console.log( 'validationService2', validationService2 );
+
+        validationService2.setValues();
+
+        var form2 = document.getElementById( 'form-2' );
+
+        validation.setFeedbackDisplayLayout( form2, validationService2 );
+
+        form2.addEventListener( 'submit', function( event ) {
+            event.preventDefault();
+            // console.log( '#submit', validationService.setValues );
+            validationService2.validateForm().then( function( result ) {
+                console.log( '----->validateForm success', result );
+            } ).catch( function( result ) {
+                console.log( '----->validateForm fail', result );
+            } );
+        } );
+        // document.getElementById( 'submit-btn-2' ).click();
+    </script>
+
+</div>
+
+<script type="text/javascript" src="demo-only/js/auto-prism.js"></script>
+<script src="demo-only/vendor/js/prism.js"></script>
 </body>
 </html>
