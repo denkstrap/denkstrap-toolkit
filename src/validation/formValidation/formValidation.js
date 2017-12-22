@@ -128,6 +128,7 @@ export class FormValidation {
                 this.options.condition,
                 this.configFields,
                 this.validation );
+            this.behaviour.behaviour();
 
         } catch( error ) {
             // console.log( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
@@ -285,11 +286,16 @@ export class FormValidation {
          * @type {Array} - Field dom references
          */
         var fields = this.getValidationFields();
-
         this.config = this.getValidationConfig( fields );
         this.configFields = this.getValidationFieldConfig( fields );
         this.validation.setConfig( this.config );
         this.setValues();
+        this.validation.setResolver(
+            new Resolver(
+                this.configFields,
+                this.options.validators,
+                this.feedbackDisplay ).resolver() );
+        this.behaviour.updateConfigFieldsAndValidation( this.configFields, this.validation );
         this.behaviour.behaviour();
     }
 

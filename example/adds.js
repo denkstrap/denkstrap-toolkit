@@ -24,9 +24,5 @@ if ( addInputFieldBtn !== null ) {
         // validationService.setValueByField( document.getElementsByName( name )[ 0 ] );
 
         validationService.updateConfigAndValuesAndBehaviour();
-
-        console.log( 'dyn config', validationService.config );
-        console.log(  'validationService.data', validationService.validation.data );
-
     } );
 }

@@ -114,6 +114,15 @@ export class ValidationService {
     }
 
     /**
+     * Set resolver
+     *
+     * @param {Object} validationResolver
+     */
+    setResolver( validationResolver ) {
+        this.validationResolver = validationResolver;
+    }
+
+    /**
      * Set all values
      * @example
      * validationService.setValues( {
@@ -199,7 +208,8 @@ export class ValidationService {
                         isValid: true,
                         results: validationResults
                     } );
-                } else if ( resolvedCount === validatorNames.length ) {
+                } else if ( resolvedCount === validatorNames.length ||
+                    ( this.stopValidationOnFirstFail && hasError ) ) {
                     reject( {
                         isValid: false,
                         results: validationResults

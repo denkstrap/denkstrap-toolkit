@@ -49,6 +49,16 @@ export class Behaviour {
     }
 
     /**
+     * Updates the configFields property
+     * @param {Object} The validation service object
+     * @param {configFields} configFields - The config of fields
+     */
+    updateConfigFieldsAndValidation( configFields, validation ) {
+        this.configFields = configFields;
+        this.validation = validation;
+    }
+    
+    /**
      * The behaviour for each field
      */
     behaviour() {
@@ -58,13 +68,15 @@ export class Behaviour {
             var tagName = field.tagName.toLowerCase();
             var eventName = type !== 'checkbox' && type !== 'radio' && tagName !== 'select' ? 'blur' : 'change';
 
-            field.removeEventListener( eventName, this.behaviourHandler[ field.id ] );
+            if ( typeof this.behaviourHandler[ field.id ] !== 'undefined' ) {
+                field.removeEventListener( eventName, this.behaviourHandler[ field.id ] );
+            }
+
             /**
              * Creates field event handler
              */
             var handler = function() {
                 var fieldIdentifier = field.id;
-
                 this.validation.setValueByField( field );
                 this.validation.validate( fieldIdentifier, this.formId ).catch( function() {} );
 

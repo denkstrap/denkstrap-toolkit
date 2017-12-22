@@ -199,6 +199,7 @@ export class Resolver {
                                     console.log( 'ERROR: Validator', validatorName, 'not defined' );
                                 }
 
+
                                 this.validators[ validatorName ]( value, data )
                                     .then( function( result ) {
                                         if ( this.configFields[ fieldName ]
