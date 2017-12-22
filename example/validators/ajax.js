@@ -1,7 +1,7 @@
 validation.validators.ajax = function( value, data ) {
     return new Promise( function( resolve, reject ) {
         var options = {};
-        var validatorData = data[ 'validatorData' ][ 'ajax' ];
+        var validatorData = data[ 'validatorData' ];
 
         options.url = validatorData.url;
         options.data = data;

@@ -184,10 +184,11 @@ export class Resolver {
                     resolve(
                         function( value, validator, validationService, fieldName ) {
                             return new Promise( function( resolve, reject ) {
-                                var fieldDom = document.getElementById( fieldName );
+                                  var fieldDom = document.getElementById( fieldName );
 
                                 var data = {};
                                 data.value = value;
+                                data.validatorData = this.configFields[ fieldName ].validators[ validatorName ];
 
                                 if ( this.configFields[ fieldName ].groupSel !== null ) {
                                     data.addInfo = this.getAddInfoData( fieldName, this.configFields );

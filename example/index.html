@@ -22,6 +22,7 @@
 
 <h2>First Form</h2>
 <form id="form">
+
     <h2>Validation On Dynamic Dom</h2>
     <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
     <br><br>
@@ -40,6 +41,8 @@
             }'
         >
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
+
     <h3>Validate Positive If Any Radio Clicked</h3>
     <div data-prism>
         <div class="radio" id="radio-insert-loc">
@@ -81,7 +84,9 @@
             <label class="radio__label" for="mode-2">business</label>
         </div>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
+
     <h3>Validation Ajax With Manipulating Message ({ name }}</h3>
     <div data-prism>
         <label for="zip">Zip</label>
@@ -99,6 +104,7 @@
             }'
         >
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
 
     <h3>Validate EMail</h3>
@@ -113,8 +119,8 @@
                 }
             }'>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
-
 
     <h3>Validate A Checkbox</h3>
     <div data-prism>
@@ -128,7 +134,9 @@
             <label class="checkbox__label" for="newsletter">Newsletter</label>
         </div>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
+
     <h3>Validate Group With Needing Single Choice</h3>
     <div data-prism>
         <div class="radio" id="radio-insert-loc-2">
@@ -169,7 +177,9 @@
             <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
         </div>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
+
     <h3>Validate A Select Field</h3>
     <div data-prism>
         <select name="language" id="language"
@@ -182,7 +192,9 @@
             <option value="England">England</option>
         </select>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
+
     <h3>Validate An Textarea</h3>
     <div data-prism>
         <label for="notice">Textarea</label>
@@ -194,7 +206,9 @@
          >
     </textarea>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
+
     <h3>Validate A Phone Field</h3>
     <div data-prism>
         <label for="pre-number" id="pre-number-loc">phone</label>
@@ -226,6 +240,8 @@
             >
         </div>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
+
     <h3>Validate A Phone Field With Customized Group Validation Display Using Events</h3>
     <div data-prism>
         <label for="pre-number-2">phone</label>
@@ -252,24 +268,26 @@
                "setEventOnValidation": true,
                "groupSel": "[data-phone-number-group]"
                }'
-                   data-phone-number-group
-            >
-            <input type="number" id="number-2" name="number-2"
-                   data-validation='{
-               "validators": { "required": {} },
-               "feedbackDisplay": {
-               "fieldShowState": true,
-               "messageShow": false
-               },
-               "setEventOnValidation": true,
-               "groupSel": "[data-phone-number-group]"
-               }'
-                   data-phone-number-group
-            >
-        </div>
+    data-phone-number-group
+    >
+    <input type="number" id="number-2" name="number-2"
+    data-validation='{
+    "validators": { "required": {} },
+    "feedbackDisplay": {
+    "fieldShowState": true,
+    "messageShow": false
+    },
+    "setEventOnValidation": true,
+    "groupSel": "[data-phone-number-group]"
+    }'
+    data-phone-number-group
+    >
+    </div>
     </div>
     <br><br>
-    <button id="submit-btn" type="submit">Fomular validieren</button>
+
+    <button class="submit-btn" type="submit">Fomular validieren</button>
+
 </form>
 
 
@@ -335,7 +353,7 @@
             >
         </div>
     </div>
-
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
 
     <h3>Validate Not Empty With Minimum Config</h3>
@@ -349,6 +367,7 @@
             }
             }'>
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
 
     <h3>Do Not Validate Name Unvisible</h3>
@@ -362,9 +381,10 @@
             }'
         >
     </div>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
     <br><br>
 
-    <button id="submit-btn-2" type="submit">Fomular validieren</button>
+    <button class="submit-btn" type="submit">Fomular validieren</button>
 </form>
 
 <script type="text/javascript" src="ajax.js"></script>
@@ -380,74 +400,8 @@
 <script type="text/javascript" src="feedback-display-group.js"></script>
 <script type="text/javascript" src="feedback-display-layout.js"></script>
 
-<!--<script type="text/javascript" src="index.js"></script>-->
-<div data-prism class="data-prism-script">
-    <script type="text/javascript">
-        var options = {
-            validators: {
-                checkbox: validation.validators.checkbox,
-                minLength: validation.validators.minLength,
-                requiredGroupAny: validation.validators.requiredGroupAny,
-                requiredGroupNot: validation.validators.requiredGroupNot,
-                ajax: validation.validators.ajax
-            },
-            formId: 'form',
-            caching: true
-        }
+<script type="text/javascript" src="index.js"></script>
 
-        var validationService = new FormValidation(
-                options );
-
-
-        console.log( 'validationService', validationService );
-
-        validationService.setValues();
-
-        var form = document.getElementById( 'form' );
-
-        validation.setGroupMessageBehavior( form, validationService );
-
-        form.addEventListener( 'submit', function( event ) {
-            event.preventDefault();
-            // console.log( '#submit', validationService.setValues );
-            validationService.validateForm().then( function( result ) {
-                console.log( '----->validateForm success', result );
-            } ).catch( function( result ) {
-                console.log( '----->validateForm fail', result );
-            } );
-        } );
-        // document.getElementById( 'submit-btn' ).click();
-
-
-        var options2 = {
-            formId: 'form-2'
-        }
-
-        var validationService2 = new FormValidation(
-                options2 );
-
-
-        console.log( 'validationService2', validationService2 );
-
-        validationService2.setValues();
-
-        var form2 = document.getElementById( 'form-2' );
-
-        validation.setFeedbackDisplayLayout( form2, validationService2 );
-
-        form2.addEventListener( 'submit', function( event ) {
-            event.preventDefault();
-            // console.log( '#submit', validationService.setValues );
-            validationService2.validateForm().then( function( result ) {
-                console.log( '----->validateForm success', result );
-            } ).catch( function( result ) {
-                console.log( '----->validateForm fail', result );
-            } );
-        } );
-        // document.getElementById( 'submit-btn-2' ).click();
-    </script>
-
-</div>
 
 <script type="text/javascript" src="demo-only/js/auto-prism.js"></script>
 <script src="demo-only/vendor/js/prism.js"></script>
