@@ -9,14 +9,14 @@ module.exports = function( config ) {
 
         // Frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: [ 'jasmine', 'sinon', 'fixture' ],
+        frameworks: [ 'jasmine', 'sinon', 'fixture', 'viewport' ],
 
         // List of files / patterns to load in the browser
         files: [
-            'node_modules/babel-polyfill/dist/polyfill.js',
-            // 'example/polyfills/custom-event.js',
-            // 'example/polyfills/object-assign.js',
-            // 'example/polyfills/promise.js',
+            //'node_modules/babel-polyfill/dist/polyfill.js',
+            'example/polyfills/custom-event.js',
+            'example/polyfills/object-assign.js',
+            'example/polyfills/promise.js',
             'src/**/*.js',
             'test/**/*.js',
             {
@@ -53,6 +53,7 @@ module.exports = function( config ) {
             require( 'karma-coverage' ),
             require( 'karma-tape-reporter' ),
             require( 'karma-fixture' ),
+            require( 'karma-viewport' ),
             require( 'karma-html2js-preprocessor' ),
             require( 'karma-json-fixtures-preprocessor' )
         ],

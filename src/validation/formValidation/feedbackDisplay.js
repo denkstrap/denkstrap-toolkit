@@ -245,7 +245,7 @@ export class FeedbackDisplay {
      * @param {Object} messageLocation
      * @returns {Object|null} - Breakpoint depended message location data.
      * If breakpoint is matched all properties defined in HTML for this breakpoint (via min-width property)
-     * are returned.
+     * are returned otherwise null is returned.
      * @example
      * {
      * "minWidth": 750,

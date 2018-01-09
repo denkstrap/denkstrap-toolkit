@@ -41,6 +41,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.5",
     "karma-tape-reporter": "^1.0.3",
+    "karma-viewport": "^0.4.2",
     "karma-webpack": "^2.0.3",
     "sinon": "^2.3.2",
     "webpack": "^2.6.1",

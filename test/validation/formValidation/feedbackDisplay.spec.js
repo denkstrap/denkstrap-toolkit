@@ -7,6 +7,10 @@ describe( 'FeedbackDisplay', function() {
         this.result = fixture.load( '/test/fixtures/form.html' );
     } );
 
+    afterEach( function() {
+        viewport.reset()
+    } );
+
     describe( 'constructor', function() {
 
         it( 'should throw an error when option fieldErrorClass is not of type String', function() {
@@ -158,10 +162,8 @@ describe( 'FeedbackDisplay', function() {
         it( 'should have correct html depending on validation result', function() {
             expect( function() {
                 var feedbackDisplay = new FeedbackDisplay();
-                var id = 'name';
                 var selector = '#name, #nameWithFeedbackDisplay';
                 var ariaInvalidAttr = 'aria-invalid';
-                var ariaDescribedby = 'aria-describedby';
 
                 feedbackDisplay.setStatusBySelector( selector, false );
 
@@ -173,25 +175,172 @@ describe( 'FeedbackDisplay', function() {
 
     } );
 
-    describe( 'removeStatusBySelector( selector )', function() {
+    describe( 'getDefaultInsertLoc( field )', function() {
 
-        it( 'should have cleaned html depending on validation result', function() {
+        it( 'should give back a reference to the according label of field', function() {
             expect( function() {
                 var feedbackDisplay = new FeedbackDisplay();
-                var id = 'name';
-                var field = document.getElementById( id );
-                var selector = '#name, #nameWithFeedbackDisplay';
-                var ariaInvalidAttr = 'aria-invalid';
-                var ariaDescribedby = 'aria-describedby';
-
-                feedbackDisplay.removeStatusBySelector( selector );
-
-                var fieldsLength = document.querySelectorAll( '#form input[' + ariaInvalidAttr + ']' ).length;
-                var r = fieldsLength === 0 ? true : false;
+                var field = document.getElementById( 'name' );
+                var label = document.querySelector( '[for="name"]' );
+                var r = feedbackDisplay.getDefaultInsertLoc( field ) === label ? true : false;
                 return r;
             }() ).toBeTruthy();
         } );
 
     } );
+
+    describe( 'getBreakpointMessageInfoLocationData( messageLocation )', function() {
+
+
+        it( 'should return message breakpoint data 750', function() {
+
+            var messageLocationMin750 =
+            {
+                minWidth: 750,
+                insertTargetSelector: "#nameHidden"
+            };
+
+            expect( function() {
+
+                var feedbackDisplay = new FeedbackDisplay();
+
+                var messageLocation = [
+                    {
+                        minWidth: 0,
+                        insertTargetSelector: "#name"
+                    }
+                ];
+
+                messageLocation.push( messageLocationMin750 );
+
+                viewport.set( 750 );
+                var breakPointData = feedbackDisplay.getBreakpointMessageInfoLocationData( messageLocation );
+
+                return breakPointData;
+            }() ).toEqual( messageLocationMin750 );
+        } );
+
+        it( 'should return message location data of null', function() {
+
+            var messageLocationMin750 =
+            {
+                minWidth: 750,
+                insertTargetSelector: "#nameHidden"
+            };
+
+            expect( function() {
+
+                var feedbackDisplay = new FeedbackDisplay();
+
+                var messageLocation = [];
+
+                messageLocation.push( messageLocationMin750 );
+
+                viewport.set( 749 );
+                var breakPointData = feedbackDisplay.getBreakpointMessageInfoLocationData( messageLocation );
+
+                return breakPointData;
+            }() ).toBe( null );
+        } );
+
+    } );
+
+
+    describe( 'getMessageInsertLocationData( field, messageLocation )', function() {
+
+        it( 'should return message location data with breakpoint data 750 and label of input as fallback insert point', function() {
+
+            var messageLocationMin750 =
+            {
+                minWidth: 750,
+                insertTargetSelector: "#nameHiddenDOES_NOT_EXIST"
+            };
+
+            var infoData = {
+                insertLoc: document.querySelector( '[for="name"]' ),
+                breakpointData: messageLocationMin750
+            }
+
+            expect( function() {
+
+                var feedbackDisplay = new FeedbackDisplay();
+                var id = 'name';
+                var field = document.getElementById( id );
+
+                var messageLocation = [];
+
+                messageLocation.push( messageLocationMin750 );
+
+                viewport.set( 750 );
+                var breakPointData = feedbackDisplay.getMessageInsertLocationData( field, messageLocation );
+
+                return breakPointData;
+
+
+            }() ).toEqual( infoData );
+
+        } );
+
+    } );
+
+    describe( 'showMessage( field, message, messageLocation )', function() {
+
+        it( 'should show error message with specific message and fallback insert point', function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var field = document.getElementById( 'name' );
+                var message = 'Enter a name, please.';
+                var messageLocation = null;
+                var messageId = feedbackDisplay.getMessageId( field );
+                feedbackDisplay.showMessage( field, message, messageLocation );
+
+                var messageDom = document.getElementById( messageId );
+                var r =  messageDom instanceof HTMLElement &&
+                messageDom.querySelector( 'label' ).innerHTML === message ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+
+    describe( 'removeMessageAndAccordingAriaAttrOfField( field )', function() {
+
+        it( 'should remove error message and accrding aria attributes of field', function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var field = document.getElementById( 'name' );
+                var message = 'Enter a name, please.';
+                var messageLocation = null;
+                var messageId = feedbackDisplay.getMessageId( field );
+                feedbackDisplay.showMessage( field, message, messageLocation );
+
+                feedbackDisplay.removeMessageAndAccordingAriaAttrOfField( field );
+
+                var messageDom = document.getElementById( messageId );
+                var r =  messageDom === null &&
+                    field.getAttribute( 'aria-describedby' ) === null ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+    // describe( 'getMessageId( field )', function() {
+    //
+    //     it( 'should give back validation message id', function() {
+    //         expect( function() {
+    //             var feedbackDisplay = new FeedbackDisplay();
+    //             var id = 'name';
+    //             var field = document.getElementById( id );
+    //             var messge = feedbackDisplay.getMessageId( field );s
+    //             var r = message instanceof HTMLElement ? true : false;
+    //             return r;
+    //         }() ).toBeTruthy();
+    //     } );
+    //
+    // } );
+
+
 
 } );
