@@ -13,6 +13,12 @@ export class Cache {
             throw new TypeError( 'validationAttr must be of type String' );
         }
         this.validationAttr = validationAttr;
+
+        /**
+         *
+         * @type {Object}
+         */
+        this.data = {};
     }
 
     /**
@@ -35,6 +41,7 @@ export class Cache {
      * @returns {{getValue: (function(this:Cache)), setValue: setValue, data: Array}}
      */
     getValidationCache() {
+
         return {
             getValue: function( cacheKey ) {
                 var fieldName = cacheKey.split( '.' )[ 1 ];
@@ -46,8 +53,7 @@ export class Cache {
             }.bind( this ),
             setValue: function( cacheKey, cached ) {
                 this.data[ cacheKey ] = cached;
-            },
-            data: []
+            }.bind( this )
         };
     }
 
@@ -60,7 +66,8 @@ export class Cache {
         var fieldDom = document.getElementById( fieldName );
         var objData = fieldDom.getAttribute( this.validationAttr );
         objData = JSON.parse( objData );
-        return objData.caching ? true : false;
+        /* must have value false to prevent taking undefined as false (no coercion) */
+        return objData.caching === false ? false : true;
     }
 
 }

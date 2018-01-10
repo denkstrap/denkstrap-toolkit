@@ -223,7 +223,7 @@ export class ValidationService {
 
             var value = this.getValue( field );
 
-            var cacheKey = formId + '.' + field;
+            var cacheKey = formId + '.' + field; // TODO: discuss if formId is needed
             var cached = this.cache.getValue( cacheKey ) ||
                 {
                     value: value,

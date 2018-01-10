@@ -189,15 +189,47 @@ describe( 'FeedbackDisplay', function() {
 
     } );
 
-    describe( 'getBreakpointMessageInfoLocationData( messageLocation )', function() {
+    describe( 'checkMessageLocationDataFormat( messageLocation )', function() {
 
+        it( 'should throw an error if message location is not of type valid type', function() {
+            expect( function() {
+                var messageLocation = 1;
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( 'should throw an error if message location is not of valid subtype', function() {
+            expect( function() {
+                var messageLocation = [ { 'minWidth': '0', 'insertTargetSelector': '[for="nameWithFeedbackDisplay"]' } ];
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( 'should throw an error if corresponding messageLocation.insertTargetSelector is null', function() {
+            expect( function() {
+                var messageLocation = [ { 'minWidth': 0, 'insertTargetSelector': '[for="nameWithFeedbackDisplay_DOES_NOT_EXIST"]' } ];
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( 'should throw no error if message location is made of valid data', function() {
+            expect( function() {
+                var messageLocation = [ { 'minWidth': 0, 'insertTargetSelector': '[for="nameWithFeedbackDisplay"]' } ];
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).not.toThrowError();
+        } );
+
+
+    } );    
+
+    describe( 'getBreakpointMessageInfoLocationData( messageLocation )', function() {
 
         it( 'should return message breakpoint data 750', function() {
 
             var messageLocationMin750 =
             {
                 minWidth: 750,
-                insertTargetSelector: "#nameHidden"
+                insertTargetSelector: '#nameHidden'
             };
 
             expect( function() {
@@ -207,7 +239,7 @@ describe( 'FeedbackDisplay', function() {
                 var messageLocation = [
                     {
                         minWidth: 0,
-                        insertTargetSelector: "#name"
+                        insertTargetSelector: '#name'
                     }
                 ];
 
@@ -225,7 +257,7 @@ describe( 'FeedbackDisplay', function() {
             var messageLocationMin750 =
             {
                 minWidth: 750,
-                insertTargetSelector: "#nameHidden"
+                insertTargetSelector: '#nameHidden'
             };
 
             expect( function() {
@@ -253,7 +285,7 @@ describe( 'FeedbackDisplay', function() {
             var messageLocationMin750 =
             {
                 minWidth: 750,
-                insertTargetSelector: "#nameHiddenDOES_NOT_EXIST"
+                insertTargetSelector: '#nameHiddenDOES_NOT_EXIST'
             };
 
             var infoData = {

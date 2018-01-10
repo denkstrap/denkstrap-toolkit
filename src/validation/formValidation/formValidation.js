@@ -105,6 +105,12 @@ export class FormValidation {
         this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplayOptions );
 
         /**
+         * {@link Cache}
+         * @type {Class}
+         */
+        var cache = new Cache( this.options.validationAttr );
+
+        /**
          * {@link ValidationServiceExt}
          * @type {Class}
          */
@@ -114,7 +120,7 @@ export class FormValidation {
                 this.configFields,
                 this.options.validators,
                 this.feedbackDisplay ).resolver(),
-            this.options.caching ? new Cache( this.options.validationAttr ).getValidationCache() : new Cache().getValidationOffCache(),
+            this.options.caching ? cache.getValidationCache() : cache.getValidationOffCache(),
             this.options.stopValidationOnFirstFail );
 
         /**

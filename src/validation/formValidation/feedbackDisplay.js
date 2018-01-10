@@ -232,7 +232,7 @@ export class FeedbackDisplay {
                 }
 
                 var insertLoc = document.querySelector( bP.insertTargetSelector );
-                if ( typeof insertLoc === null ) {
+                if ( insertLoc === null ) {
                     throw new TypeError( 'messageLocation needs for each entry a insertTargetSelector not resulting in null' );
                 }
 
