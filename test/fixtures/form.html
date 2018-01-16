@@ -3,11 +3,11 @@
     <label for="name">Name</label>
     <input name="name"
            id="name"
-           value="testname"
            data-validation='{
                 "validators": {
                     "required": { "message": "Required \"name\" not set" }
-                }
+                },
+                "setEventOnValidation": true
             }'
     >
 
@@ -32,7 +32,8 @@
                     "required": { "message": "Required \"name\" not set" }
                 },
                 "feedbackDisplay": {
-                    "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ]
+                    "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ],
+                    "fieldShowState": true
                 },
                 "caching": false
             }'

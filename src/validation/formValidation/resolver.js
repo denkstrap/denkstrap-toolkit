@@ -34,7 +34,7 @@ export class Resolver {
          *
          * @type {Object}
          */
-        if ( typeof configFields !== 'object' ) {
+        if ( typeof feedbackDisplay !== 'object' ) {
             throw new TypeError( 'feedbackDisplay is not of type object' );
         }
         this.feedbackDisplay = feedbackDisplay;
@@ -56,22 +56,64 @@ export class Resolver {
      * @property {Object} result merged HTML given data
      * (merged with default feedbackData {@link getValidationFieldConfig} )
      * and validator feedbackData
+     * @example
+     *
+     * from HTML:
+     * "feedbackDisplay": {
+     *   "fieldShowState": true
+     * }
+     *
+     * from validator:
+     * result = {
+     *            options: {
+     *                'feedbackDisplay': {
+     *                    "fieldShowState": false
+     *                }
+     *            },
+     *            isValid: valid
+     *        }
+
      */
     getValidationFeedbackData( result, fieldName ) {
+
+        if ( typeof result !== 'object' ) {
+            throw new TypeError( 'result must be an object' );
+        }
+
+        if ( typeof fieldName !== 'string' ) {
+            throw new TypeError( 'fieldName must be a string' );
+        }
+
         // get validator feedbackData
         var configFeedbackDisplayValidator = result.options && result.options.feedbackDisplay ?
             result.options.feedbackDisplay : {};
         var configFeedbackDisplay = {};
 
         Object.keys( this.configFields[ fieldName ].feedbackDisplay ).forEach( function( key ) {
-            configFeedbackDisplay[ key ] = configFeedbackDisplayValidator[ key ] ?
-                Object.assign(
-                    this.configFields[ fieldName ].feedbackDisplay[ key ] || {},
-                    configFeedbackDisplayValidator[ key ] || {}
-                ) : this.configFields[ fieldName ].feedbackDisplay[ key ];
+            configFeedbackDisplay[ key ] =
+                typeof configFeedbackDisplayValidator[ key ] !== 'undefined' ?
+                    typeof this.configFields[ fieldName ].feedbackDisplay[ key ] === 'object' &&
+                    typeof configFeedbackDisplayValidator[ key ] === 'object' ?
+                        Object.assign(
+                            this.configFields[ fieldName ].feedbackDisplay[ key ],
+                            configFeedbackDisplayValidator[ key ]
+                        ) :
+                        configFeedbackDisplayValidator[ key ] :
+                    this.configFields[ fieldName ].feedbackDisplay[ key ];
+
         }.bind( this ) );
 
         return configFeedbackDisplay;
+    }
+
+    /**
+     *
+     * @param {Object} setByValidatorOnly
+     */
+    displayActionSetByValidatorOnly( setByValidatorOnly ) {
+        this.feedbackDisplay.setStatusBySelector( setByValidatorOnly.fieldShowStateValidSel, true );
+        this.feedbackDisplay.setStatusBySelector( setByValidatorOnly.fieldShowStateInvalidSel, false );
+        this.feedbackDisplay.removeStatusBySelector( setByValidatorOnly.fieldRemoveStateSel );
     }
 
     /**
@@ -119,16 +161,6 @@ export class Resolver {
 
         this.feedbackDisplay.removeMessageAndAccordingAriaAttrOfField( fieldDom );
         this.displayActionSetByValidatorOnly( configFeedbackDisplay.setByValidatorOnly );
-    }
-
-    /**
-     *
-     * @param {Object} setByValidatorOnly
-     */
-    displayActionSetByValidatorOnly( setByValidatorOnly ) {
-        this.feedbackDisplay.setStatusBySelector( setByValidatorOnly.fieldShowStateValidSel, true );
-        this.feedbackDisplay.setStatusBySelector( setByValidatorOnly.fieldShowStateInvalidSel, false );
-        this.feedbackDisplay.removeStatusBySelector( setByValidatorOnly.fieldRemoveStateSel );
     }
 
     /**
@@ -183,8 +215,10 @@ export class Resolver {
                      */
                     resolve(
                         function( value, validator, validationService, fieldName ) {
+
+                            console.log( '######...validator', validator );
                             return new Promise( function( resolve, reject ) {
-                                  var fieldDom = document.getElementById( fieldName );
+                                var fieldDom = document.getElementById( fieldName );
 
                                 var data = {};
                                 data.value = value;
@@ -199,16 +233,16 @@ export class Resolver {
                                     console.log( 'ERROR: Validator', validatorName, 'not defined' );
                                 }
 
-
                                 this.validators[ validatorName ]( value, data )
                                     .then( function( result ) {
+
+                                        var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
+                                        this.displayActionValid( fieldDom, configFeedbackDisplay, this.feedbackDisplay );
+
                                         if ( this.configFields[ fieldName ]
                                                 .setEventOnValidation ) {
                                             this.dispatchEvent( fieldDom, true );
                                         }
-
-                                        var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
-                                        this.displayActionValid( fieldDom, configFeedbackDisplay, this.feedbackDisplay );
 
                                         resolve(
                                             {
@@ -217,21 +251,23 @@ export class Resolver {
                                         );
 
                                     }.bind( this ) ).catch( function( result ) {
-                                        if ( this.configFields[ fieldName ]
-                                                .setEventOnValidation ) {
-                                            this.dispatchEvent( fieldDom, false );
+
+
+
+                                    var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
+
+                                    this.displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay );
+
+                                    if ( this.configFields[ fieldName ]
+                                            .setEventOnValidation ) {
+                                        this.dispatchEvent( fieldDom, false );
+                                    }
+
+                                    reject(
+                                        {
+                                            isValid: false
                                         }
-
-                                        var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
-
-                                        this.displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay,
-                                            this.feedbackDisplay );
-
-                                        reject(
-                                            {
-                                                isValid: false
-                                            }
-                                        );
+                                    );
 
                                 }.bind( this ) );
 

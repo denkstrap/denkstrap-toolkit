@@ -6,7 +6,7 @@ validation.validators.requiredGroupNot = function( value ) {
         var valid = !value;
         if ( valid ) {
             options = {
-                "feedbackDisplay": {
+                feedbackDisplay: {
                     "fieldShowState": false
                 }
             }
@@ -16,7 +16,7 @@ validation.validators.requiredGroupNot = function( value ) {
             } );
         } else {
             options = {
-                "feedbackDisplay": {
+                feedbackDisplay: {
                     "fieldShowState": true
                 }
             }

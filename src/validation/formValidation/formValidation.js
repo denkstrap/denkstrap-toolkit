@@ -18,24 +18,24 @@ import getValidationFields from './getValidationFields'
  * This Class offers form validation via html driven setup combined with customized or default validators
  *
  * @example
-  <form id="form">
+ <form id="form">
 
-   <input name="name" id="name"
-     data-validation='{
+ <input name="name" id="name"
+ data-validation='{
      "validators": {
      "required": { "message": "Required \"name\" not set" } },
      "feedbackDisplay": {
         "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"name\"]" } ]
      }
     }'
-  >
+ >
 
-    <button id="submit-btn" type="submit">Validate Form</button>
-  </form>
+ <button id="submit-btn" type="submit">Validate Form</button>
+ </form>
 
  <script type="text/javascript">
 
-      var options = {
+ var options = {
         formId: 'form',
         caching: false
     }
@@ -56,8 +56,8 @@ import getValidationFields from './getValidationFields'
 
 } );
 
-  </script>
-  */
+ </script>
+ */
 export class FormValidation {
 
     /**
@@ -82,6 +82,19 @@ export class FormValidation {
         this.options = this.getMergedOptions( options );
 
         /**
+         * {@link FeedbackDisplay}
+         * @type {Class}
+         */
+        this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplayOptions );
+
+        /**
+         * {@link Cache}
+         * cache set a to this context to make them public
+         * @type {Class}
+         */
+        this.cache = new Cache( this.options.validationAttr );
+
+        /**
          * @type {Array} - Field dom references
          */
         var fields = this.getValidationFields();
@@ -97,30 +110,32 @@ export class FormValidation {
          * @type {Object}
          */
         this.configFields = this.getValidationFieldConfig( fields );
+    }
 
-        /**
-         * {@link FeedbackDisplay}
-         * @type {Class}
-         */
-        this.feedbackDisplay = new FeedbackDisplay( options.feedbackDisplayOptions );
+    /**
+     *
+     * @type {Class} Resolver
+     */
+    setResolver() {
+        this.resolver = new Resolver(
+            this.configFields,
+            this.options.validators,
+            this.feedbackDisplay );
+    }
 
-        /**
-         * {@link Cache}
-         * @type {Class}
-         */
-        var cache = new Cache( this.options.validationAttr );
-
+    /**
+     * Initializes the validation service
+     * and field behaviour.
+     */
+    setValidationAndBehaviour() {
         /**
          * {@link ValidationServiceExt}
          * @type {Class}
          */
         this.validation = new ValidationServiceExt(
             this.config,
-            new Resolver(
-                this.configFields,
-                this.options.validators,
-                this.feedbackDisplay ).resolver(),
-            this.options.caching ? cache.getValidationCache() : cache.getValidationOffCache(),
+            this.resolver.resolver(),
+            this.options.caching ? this.cache.getValidationCache() : this.cache.getValidationOffCache(),
             this.options.stopValidationOnFirstFail );
 
         /**
@@ -140,6 +155,17 @@ export class FormValidation {
             // console.log( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
             throw new Error( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
         }
+
+    }
+
+    /**
+     * Does the required setup.
+     * Set in extra part - why?
+     * This allows to manipulate several objects for customization
+     */
+    init() {
+        this.setResolver();
+        this.setValidationAndBehaviour();
     }
 
     /**
@@ -296,11 +322,7 @@ export class FormValidation {
         this.configFields = this.getValidationFieldConfig( fields );
         this.validation.setConfig( this.config );
         this.setValues();
-        this.validation.setResolver(
-            new Resolver(
-                this.configFields,
-                this.options.validators,
-                this.feedbackDisplay ).resolver() );
+        this.setResolver();
         this.behaviour.updateConfigFieldsAndValidation( this.configFields, this.validation );
         this.behaviour.behaviour();
     }

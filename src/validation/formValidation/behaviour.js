@@ -11,11 +11,27 @@ export class Behaviour {
      * @param {String} formId - The id of the form.
      * @property {String} validationAttr     *
      * @param {Function} condition - The condition for to collect the validating fields
-     * @param {configFields} configFields - The config of fields
+     * @param {Object} configFields - The config of fields
      * @param {Object} The validation service object
      */
     constructor( formId, validationAttr, condition, configFields, validation ) {
 
+        if ( typeof formId !== 'string' ) {
+            throw new TypeError( 'form id must be of type String' );
+        }
+
+        if ( typeof condition !== 'function' ) {
+            throw new TypeError( 'formId must be of type function' );
+        }
+
+        if ( typeof configFields !== 'object' ) {
+            throw new TypeError( 'configFields must be of type function' );
+        }
+
+        if ( typeof validation !== 'object' ) {
+            throw new TypeError( 'validation must be of type object' );
+        }
+        
         /**
          *
          * @type {String}

@@ -1,4 +1,4 @@
-import { ValidationService } from '../../src/validation/validation.service.ext';
+import { ValidationServiceExt } from '../../src/validation/validation.service.ext';
 /** @test {ValidationServiceExt} */
 
 describe( 'Validation Service Ext', function() {
@@ -30,11 +30,12 @@ describe( 'Validation Service Ext', function() {
     } );
 
     it( 'should set the correct value to validator config', function() {
+        var el = document.getElementById( 'name' );
+        el.value = 'testname';
         var validationResolver = { getValidator: function() {} };
         var validationService = new ValidationServiceExt( {}, validationResolver, cacheMock );
-        var el = document.getElementById( 'name' );
-        validationService.setValueByField( el );
         var config = validationService.getValues();
+        validationService.setValueByField( el );
         expect( config ).toEqual( {
             name: 'testname'
         } );

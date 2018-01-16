@@ -26,7 +26,7 @@ validation.validators.requiredGroupAny = function( value, config ) {
         var valid = value || otherValid;
         if ( valid ) {
             options = {
-                "feedbackDisplay": {
+                feedbackDisplay: {
                     "fieldShowState": value
                 }
             }
@@ -36,7 +36,7 @@ validation.validators.requiredGroupAny = function( value, config ) {
             } );
         } else {
             options = {
-                "feedbackDisplay": {
+                feedbackDisplay: {
                     "fieldShowState": true
                 }
             }

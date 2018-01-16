@@ -1,6 +1,6 @@
 import {Cache} from '../../../src/validation/formValidation/cache';
 
-/** @test {Behaviour} */
+/** @test {Cache} */
 
 describe( 'Cache', function() {
 
@@ -16,8 +16,6 @@ describe( 'Cache', function() {
                 var cache = new Cache( 1 );
             } ).toThrowError( TypeError );
         } );
-
-        //this.options.caching ? new Cache( this.options.validationAttr ).getValidationCache() : new Cache().getValidationOffCache(),
 
     } );
 

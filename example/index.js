@@ -13,6 +13,7 @@ var options = {
 var validationService = new FormValidation(
     options );
 
+validationService.init();
 
 console.log( 'validationService', validationService );
 
@@ -24,7 +25,6 @@ validation.setGroupMessageBehavior( form, validationService );
 
 form.addEventListener( 'submit', function( event ) {
     event.preventDefault();
-    // console.log( '#submit', validationService.setValues );
     validationService.validateForm().then( function( result ) {
         console.log( '----->validateForm success', result );
     } ).catch( function( result ) {
@@ -45,6 +45,7 @@ var options2 = {
 var validationService2 = new FormValidation(
     options2 );
 
+validationService2.init();
 
 console.log( 'validationService2', validationService2 );
 

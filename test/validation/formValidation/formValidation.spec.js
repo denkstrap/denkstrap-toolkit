@@ -37,10 +37,11 @@ describe( 'FormValidation', function() {
 
     it( 'should throw an error when parameter Behaviour is not a class/prototype', function() {
         expect( function() {
-            new FormValidation( {
+            formValidation = new FormValidation( {
                 formId: 'form',
                 Behaviour: {}
-            } )
+            } );
+            formValidation.init();
         } ).toThrowError( Error );
     } );
 
