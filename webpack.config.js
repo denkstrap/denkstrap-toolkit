@@ -27,8 +27,8 @@ module.exports = (config) => {
                     test: /\.js$/,
                     exclude: /(node_modules|test|__*\.js)/,
                     use: [
-                        "babel-loader",
-                        "eslint-loader"
+                        "babel-loader"//,
+                        // "eslint-loader"
                     ]
                 }
             ]

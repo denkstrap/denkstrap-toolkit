@@ -16,6 +16,12 @@ describe( 'dispatchEvent', function() {
             } ).toThrowError( TypeError );
         } );
 
+        it( 'should throw an error when given parameter isValid is not of type Boolean', function() {
+            var field = document.getElementById( 'name' );
+            expect( function() {
+                dispatchEvent( field, 'true' );
+            } ).toThrowError( TypeError );
+        } );
 
         it( 'should receive a proper event message', function( done ) {
             var fieldId = 'name';

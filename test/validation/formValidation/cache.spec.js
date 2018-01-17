@@ -20,7 +20,7 @@ describe( 'Cache', function() {
     } );
 
     describe( 'getValidationCache()', function() {
-    
+
         it( 'should cache the value', function() {
 
             var fieldId = 'name';
@@ -41,7 +41,7 @@ describe( 'Cache', function() {
 
 
         it( 'should not cache the value', function() {
-        
+
             var fieldId = 'nameWithFeedbackDisplay';
             var formId = 'form';
             var field = document.getElementById( fieldId );
@@ -49,13 +49,13 @@ describe( 'Cache', function() {
             var cacheKey = formId + '.' + fieldId;
             var cached = field.value;
             var cache = new Cache( 'data-validation' );
-        
+
             var validationCache = cache.getValidationCache();
-        
+
             validationCache.setValue( cacheKey, cached );
             expect( validationCache.getValue( cacheKey )).toEqual( false );
         } );
-        
+
     } );
 
 } );

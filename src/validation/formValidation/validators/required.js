@@ -1,16 +1,11 @@
 /**
  * The required validator.
- * @param {Boolean|undefined} value
+ * @param {String} value
  * @returns {Promise}
  */
 export default function required( value ) {
     return new Promise( function( resolve, reject ) {
-        var valid;
-        if ( typeof value === 'string' ) {
-            valid = value.trim() === '' ? false : true;
-        } else {
-            valid = value;
-        }
+        var valid = value !== '' ? value.trim() === '' ? false : true : false;
 
         if ( valid ) {
             resolve( {

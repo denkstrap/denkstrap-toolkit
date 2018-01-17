@@ -277,6 +277,7 @@ describe( 'FeedbackDisplay', function() {
             } else {
                 console.log( '!!!!!!!!!!!!!!!!!!!!!! viewport is not working in Netscape ' +
                     '- so this test is skipped(should return message location data of null)' );
+                // TODO: Is there a possibility to get it working on FF/PhantomJS
                 done();
             }
 
