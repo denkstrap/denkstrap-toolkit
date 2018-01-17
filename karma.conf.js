@@ -31,7 +31,7 @@ module.exports = function( config ) {
         // Preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/**/*.js': [ 'webpack', 'coverage' ],
+            'src/**/*.js': [ 'webpack' ],
             'test/**/*.js': [ 'webpack' ],
             'test/fixtures/**/*.html'   : [ 'html2js' ],
             'test/fixtures/**/*.json'   : ['json_fixtures']
@@ -87,7 +87,7 @@ module.exports = function( config ) {
 
         // Start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [ 'PhantomJS' ], 
+        browsers: [ 'PhantomJS' ],
         
         // not every browser of this list below is/could be installed
         // - so adjust it (comment out/in) according to your local prerequisite
