@@ -160,12 +160,6 @@ describe( 'Resolver', function() {
 
         it( 'should set error caused dom manipulations', function( done ) {
 
-            var setByValidatorOnly = {
-                fieldShowStateValidSel: null,
-                fieldShowStateInvalidSel: null,
-                fieldRemoveStateSel: '#name'
-            }
-
             var validatorResultData = {
                 options: {
                     feedbackDisplay: {
@@ -204,5 +198,97 @@ describe( 'Resolver', function() {
 
 
     } );
+
+
+    describe( 'displayActionValid( fieldDom, configFeedbackDisplay )', function() {
+
+        it( 'should set valid validator result caused dom manipulations', function( done ) {
+
+            var validatorResultData = {
+                options: {
+                    feedbackDisplay: {
+                        fieldShowState: true
+                    }
+                }
+            };
+
+            var configServiceValidator = {
+                "message": "Required \"name\" not set"
+            }
+
+            var formValidation = new FormValidation( { formId: formId } );
+            formValidation.init();
+
+            var name = 'name';
+            var field = document.getElementById( name );
+            var eventName = name + '-validated';
+            field.addEventListener( eventName, function( event ) {
+                formValidation.resolver.displayActionValid(
+                    field,
+                    formValidation.configFields[ name ].feedbackDisplay );
+                expect( function() {
+                    return document.getElementById( name ).classList.contains( 'validation-success' );
+                }() ).toBeTruthy();
+
+                done();
+
+            } );
+
+            formValidation.validateForm();
+
+        } );
+
+
+    } );
+
+
+    describe( 'getAddInfoData( fieldName, configFields )', function() {
+
+        it( 'should give additional data to validator', function( done ) {
+
+            var addInfo = {
+                groupMembers: [
+                    { id: 'name', value: '' },
+                    { id: 'nameHidden', value: 'testnameHidden' }
+                ]
+            }
+
+            var validatorResultData = {
+                options: {
+                    feedbackDisplay: {
+                        fieldShowState: true
+                    }
+                }
+            };
+
+            var configServiceValidator = {
+                "message": "Required \"name\" not set"
+            }
+
+            var formValidation = new FormValidation( { formId: formId } );
+            formValidation.init();
+
+            var name = 'name';
+            var field = document.getElementById( name );
+            var eventName = name + '-validated';
+            field.addEventListener( eventName, function( event ) {
+
+                expect( function() {
+                    return formValidation.resolver.getAddInfoData( 'nameWithFeedbackDisplay', formValidation.configFields );
+                }() ).toEqual( addInfo );
+
+                done();
+
+            } );
+
+            formValidation.validateForm();
+
+        } );
+
+
+    } );
+
+
+
 
 } );

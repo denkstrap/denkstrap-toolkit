@@ -17,10 +17,10 @@
            id="nameHidden"
            value="testnameHidden"
            data-validation='{
-                "validators": {
-                    "required": { "message": "Required \"nameHidden\" not set" }
-                }
-            }'
+    "validators": {
+    "required": { "message": "Required \"nameHidden\" not set" }
+    }
+    }'
     >
 
     <label for="nameWithFeedbackDisplay">Name nameWithFeedbackDisplay</label>
@@ -28,15 +28,16 @@
            id="nameWithFeedbackDisplay"
            value="nameWithFeedbackDisplay"
            data-validation='{
-                "validators": {
-                    "required": { "message": "Required \"name\" not set" }
-                },
-                "feedbackDisplay": {
-                    "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ],
-                    "fieldShowState": true
-                },
-                "caching": false
-            }'
+    "validators": {
+    "required": { "message": "Required \"name\" not set" }
+    },
+    "feedbackDisplay": {
+    "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ],
+    "fieldShowState": true
+    },
+    "caching": false,
+    "groupSel": "#name, #nameHidden"
+    }'
     >
 
 </form>
@@ -67,10 +68,10 @@
            id="formInvalidDataAttrDataName"
            value="formInvalidDataAttrDataTestname"
            data-validation='
-                "validators": {
-                    "required": { "message": "Required \"name\" not set" }
-                }
-            }'
+"validators": {
+"required": { "message": "Required \"name\" not set" }
+}
+}'
     >
 
 </form>
@@ -82,25 +83,25 @@
            id="formDataAttrDataWithoutValidatorsName"
            value="formDataAttrDataWithoutValidatorsTestname"
            data-validation='{
-            }'
+}'
     >
 
 </form>
 
 <form id="formInvalidMessageLocationData">
 
-    <label for="formInvalidMessageLocationData">Name</label>
+    <label for="InvalidMessageLocationData">Name</label>
     <input name="formInvalidMessageLocationData"
            id="InvalidMessageLocationData"
            value="formInvalidMessageLocationData"
            data-validation='{
-                "validators": {
-                    "required": { "message": "Required \"name\" not set" }
-                },
-                "feedbackDisplay": {
-                    "messageLocation": [ { "minWidthXXX": 0, "insertTargetSelector": "#formInvalidMessageLocationData" } ]
-                }
-            }'
+"validators": {
+"required": { "message": "Required \"name\" not set" }
+},
+"feedbackDisplay": {
+"messageLocation": [ { "minWidthXXX": 0, "insertTargetSelector": "#formInvalidMessageLocationData" } ]
+}
+}'
     >
 
 </form>

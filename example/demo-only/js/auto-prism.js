@@ -1,6 +1,6 @@
 
 
-var prismMarks = document.querySelectorAll('[data-prism');
+var prismMarks = document.querySelectorAll('[data-prism]');
 
 var escapeHTML = function( html ) {
     var tagsToReplace = {

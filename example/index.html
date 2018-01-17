@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script type="text/javascript" src="polyfills/promise.js"></script>
-    <script type="text/javascript" src="polyfills/custom-event.js"></script>
-    <script type="text/javascript" src="polyfills/object-assign.js"></script>
+    <script src="polyfills/promise.js"></script>
+    <script src="polyfills/custom-event.js"></script>
+    <script src="polyfills/object-assign.js"></script>
 
-    <script type="text/javascript" src="/dist/validation/formValidation/formValidation.js"></script>
+    <script src="/dist/validation/formValidation/formValidation.js"></script>
     <link rel="stylesheet" href="css/validation.css">
     <link rel="stylesheet" href="css/checkbox.css">
     <link rel="stylesheet" href="css/radio.css">
@@ -41,11 +41,11 @@
             }'>
     </div>
     <button class="submit-btn" type="submit">Validate Form</button>
-
-    <h3>Validate Positive If Any Radio Clicked</h3>
-    <div data-prism>
-        <div class="radio" id="radio-insert-loc">
-            <input type="radio" name="mode" id="mode-1" class="radio__input" data-validation='{
+    <fieldset>
+        <h3><legend>Validate Positive If Any Radio Clicked</legend></h3>
+        <div data-prism>
+            <div class="radio" id="radio-insert-loc">
+                <input type="radio" name="mode" id="mode-1" class="radio__input" data-validation='{
                "validators": {
                "requiredGroupAny": {
                "message": "check any option, please."
@@ -58,10 +58,10 @@
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#radio-insert-loc" } ]
                }
                }'>
-            <label class="radio__label" for="mode-1">private</label>
-        </div>
-        <div class="radio">
-            <input type="radio" name="mode" id="mode-2" class="radio__input" data-validation='{
+                <label class="radio__label" for="mode-1">private</label>
+            </div>
+            <div class="radio">
+                <input type="radio" name="mode" id="mode-2" class="radio__input" data-validation='{
                "validators": {
                "requiredGroupAny": {
                "message": "Check any option, please."
@@ -74,9 +74,10 @@
                "messageShow": false
                }
                }'>
-            <label class="radio__label" for="mode-2">business</label>
+                <label class="radio__label" for="mode-2">business</label>
+            </div>
         </div>
-    </div>
+    </fieldset>
     <button class="submit-btn" type="submit">Validate Form</button>
     <br><br>
 
@@ -124,7 +125,8 @@
     <button class="submit-btn" type="submit">Validate Form</button>
     <br><br>
 
-    <h3>Validate Group With Needing Single Choice</h3>
+    <fieldset>
+    <h3><legend>Validate Group With Needing Single Choice</legend></h3>
     <div data-prism>
         <div class="radio" id="radio-insert-loc-2">
             <input type="radio" name="legal-terms" id="legal-terms-1" class="radio__input" data-validation='{
@@ -158,15 +160,17 @@
             <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
         </div>
     </div>
+    </fieldset>
     <button class="submit-btn" type="submit">Validate Form</button>
     <br><br>
 
     <h3>Validate A Select Field</h3>
     <div data-prism>
+        <label class="hidden" for="language">Language</label>
         <select name="language" id="language" data-validation='{
             "validators": { "required": { "message": "Required \"language\" not set." } }
             }'>
-            <option value="" selected></option>
+            <option value="" selected>make your choice</option>
             <option value="Germany">Germany</option>
             <option value="England">England</option>
         </select>
@@ -200,6 +204,7 @@
                },
                "groupSel": "[data-pre-number-number-group]"
                }' data-pre-number-number-group>
+            <label class="hidden" for="number">phone main number</label>
             <input type="number" id="number" name="number" data-validation='{
                "validators": { "required": { "message": "Required field \"phone\" not set." } },
                "feedbackDisplay": {
@@ -235,11 +240,13 @@
                "setEventOnValidation": true,
                "groupSel": "[data-phone-number-group]"
                }' data-phone-number-group>
+            <label class="hidden" for="number-2">phone number main</label>
             <input type="number" id="number-2" name="number-2" data-validation='{
     "validators": { "required": {} },
     "feedbackDisplay": {
     "fieldShowState": true,
-    "messageShow": false
+    "messageShow": false,
+    "fieldIdForAriaUsage": "pre-number-2"
     },
     "setEventOnValidation": true,
     "groupSel": "[data-phone-number-group]"
@@ -337,23 +344,23 @@
 
 </form>
 
-<script type="text/javascript" src="ajax.js"></script>
-<script type="text/javascript" src="base.js"></script>
-<script type="text/javascript" src="adds.js"></script>
+<script src="ajax.js"></script>
+<script src="base.js"></script>
+<script src="adds.js"></script>
 
-<script type="text/javascript" src="validators/requiredGroupAny.js"></script>
-<script type="text/javascript" src="validators/requiredGroupNot.js"></script>
-<script type="text/javascript" src="validators/ajax.js"></script>
-<script type="text/javascript" src="validators/checkbox.js"></script>
-<script type="text/javascript" src="validators/minLength.js"></script>
+<script src="validators/requiredGroupAny.js"></script>
+<script src="validators/requiredGroupNot.js"></script>
+<script src="validators/ajax.js"></script>
+<script src="validators/checkbox.js"></script>
+<script src="validators/minLength.js"></script>
 
-<script type="text/javascript" src="feedback-display-group.js"></script>
-<script type="text/javascript" src="feedback-display-layout.js"></script>
+<script src="feedback-display-group.js"></script>
+<script src="feedback-display-layout.js"></script>
 
-<script type="text/javascript" src="index.js"></script>
+<script src="index.js"></script>
 
 
-<script type="text/javascript" src="demo-only/js/auto-prism.js"></script>
+<script src="demo-only/js/auto-prism.js"></script>
 <script src="demo-only/vendor/js/prism.js"></script>
 </body>
 
