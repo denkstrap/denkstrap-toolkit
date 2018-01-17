@@ -1,11 +1,12 @@
 // Karma configuration
-// Generated on Mon Sep 21 2015 14:52:54 GMT+0200 (CEST)
 
 module.exports = function( config ) {
     config.set( {
 
         // Base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
+
+        browserConsoleLogOptions: {level: 'log', format: '%b %T: %m', terminal: true },
 
         // Frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -17,6 +18,7 @@ module.exports = function( config ) {
             'example/polyfills/custom-event.js',
             'example/polyfills/object-assign.js',
             'example/polyfills/promise.js',
+            'node_modules/axe-core/axe.min.js',
             'src/**/*.js',
             'test/**/*.js',
             {
@@ -29,7 +31,7 @@ module.exports = function( config ) {
         // Preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/**/*.js': [ 'webpack' ],
+            'src/**/*.js': [ 'webpack', 'coverage' ],
             'test/**/*.js': [ 'webpack' ],
             'test/fixtures/**/*.html'   : [ 'html2js' ],
             'test/fixtures/**/*.json'   : ['json_fixtures']
@@ -43,13 +45,17 @@ module.exports = function( config ) {
 
         webpackMiddleware: {
             stats: 'errors-only'
-		},
+        },
 
         plugins: [
             require( 'karma-webpack' ),
             require( 'karma-jasmine' ),
             require( 'karma-sinon' ),
             require( 'karma-phantomjs-launcher' ),
+            require( 'karma-chrome-launcher' ),
+            require( 'karma-firefox-launcher' ),
+            require( 'karma-ie-launcher' ),
+            require( 'karma-safari-launcher' ),
             require( 'karma-coverage' ),
             require( 'karma-tape-reporter' ),
             require( 'karma-fixture' ),
@@ -63,8 +69,8 @@ module.exports = function( config ) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: [
             // 'progress',
-            'tape'
-            // 'coverage'
+            'tape',
+             'coverage'
         ],
 
         // Web server port
@@ -81,7 +87,15 @@ module.exports = function( config ) {
 
         // Start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [ 'PhantomJS' ],
+        browsers: [ 'PhantomJS' ], 
+        
+        // not every browser of this list below is/could be installed
+        // - so adjust it (comment out/in) according to your local prerequisite
+        // browsers: [ 'PhantomJS', 'Chrome', 'Firefox' ],
+        // browsers: [ 'Chrome' ],
+        // browsers: [ 'Firefox' ],
+        // browsers: [ 'IE' ],
+        // browsers: [ 'Safari' ],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
@@ -97,5 +111,6 @@ module.exports = function( config ) {
                 { type: 'teamcity', subdir: '.', file: 'teamcity.txt' }
             ]
         }
+
     } );
 };
