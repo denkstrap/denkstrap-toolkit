@@ -7,7 +7,9 @@
 
  code[class*="language-"],
  pre[class*="language-"] {
-	 color: #f8f8f2;
+	 /*color: #f8f8f2;*/
+     /*https://webaim.org/resources/contrastchecker/*/
+     color: #FFFFFF;
 	 background: none;
 	 text-shadow: 0 1px rgba(0, 0, 0, 0.3);
 	 font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
@@ -38,7 +40,8 @@
  
  :not(pre) > code[class*="language-"],
  pre[class*="language-"] {
-	 background: #272822;
+	 /*background: #272822;*/
+     background: #000000;
  }
  
  /* Inline code */
@@ -68,7 +71,9 @@
  .token.constant,
  .token.symbol,
  .token.deleted {
-	 color: #f92672;
+	 /*color: #f92672;*/
+     /*WCAG*/
+     color: #FC5F99;
  }
  
  .token.boolean,

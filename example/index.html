@@ -21,17 +21,17 @@
 <body>
 <h1>Form Validation Examples</h1>
 
+<main>
+    <h2>First Form</h2>
+    <form id="form">
 
-<h2>First Form</h2>
-<form id="form">
-
-    <h2>Validation On Dynamic Dom</h2>
-    <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
-    <br><br>
-    <h3>Validate Not Empty</h3>
-    <div data-prism>
-        <label for="name">Name</label>
-        <input name="name" id="name" data-validation='{
+        <h2>Validation On Dynamic Dom</h2>
+        <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
+        <br><br>
+        <h3>Validate Not Empty</h3>
+        <div data-prism>
+            <label for="name">Name</label>
+            <input name="name" id="name" data-validation='{
             "validators": {
             "required": { "message": "Required \"name\" not set" }
             },
@@ -39,13 +39,13 @@
             "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"name\"]" } ]
             }
             }'>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <fieldset>
-        <h3><legend>Validate Positive If Any Radio Clicked</legend></h3>
-        <div data-prism>
-            <div class="radio" id="radio-insert-loc">
-                <input type="radio" name="mode" id="mode-1" class="radio__input" data-validation='{
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <fieldset>
+            <legend><h3>Validate Positive If Any Radio Clicked</h3></legend>
+            <div data-prism>
+                <div class="radio" id="radio-insert-loc">
+                    <input type="radio" name="mode" id="mode-1" class="radio__input" data-validation='{
                "validators": {
                "requiredGroupAny": {
                "message": "check any option, please."
@@ -58,10 +58,10 @@
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#radio-insert-loc" } ]
                }
                }'>
-                <label class="radio__label" for="mode-1">private</label>
-            </div>
-            <div class="radio">
-                <input type="radio" name="mode" id="mode-2" class="radio__input" data-validation='{
+                    <label class="radio__label" for="mode-1">private</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="mode" id="mode-2" class="radio__input" data-validation='{
                "validators": {
                "requiredGroupAny": {
                "message": "Check any option, please."
@@ -74,17 +74,17 @@
                "messageShow": false
                }
                }'>
-                <label class="radio__label" for="mode-2">business</label>
+                    <label class="radio__label" for="mode-2">business</label>
+                </div>
             </div>
-        </div>
-    </fieldset>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        </fieldset>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validation Ajax With Manipulating Message ({ name }}</h3>
-    <div data-prism>
-        <label for="zip">Zip</label>
-        <input name="zip" id="zip" data-validation='{
+        <h3>Validation Ajax With Manipulating Message ({ name }}</h3>
+        <div data-prism>
+            <label for="zip">Zip</label>
+            <input name="zip" id="zip" data-validation='{
             "validators": {
             "ajax": {
             "message": "Zip does not exist, Mr {{ name }}.",
@@ -95,41 +95,41 @@
             "preferHTMLValidatorMessage": false
             }
             }'>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validate EMail</h3>
-    <div data-prism>
-        <label for="email">E-Mail</label>
-        <input name="email" id="email" data-validation='{
+        <h3>Validate EMail</h3>
+        <div data-prism>
+            <label for="email">E-Mail</label>
+            <input name="email" id="email" data-validation='{
 
             "validators": {
                 "required": {},
                 "email": {}
                 }
             }'>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validate A Checkbox</h3>
-    <div data-prism>
-        <div class="checkbox">
-            <input type="checkbox" name="newsletter" id="newsletter" class="checkbox__input" data-validation='{
+        <h3>Validate A Checkbox</h3>
+        <div data-prism>
+            <div class="checkbox">
+                <input type="checkbox" name="newsletter" id="newsletter" class="checkbox__input" data-validation='{
                "validators": {"checkbox": { "message": "check this option, please." } }
                }'>
-            <label class="checkbox__label" for="newsletter">Newsletter</label>
+                <label class="checkbox__label" for="newsletter">Newsletter</label>
+            </div>
         </div>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <fieldset>
-    <h3><legend>Validate Group With Needing Single Choice</legend></h3>
-    <div data-prism>
-        <div class="radio" id="radio-insert-loc-2">
-            <input type="radio" name="legal-terms" id="legal-terms-1" class="radio__input" data-validation='{
+        <fieldset>
+            <legend><h3>Validate Group With Needing Single Choice</h3></legend>
+            <div data-prism>
+                <div class="radio" id="radio-insert-loc-2">
+                    <input type="radio" name="legal-terms" id="legal-terms-1" class="radio__input" data-validation='{
                "validators": {
                "required": { "message": "Check \"accept legal terms\" to proceed."}
                },
@@ -139,10 +139,10 @@
                "fieldShowState": true
                }
                }'>
-            <label class="radio__label" for="legal-terms-1">accept legal terms</label>
-        </div>
-        <div class="radio">
-            <input type="radio" name="legal-terms" id="legal-terms-2" class="radio__input" data-validation='{
+                    <label class="radio__label" for="legal-terms-1">accept legal terms</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="legal-terms" id="legal-terms-2" class="radio__input" data-validation='{
                "validators": {
                "requiredGroupNot": {
                "message": "Uncheck \"do NOT accept legal terms\", please."
@@ -157,45 +157,45 @@
                },
                "groupSel": "[name=\"legal-terms\"]"
                }'>
-            <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
-        </div>
-    </div>
-    </fieldset>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+                    <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
+                </div>
+            </div>
+        </fieldset>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validate A Select Field</h3>
-    <div data-prism>
-        <label class="hidden" for="language">Language</label>
-        <select name="language" id="language" data-validation='{
+        <h3>Validate A Select Field</h3>
+        <div data-prism>
+            <label class="sr-only" for="language">Language</label>
+            <select name="language" id="language" data-validation='{
             "validators": { "required": { "message": "Required \"language\" not set." } }
             }'>
-            <option value="" selected>make your choice</option>
-            <option value="Germany">Germany</option>
-            <option value="England">England</option>
-        </select>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+                <option value="" selected>make your choice</option>
+                <option value="Germany">Germany</option>
+                <option value="England">England</option>
+            </select>
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validate An Textarea</h3>
-    <div data-prism>
-        <label for="notice">Textarea</label>
-        <br>
+        <h3>Validate An Textarea</h3>
+        <div data-prism>
+            <label for="notice">Textarea</label>
+            <br>
             <textarea name="notice" id="notice" data-validation='{
             "validators": { "required": { "message": "Required \"notice\" not set." } }
             }'>
     </textarea>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validate A Phone Field</h3>
-    <div data-prism>
-        <label for="pre-number" id="pre-number-loc">phone</label>
-        <br>
-        <div class="phone-number">
-            <input type="number" id="pre-number" name="pre-number" style="width:70px" data-validation='{
+        <h3>Validate A Phone Field</h3>
+        <div data-prism>
+            <label for="pre-number" id="pre-number-loc">phone</label>
+            <br>
+            <div class="phone-number">
+                <input type="number" id="pre-number" name="pre-number" style="width:70px" data-validation='{
                "validators": { "required": { "message": "Required field \"pre-number\" not set." } },
                "feedbackDisplay": {
                "fieldShowState": true,
@@ -204,8 +204,8 @@
                },
                "groupSel": "[data-pre-number-number-group]"
                }' data-pre-number-number-group>
-            <label class="hidden" for="number">phone main number</label>
-            <input type="number" id="number" name="number" data-validation='{
+                <label class="sr-only" for="number">phone main number</label>
+                <input type="number" id="number" name="number" data-validation='{
                "validators": { "required": { "message": "Required field \"phone\" not set." } },
                "feedbackDisplay": {
                "fieldShowState": true,
@@ -214,22 +214,22 @@
                },
                "groupSel": "[data-pre-number-number-group]"
                }' data-pre-number-number-group>
+            </div>
         </div>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
+        <button class="submit-btn" type="submit">Validate Form</button>
 
-    <h3>Validate A Phone Field With Customized Group Validation Display Using Events</h3>
-    <div data-prism>
-        <label for="pre-number-2">phone</label>
-        <br>
-        <div class="phone-number" data-validation-feedback-group-display='{
+        <h3>Validate A Phone Field With Customized Group Validation Display Using Events</h3>
+        <div data-prism>
+            <label for="pre-number-2">phone</label>
+            <br>
+            <div class="phone-number" data-validation-feedback-group-display='{
             "message": "Required \"phone\" not set proper.",
             "feedbackDisplay": {
             "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#form [for=\"pre-number-2\"]" } ]
             },
             "fieldSelector": "[data-phone-number-group]"
             }' id="phone-number-group">
-            <input type="number" id="pre-number-2" name="pre-number-2" style="width:70px" data-validation='{
+                <input type="number" id="pre-number-2" name="pre-number-2" style="width:70px" data-validation='{
                "validators": {
                "required": { "message": {} }
                },
@@ -240,8 +240,8 @@
                "setEventOnValidation": true,
                "groupSel": "[data-phone-number-group]"
                }' data-phone-number-group>
-            <label class="hidden" for="number-2">phone number main</label>
-            <input type="number" id="number-2" name="number-2" data-validation='{
+                <label class="sr-only" for="number-2">phone number main</label>
+                <input type="number" id="number-2" name="number-2" data-validation='{
     "validators": { "required": {} },
     "feedbackDisplay": {
     "fieldShowState": true,
@@ -251,24 +251,24 @@
     "setEventOnValidation": true,
     "groupSel": "[data-phone-number-group]"
     }' data-phone-number-group>
+            </div>
         </div>
-    </div>
-    <br><br>
+        <br><br>
 
-    <button class="submit-btn" type="submit">Validate Form</button>
+        <button class="submit-btn" type="submit">Validate Form</button>
 
-</form>
+    </form>
 
 
-<h2>Second Form</h2>
-<form id="form-2">
+    <h2>Second Form</h2>
+    <form id="form-2">
 
-    <h3>Validation With Message In Customized Col Left/Right Responsive Layout Container</h3>
-    <div data-prism class="clearfix">
-        <div class="col" id="name-name-second-insert-point">
-            <label for="name-first">Name</label>
-            <br>
-            <input name="name-first" id="name-first" data-validation='{
+        <h3>Validation With Message In Customized Col Left/Right Responsive Layout Container</h3>
+        <div data-prism class="clearfix">
+            <div class="col" id="name-name-second-insert-point">
+                <label for="name-first">Name</label>
+                <br>
+                <input name="name-first" id="name-first" data-validation='{
                "validators": {
                "required": { "message": "Required \"name\" not set" }
                },
@@ -289,11 +289,11 @@
                ]
                }
                }'>
-        </div>
-        <div class="col">
-            <label for="name-second">Second Name</label>
-            <br>
-            <input name="name-second" id="name-second" data-validation='{
+            </div>
+            <div class="col">
+                <label for="name-second">Second Name</label>
+                <br>
+                <input name="name-second" id="name-second" data-validation='{
                "validators": {
                "required": { "message": "Required \"name second\" not set" }
                },
@@ -315,34 +315,36 @@
                ]
                }
                }'>
+            </div>
         </div>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Validate Not Empty With Minimum Config</h3>
-    <div data-prism>
-        <label for="name-2">Name</label>
-        <input name="name-2" id="name-2" data-validation='{
+        <h3>Validate Not Empty With Minimum Config</h3>
+        <div data-prism>
+            <label for="name-2">Name</label>
+            <input name="name-2" id="name-2" data-validation='{
             "validators": {
             "required": {}
             }
             }'>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-    <h3>Do Not Validate Name Unvisible</h3>
-    <div data-prism>
-        <label for="name-unvisible">Name unvisible</label>
-        <input style="display: none;" name="name-unvisible" id="name-unvisible" data-validation='{
+        <h3>Do Not Validate Name Unvisible</h3>
+        <div data-prism>
+            <label for="name-unvisible">Name unvisible</label>
+            <input style="display: none;" name="name-unvisible" id="name-unvisible" data-validation='{
             "validators": {"required": { "message": "Required \"name\" not set" } }
             }'>
-    </div>
-    <button class="submit-btn" type="submit">Validate Form</button>
-    <br><br>
+        </div>
+        <button class="submit-btn" type="submit">Validate Form</button>
+        <br><br>
 
-</form>
+    </form>
+
+</main>
 
 <script src="ajax.js"></script>
 <script src="base.js"></script>
