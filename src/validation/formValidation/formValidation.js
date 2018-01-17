@@ -12,7 +12,7 @@ import {Behaviour} from './behaviour';
 import defaultValidatorRequired from './validators/required';
 import defaultValidatorEmail from './validators/email';
 
-import getValidationFields from './getValidationFields'
+import getValidationFields from './getValidationFields';
 
 /**
  * This Class offers form validation via html driven setup combined with customized or default validators
@@ -151,7 +151,7 @@ export class FormValidation {
                 this.validation );
             this.behaviour.behaviour();
 
-        } catch( error ) {
+        } catch ( error ) {
             // console.log( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
             throw new Error( 'options.Behaviour must be a class/prototype to be instanciated of this.behaviour' );
         }
@@ -242,7 +242,7 @@ export class FormValidation {
         var objData = field.getAttribute( this.options.validationAttr );
         try {
             objData = JSON.parse( objData );
-        } catch( error ) {
+        } catch ( error ) {
             console.log( 'Error while trying to parse objData:' + objData );
             console.log( 'Error:' + error );
         }
@@ -352,7 +352,7 @@ export class FormValidation {
             caching: true,
             setEventOnValidation: false,
             groupSel: null
-        }
+        };
     }
 
     /**

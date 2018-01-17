@@ -47,9 +47,9 @@ export class FeedbackDisplay {
             fieldErrorClass: 'validation-error',
             fieldSuccessClass: 'validation-success',
             messageTemplate: '<p id="{{ id }}" class="validation-message" aria-live="assertive" role="alert">' +
-            '<label for="{{ id-for }}">{{ message }}</label></p>',
+            '{{ message }}</p>',
             messageCreateFunction: null
-        }
+        };
     }
 
     /**
@@ -95,7 +95,7 @@ export class FeedbackDisplay {
                 fieldRemoveStateSel: null
             }
 
-        }
+        };
     }
 
     /**
@@ -161,7 +161,7 @@ export class FeedbackDisplay {
      * @param {String} selector - CSS selector.
      * @param {Boolean} status - The status to show.
      */
-    setStatusBySelector( selector, status ){
+    setStatusBySelector( selector, status ) {
         if ( selector !== null ) {
             var fields = document.querySelectorAll( selector );
             Array.prototype.forEach.call( fields, function( field ) {
@@ -175,7 +175,7 @@ export class FeedbackDisplay {
      * Removes staus classes and aria attributes of dom elements.
      * @param {String} selector - CSS selector to get dom element list.
      */
-    removeStatusBySelector( selector ){
+    removeStatusBySelector( selector ) {
         if ( selector !== null ) {
             var fields = document.querySelectorAll( selector );
             Array.prototype.forEach.call( fields, function( field ) {
@@ -200,7 +200,8 @@ export class FeedbackDisplay {
      */
     getDefaultInsertLoc( field ) {
         var attr = field.getAttribute( 'type' );
-        var insertLoc = attr !== 'checkbox' && attr !== 'radio' ? field.previousElementSibling || field : field.parentNode;
+        var insertLoc = attr !== 'checkbox' && attr !== 'radio' ? field.previousElementSibling || field :
+            field.parentNode;
         return insertLoc;
     }
 
@@ -208,12 +209,12 @@ export class FeedbackDisplay {
      * Checks messageLocation data for its validity
      * @example
      * "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "[for=\"nameWithFeedbackDisplay\"]" } ]
-     * @param messageLocation
+     * @param {null|String} messageLocation
      */
     static checkMessageLocationDataFormat( messageLocation ) {
 
         if ( messageLocation !== null && !Array.isArray( messageLocation ) ) {
-            throw new TypeError( 'messageLocation should be null or of type Array' )
+            throw new TypeError( 'messageLocation should be null or of type Array' );
         }
 
         if ( Array.isArray( messageLocation ) ) {
@@ -233,7 +234,8 @@ export class FeedbackDisplay {
 
                 var insertLoc = document.querySelector( bP.insertTargetSelector );
                 if ( insertLoc === null ) {
-                    throw new TypeError( 'messageLocation needs for each entry a insertTargetSelector not resulting in null' );
+                    throw new TypeError(
+                        'messageLocation needs for each entry a insertTargetSelector not resulting in null' );
                 }
 
             }
@@ -316,7 +318,7 @@ export class FeedbackDisplay {
      *
      * @param {Object} field - Reference to dom element.
      * @param {String} message - The error message.
-     * @param messageLocation
+     * @param {null|Array} messageLocation
      */
     showMessage( field, message, messageLocation ) {
         this.removeMessageAndAccordingAriaAttrOfField( field );

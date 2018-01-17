@@ -28,7 +28,7 @@ export class Resolver {
         if ( typeof validators !== 'object' ) {
             throw new TypeError( 'validators is not of type object' );
         }
-        this.validators = validators
+        this.validators = validators;
 
         /**
          *
@@ -127,7 +127,8 @@ export class Resolver {
      */
     displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay ) {
         var message = typeof validator.message !== 'undefined' &&
-        ( configFeedbackDisplay.preferHTMLValidatorMessage || typeof result.message === 'undefined' ) ? validator.message :
+        ( configFeedbackDisplay.preferHTMLValidatorMessage || typeof result.message === 'undefined' ) ?
+            validator.message :
             ( typeof result.message !== 'undefined' ? result.message : '' );
 
         if ( configFeedbackDisplay.fieldShowState ) {
@@ -202,45 +203,59 @@ export class Resolver {
         return {
             /**
              * This function is used in {link @validate},
-             * {String} validatorName - The name of the validator
+             * @param {String} validatorName - The name of the validator
              * @return {Promise} - Returns am promise which is solved in @validate
-             * @property {Function) resolve
-             * @property {Function) rejects
-         */
+             */
             getValidator: function( validatorName ) {
-                return new Promise( function( resolve ) {
+
+                return new Promise(
                     /**
-                     *  This function is giving back via "resolve" to {@link validate}
-                     *  and could be taken via "then". It's executed in {@link validate}.
+                     * @param {Function} resolve
                      */
-                    resolve(
-                        function( value, validator, validationService, fieldName ) {
+                    function( resolve ) {
 
-                            console.log( '######...validator', validator );
-                            return new Promise( function( resolve, reject ) {
-                                var fieldDom = document.getElementById( fieldName );
+                        resolve(
+                            /**
+                             *  This function is giving back via "resolve" to {@link validate}
+                             *  and could be taken via "then". It's executed in {@link validate}.
+                             */
 
-                                var data = {};
-                                data.value = value;
-                                data.validatorData = this.configFields[ fieldName ].validators[ validatorName ];
+                            /**
+                             * @param {String} value
+                             * @param {Object} validator
+                             * @param {Object} validationService
+                             * @param {String} fieldName
+                             * @return {Promise}
+                             */
+                            function( value, validator, validationService, fieldName ) {
+                                /**
+                                 * @param {Function} resolve
+                                 * @param {Function} reject
+                                 */
+                                return new Promise( function( resolve, reject ) {
+                                    var fieldDom = document.getElementById( fieldName );
 
-                                if ( this.configFields[ fieldName ].groupSel !== null ) {
-                                    data.addInfo = this.getAddInfoData( fieldName, this.configFields );
-                                }
+                                    var data = {};
+                                    data.value = value;
+                                    data.validatorData = this.configFields[ fieldName ].validators[ validatorName ];
 
-                                if ( typeof this.validators[ validatorName ] ===
-                                    'undefined' ) {
-                                    console.log( 'ERROR: Validator', validatorName, 'not defined' );
-                                }
+                                    if ( this.configFields[ fieldName ].groupSel !== null ) {
+                                        data.addInfo = this.getAddInfoData( fieldName, this.configFields );
+                                    }
 
-                                this.validators[ validatorName ]( value, data )
-                                    .then( function( result ) {
+                                    if ( typeof this.validators[ validatorName ] ===
+                                        'undefined' ) {
+                                        console.log( 'ERROR: Validator', validatorName, 'not defined' );
+                                    }
 
-                                        var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
-                                        this.displayActionValid( fieldDom, configFeedbackDisplay, this.feedbackDisplay );
+                                    this.validators[ validatorName ]( value, data ).then( function( result ) {
 
-                                        if ( this.configFields[ fieldName ]
-                                                .setEventOnValidation ) {
+                                        var configFeedbackDisplay = this.getValidationFeedbackData(
+                                            result, fieldName );
+                                        this.displayActionValid( fieldDom, configFeedbackDisplay,
+                                            this.feedbackDisplay );
+
+                                        if ( this.configFields[ fieldName ].setEventOnValidation ) {
                                             this.dispatchEvent( fieldDom, true );
                                         }
 
@@ -253,27 +268,25 @@ export class Resolver {
                                     }.bind( this ) ).catch( function( result ) {
 
 
+                                        var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
 
-                                    var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
+                                        this.displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay );
 
-                                    this.displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay );
-
-                                    if ( this.configFields[ fieldName ]
-                                            .setEventOnValidation ) {
-                                        this.dispatchEvent( fieldDom, false );
-                                    }
-
-                                    reject(
-                                        {
-                                            isValid: false
+                                        if ( this.configFields[ fieldName ].setEventOnValidation ) {
+                                            this.dispatchEvent( fieldDom, false );
                                         }
-                                    );
+
+                                        reject(
+                                            {
+                                                isValid: false
+                                            }
+                                        );
+
+                                    }.bind( this ) );
 
                                 }.bind( this ) );
-
                             }.bind( this ) );
-                        }.bind( this ) );
-                }.bind( this ) );
+                    }.bind( this ) );
             }.bind( this )
         };
     }

@@ -7,7 +7,7 @@
  * @return {Array} Collection of dom element references
  * @property {Object} field reference to dom element
  */
-export default function getValidationFields( formId, validationAttr, condition) {
+export default function getValidationFields( formId, validationAttr, condition ) {
     if ( typeof formId !== 'string' ) {
         throw new TypeError( 'formId must be of type string' );
     }
@@ -17,15 +17,15 @@ export default function getValidationFields( formId, validationAttr, condition) 
     }
 
     if ( typeof condition !== 'function' ) {
-        throw new TypeError( 'condition should be of type function' )
+        throw new TypeError( 'condition should be of type function' );
     }
 
     var form = document.getElementById( formId );
     if ( form === null ) {
-        throw new TypeError( 'form should not be null' )
+        throw new TypeError( 'form should not be null' );
     }
     var fields = form.querySelectorAll(
-        'input[' + validationAttr + '],select[' + validationAttr+ '],textarea['+ validationAttr + ']' );
+        'input[' + validationAttr + '],select[' + validationAttr + '],textarea[' + validationAttr + ']' );
 
     var fieldsAry = [];
     Array.prototype.forEach.call( fields, function( field ) {

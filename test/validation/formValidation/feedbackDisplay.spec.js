@@ -328,7 +328,7 @@ describe( 'FeedbackDisplay', function() {
 
                 var messageDom = document.getElementById( messageId );
                 var r =  messageDom instanceof HTMLElement &&
-                messageDom.querySelector( 'label' ).innerHTML === message ? true : false;
+                messageDom.innerHTML === message ? true : false;
                 return r;
             }() ).toBeTruthy();
         } );

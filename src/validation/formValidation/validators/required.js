@@ -1,6 +1,6 @@
 /**
  * The required validator.
- * @param value
+ * @param {Boolean|undefined} value
  * @returns {Promise}
  */
 export default function required( value ) {

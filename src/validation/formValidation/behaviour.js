@@ -1,4 +1,4 @@
-import getValidationFields from './getValidationFields'
+import getValidationFields from './getValidationFields';
 
 /**
  * The behaviour function provides cases for to trigger validations.
@@ -9,10 +9,10 @@ export class Behaviour {
     /**
      *
      * @param {String} formId - The id of the form.
-     * @property {String} validationAttr     *
+     * @param {String} validationAttr
      * @param {Function} condition - The condition for to collect the validating fields
      * @param {Object} configFields - The config of fields
-     * @param {Object} The validation service object
+     * @param {Object} validation  - The validation service object
      */
     constructor( formId, validationAttr, condition, configFields, validation ) {
 
@@ -31,7 +31,7 @@ export class Behaviour {
         if ( typeof validation !== 'object' ) {
             throw new TypeError( 'validation must be of type object' );
         }
-        
+
         /**
          *
          * @type {String}
@@ -66,14 +66,14 @@ export class Behaviour {
 
     /**
      * Updates the configFields property
-     * @param {Object} The validation service object
      * @param {configFields} configFields - The config of fields
+     * @param {Object} validation - The validation service object
      */
     updateConfigFieldsAndValidation( configFields, validation ) {
         this.configFields = configFields;
         this.validation = validation;
     }
-    
+
     /**
      * The behaviour for each field
      */
