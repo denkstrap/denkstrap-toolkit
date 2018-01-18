@@ -3,7 +3,7 @@ import { Cache } from '../../src/cache/cache.service';
 describe( 'Cache', function() {
     it( 'should return false on an empty cache object', function() {
         var cache = new Cache();
-        expect( cache.getValue( 'test' ) ).toBe( false );
+        expect( cache.isCached( 'name' ) ).toBe( false );
     } );
 
     it( 'should return the cached object', function() {

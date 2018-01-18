@@ -7,6 +7,9 @@ describe( 'Validation Service', function() {
         getValue: function() {
             return false;
         },
+        isCached: function() {
+            return false;
+        },
         setValue: function() {}
     };
 
@@ -82,7 +85,7 @@ describe( 'Validation Service', function() {
         } );
     } );
 
-    it( 'should have a function setValue() setting a specific values', function() {
+    it( 'should have a function setValue() setting a specific value', function() {
         var validationResolver = { getValidator: function() {} };
         var validationService = new ValidationService( {}, validationResolver, cacheMock );
 
@@ -350,8 +353,11 @@ describe( 'Validation Service', function() {
         } );
     } );
 
-    it( 'should succeed when getting a valid the value from cache', function( done ) {
+    it( 'should succeed when getting a valid value from cache', function( done ) {
         var cacheMock = {
+            isCached: function() {
+                return true;
+            },
             getValue: function() {
                 return {
                     value: 'test',
@@ -390,8 +396,11 @@ describe( 'Validation Service', function() {
         } );
     } );
 
-    it( 'should fail when getting a invalid the value from cache', function( done ) {
+    it( 'should fail when getting a invalid value from cache', function( done ) {
         var cacheMock = {
+            isCached: function() {
+                return true;
+            },
             getValue: function( cacheKey ) {
                 expect( cacheKey ).toBe( 'foo.fieldA' );
                 return {

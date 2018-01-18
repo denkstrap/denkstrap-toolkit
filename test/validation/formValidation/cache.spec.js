@@ -53,7 +53,7 @@ describe( 'Cache', function() {
             var validationCache = cache.getValidationCache();
 
             validationCache.setValue( cacheKey, cached );
-            expect( validationCache.getValue( cacheKey )).toEqual( false );
+            expect( !validationCache.isCached( cacheKey )).toBeTruthy();
         } );
 
     } );

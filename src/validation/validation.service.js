@@ -224,7 +224,10 @@ export class ValidationService {
             var value = this.getValue( field );
 
             var cacheKey = formId + '.' + field; // TODO: discuss if formId is needed
-            var cached = this.cache.getValue( cacheKey ) ||
+
+            var isCached = this.cache.isCached( cacheKey );
+
+            var cached = isCached ? this.cache.getValue( cacheKey ) :
                 {
                     value: value,
                     results: {}
@@ -232,13 +235,15 @@ export class ValidationService {
 
             var handleValidation = function( validatorName ) {
 
-                if ( cached.value === value && cached.results[ validatorName ] !== undefined ) {
+                if ( isCached && cached.value === value && cached.results[ validatorName ] !== undefined ) {
                     if ( cached.results[ validatorName ].isValid === false ) {
                         hasError = true;
                     }
                     handleValidationResult( cached.results[ validatorName ], validatorName );
                     return;
                 }
+
+                cached.value = value;
 
                 this.validationResolver.getValidator( validatorName ).then( function( validator ) {
 

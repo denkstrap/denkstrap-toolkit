@@ -1,3 +1,4 @@
+import {Cache as CacheService} from '../../cache/cache.service';
 /**
  * This Class provides cache functionality to avoid doubled validation
  *
@@ -13,12 +14,6 @@ export class Cache {
             throw new TypeError( 'validationAttr must be of type String' );
         }
         this.validationAttr = validationAttr;
-
-        /**
-         *
-         * @type {Object}
-         */
-        this.data = {};
     }
 
     /**
@@ -41,20 +36,15 @@ export class Cache {
      * @returns {{getValue: (function(this:Cache)), setValue: setValue, data: Array}}
      */
     getValidationCache() {
-
-        return {
-            getValue: function( cacheKey ) {
+        var cache = Object.assign( new CacheService(), {
+            isCached: function( cacheKey ) {
                 var fieldName = cacheKey.split( '.' )[ 1 ];
-                if ( this.isCachingEnabled( fieldName ) ) {
-                    return this.data[ cacheKey ];
-                } else {
-                    return false;
-                }
-            }.bind( this ),
-            setValue: function( cacheKey, cached ) {
-                this.data[ cacheKey ] = cached;
+                cache.checkKey( cacheKey );
+                var test = this.isCachingEnabled( fieldName ) && cache.cacheMap[ cacheKey ] ? true : false;
+                return this.isCachingEnabled( fieldName ) && cache.cacheMap[ cacheKey ] ? true : false;
             }.bind( this )
-        };
+        } );
+        return cache;
     }
 
     /**
@@ -69,5 +59,6 @@ export class Cache {
         /* must have value false to prevent taking undefined as false (no coercion) */
         return objData.caching === false ? false : true;
     }
+
 
 }
