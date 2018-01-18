@@ -23,7 +23,20 @@ export class Cache {
     getValue( key ) {
         this.checkKey( key );
 
-        return this.cacheMap[ key ] || false;
+        if ( typeof this.cacheMap[ key ] === 'undefined' ) {
+            throw new Error( 'Check cache via isCached method before trying to fetch a value' );
+        }
+        return this.cacheMap[ key ];
+    }
+
+    /**
+     * Checks if a value is stored for the given key
+     * @param {String} key
+     * @returns {Boolean}
+     */
+    isCached( key ) {
+        this.checkKey( key );
+        return this.cacheMap[ key ] ? true : false;
     }
 
     /**
@@ -34,7 +47,6 @@ export class Cache {
      */
     setValue( key, value ) {
         this.checkKey( key );
-
         this.cacheMap[ key ] = value;
     }
 
