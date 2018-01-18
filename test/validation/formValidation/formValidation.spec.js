@@ -109,7 +109,8 @@ describe( 'FormValidation', function() {
 
 
     describe( 'validateForm()', function() {
-        it( 'should validate form and set accessible html output', function( done ) {
+        it( 'should validate(fail) form and set accessible html output (error mesage with proper aria attributes)',
+            function( done ) {
 
             var formValidation = new FormValidation( {
                 formId: 'form'
@@ -117,9 +118,7 @@ describe( 'FormValidation', function() {
             formValidation.init();
 
             formValidation.validateForm().then( function( result ) {
-                console.log( '----->validateForm success', result );
             } ).catch( function( result ) {
-                console.log( '----->validateForm fail', result );
 
                 var n = document.getElementById( 'form' );
 
@@ -133,6 +132,32 @@ describe( 'FormValidation', function() {
 
         } );
     } );
+
+    describe( 'validateForm()', function() {
+        it( 'should validate(ok) form and set accessible html output (error mesage with proper aria attributes)',
+            function( done ) {
+
+                var formValidation = new FormValidation( {
+                    formId: 'form'
+                } );
+                formValidation.init();
+
+                formValidation.validateForm().then( function( result ) {
+                } ).catch( function( result ) {
+
+                    var n = document.getElementById( 'form' );
+
+                    axe.run(n, function (err, result) {
+                        expect(err).toBe(null);
+                        expect(result.violations.length).toBe(0);
+                        done();
+                    });
+
+                } );
+
+            } );
+    } );
+
 
 
     /**

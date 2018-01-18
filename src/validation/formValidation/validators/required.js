@@ -5,7 +5,7 @@
  */
 export default function required( value ) {
     return new Promise( function( resolve, reject ) {
-        var valid = value !== '' ? value.trim() === '' ? false : true : false;
+        var valid = typeof value === 'string' && value !== '' ? value.trim() === '' ? false : true : value;
 
         if ( valid ) {
             resolve( {

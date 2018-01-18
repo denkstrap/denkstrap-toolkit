@@ -95,7 +95,6 @@ export class Behaviour {
                 var fieldIdentifier = field.id;
                 this.validation.setValueByField( field );
                 this.validation.validate( fieldIdentifier, this.formId ).catch( function() {} );
-
                 if ( this.configFields[ fieldIdentifier ].groupSel !== null ) {
 
                     fields = document.querySelectorAll( this.configFields[ fieldIdentifier ].groupSel );

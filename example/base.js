@@ -1,5 +1,5 @@
 // global validation object to store validation data
-validation = {};
+var validation = {};
 
 // the validators are in folder "/validators"
 validation.validators = {};

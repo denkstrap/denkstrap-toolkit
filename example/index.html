@@ -25,7 +25,7 @@
     <h2>First Form</h2>
     <form id="form">
 
-        <h2>Validation On Dynamic Dom</h2>
+        <h3>Validation On Dynamic Dom</h3>
         <button type="button" id="addInputFieldBtn">Dynamic: Add input field</button>
         <br><br>
         <h3>Validate Not Empty</h3>
@@ -117,7 +117,7 @@
         <div data-prism>
             <div class="checkbox">
                 <input type="checkbox" name="newsletter" id="newsletter" class="checkbox__input" data-validation='{
-               "validators": {"checkbox": { "message": "check this option, please." } }
+               "validators": {"required": { "message": "check this option, please." } }
                }'>
                 <label class="checkbox__label" for="newsletter">Newsletter</label>
             </div>
@@ -353,7 +353,6 @@
 <script src="validators/requiredGroupAny.js"></script>
 <script src="validators/requiredGroupNot.js"></script>
 <script src="validators/ajax.js"></script>
-<script src="validators/checkbox.js"></script>
 <script src="validators/minLength.js"></script>
 
 <script src="feedback-display-group.js"></script>
