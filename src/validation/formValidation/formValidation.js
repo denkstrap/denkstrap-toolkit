@@ -312,6 +312,7 @@ export class FormValidation {
     /**
      * This function should be called
      * if any input fields have been added or deleted.
+     * or before a validation of the entire form starts (Its called by {@link validateForm} )
      */
     updateConfigAndValuesAndBehaviour() {
         /**
@@ -323,7 +324,8 @@ export class FormValidation {
         this.validation.setConfig( this.config );
         this.setValues();
         this.setResolver();
-        this.setValidationAndBehaviour();
+        this.validation.setResolver( this.resolver );
+        this.behaviour.updateConfigFieldsAndValidation( this.configFields, this.validation )
     }
 
     /**
