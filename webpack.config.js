@@ -2,6 +2,9 @@ const path = require( 'path' );
 const glob = require( 'glob' );
 
 module.exports = (config) => {
+    var useIstanbul = config && config.env && config.env.karma ? true: false;
+    var babelOptions = useIstanbul ? { plugins: [ 'babel-plugin-istanbul' ] } : {};
+
     return {
         entry: () => {
             return new Promise((resolve) => {
@@ -27,8 +30,11 @@ module.exports = (config) => {
                     test: /\.js$/,
                     exclude: /(node_modules|test|__*\.js)/,
                     use: [
-                        "babel-loader"//,
-                        // "eslint-loader"
+                        {
+                            loader: "babel-loader",
+                            options: babelOptions
+                            // "eslint-loader"
+                        }
                     ]
                 }
             ]
@@ -38,6 +44,8 @@ module.exports = (config) => {
             filename: '[name].js',
             libraryTarget: 'umd'
         }
+
+
     };
 };
 

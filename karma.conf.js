@@ -1,4 +1,11 @@
 // Karma configuration
+config = {
+    env: {
+        'karma': true
+    }
+};
+var webpackConfig = require( './webpack.config.js' )(config);
+
 
 module.exports = function( config ) {
     config.set( {
@@ -21,6 +28,7 @@ module.exports = function( config ) {
             'node_modules/axe-core/axe.min.js',
             'src/**/*.js',
             'test/**/*.js',
+            // 'test/validation/validation.service.spec.js',
             {
                 pattern: 'test/fixtures/**/*',
                 included: true,
@@ -41,7 +49,8 @@ module.exports = function( config ) {
             variableName: '__json__'
         },
 
-        webpack: require( './webpack.config.js' )(),
+        //webpack: require( './webpack.config.js' )(),
+        webpack: webpackConfig,
 
         webpackMiddleware: {
             stats: 'errors-only'
