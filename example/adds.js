@@ -14,15 +14,5 @@ if ( addInputFieldBtn !== null ) {
             '><br><br>';
 
         form.insertAdjacentHTML( 'afterbegin', html );
-
-        // var config = getValidationConfig();
-        // validation.configFields = config.fields;
-        //
-        // validation.validationServiceConstructorParam.validationConfig = config.service;
-        // validationService.setConfig( config.service );
-        //
-        // validationService.setValueByField( document.getElementsByName( name )[ 0 ] );
-
-        validationService.updateConfigAndValuesAndBehaviour();
     } );
 }
