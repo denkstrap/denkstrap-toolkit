@@ -165,6 +165,8 @@ export class Resolver {
     }
 
     /**
+     * Collects values of group members of field (set by groupSel)
+     * to give additional data to the validators
      *
      * @param {String} fieldName
      * @param {Object} configFields
