@@ -76,10 +76,8 @@ export class ValidationService {
         this.stopValidationOnFirstFail = false;
         if ( typeof stopValidationOnFirstFail !== 'undefined' && typeof stopValidationOnFirstFail !== 'boolean' ) {
             throw new TypeError( 'The stopValidationOnFirstFail param must be of type boolean if set.' );
-        } else {
-            if ( typeof stopValidationOnFirstFail !== 'undefined' ) {
-                this.stopValidationOnFirstFail = stopValidationOnFirstFail ;
-            }
+        } else if ( typeof stopValidationOnFirstFail !== 'undefined' ) {
+            this.stopValidationOnFirstFail = stopValidationOnFirstFail ;
         }
 
         /**
