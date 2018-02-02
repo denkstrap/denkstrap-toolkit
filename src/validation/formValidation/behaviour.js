@@ -20,6 +20,10 @@ export class Behaviour {
             throw new TypeError( 'form id must be of type String' );
         }
 
+        if ( typeof validationAttr !== 'string' ) {
+            throw new TypeError( 'validationAttr must be of type String' );
+        }
+
         if ( typeof condition !== 'function' ) {
             throw new TypeError( 'formId must be of type function' );
         }
@@ -95,10 +99,11 @@ export class Behaviour {
                 var fieldIdentifier = field.id;
                 this.validation.setValueByField( field );
                 this.validation.validate( fieldIdentifier, this.formId ).catch( function() {} );
-                if ( this.configFields[ fieldIdentifier ].groupSel !== null ) {
+                if ( this.configFields[ fieldIdentifier ].behaviourGroupSel !== null ) {
 
-                    fields = document.querySelectorAll( this.configFields[ fieldIdentifier ].groupSel );
+                    fields = document.querySelectorAll( this.configFields[ fieldIdentifier ].behaviourGroupSel );
                     Array.prototype.forEach.call( fields, function( field ) {
+
                         var fieldIdentifierGroupMember = field.id;
                         if ( fieldIdentifierGroupMember !== fieldIdentifier ) {
                             this.validation.setValueByField( field );

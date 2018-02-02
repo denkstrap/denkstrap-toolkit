@@ -52,7 +52,9 @@
                }
                },
                "setEventOnValidation": true,
-               "groupSel": "[name=\"mode\"]",
+               "behaviourGroupSel": "[name=\"mode\"]",
+               "sendToValidatorDataGroupSel": "[name=\"mode\"]",
+               "caching": false,
                "feedbackDisplay": {
                "messageShow": true,
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#radio-insert-loc" } ]
@@ -67,8 +69,10 @@
                "message": "Check any option, please."
                }
                },
-               "groupSel": "[name=\"mode\"]",
+               "behaviourGroupSel": "[name=\"mode\"]",
+               "sendToValidatorDataGroupSel": "[name=\"mode\"]",
                "setEventOnValidation": true,
+               "caching": false,
                "feedbackDisplay": {
                "fieldIdForAriaUsage": "mode-1",
                "messageShow": false
@@ -133,7 +137,8 @@
                "validators": {
                "required": { "message": "Check \"accept legal terms\" to proceed."}
                },
-               "groupSel": "[name=\"legal-terms\"]",
+               "behaviourGroupSel": "[name=\"legal-terms\"]",
+               "sendToValidatorDataGroupSel": "[name=\"legal-terms\"]",
 
                "feedbackDisplay": {
                "fieldShowState": true
@@ -155,7 +160,9 @@
                "messageRemoveInvalidSel": "#legal-terms-1",
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#radio-insert-loc-2" } ]
                },
-               "groupSel": "[name=\"legal-terms\"]"
+               "behaviourGroupSel": "[name=\"legal-terms\"]",
+               "sendToValidatorDataGroupSel": "[name=\"legal-terms\"]"
+
                }'>
                     <label class="radio__label" for="legal-terms-2">do NOT accept legal terms</label>
                 </div>
@@ -202,7 +209,9 @@
                "messageShow": true,
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#pre-number-loc" } ]
                },
-               "groupSel": "[data-pre-number-number-group]"
+               "behaviourGroupSel": "[data-pre-number-number-group]",
+               "sendToValidatorDataGroupSel": "[data-pre-number-number-group]"
+
                }' data-pre-number-number-group>
                 <label class="sr-only" for="number">phone main number</label>
                 <input type="number" id="number" name="number" data-validation='{
@@ -212,7 +221,8 @@
                "messageShow": true,
                "messageLocation": [ { "minWidth": 0, "insertTargetSelector": "#pre-number-loc" } ]
                },
-               "groupSel": "[data-pre-number-number-group]"
+               "behaviourGroupSel": "[data-pre-number-number-group]",
+               "sendToValidatorDataGroupSel": "[data-pre-number-number-group]"
                }' data-pre-number-number-group>
             </div>
         </div>
@@ -238,7 +248,8 @@
                "messageShow": false
                },
                "setEventOnValidation": true,
-               "groupSel": "[data-phone-number-group]"
+               "behaviourGroupSel": "[data-phone-number-group]",
+               "sendToValidatorDataGroupSel": "[data-phone-number-group]"
                }' data-phone-number-group>
                 <label class="sr-only" for="number-2">phone number main</label>
                 <input type="number" id="number-2" name="number-2" data-validation='{
@@ -249,7 +260,9 @@
     "fieldIdForAriaUsage": "pre-number-2"
     },
     "setEventOnValidation": true,
-    "groupSel": "[data-phone-number-group]"
+    "behaviourGroupSel": "[data-phone-number-group]",
+    "sendToValidatorDataGroupSel": "[data-phone-number-group]"
+
     }' data-phone-number-group>
             </div>
         </div>

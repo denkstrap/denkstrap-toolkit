@@ -1,6 +1,5 @@
 var options = {
     validators: {
-        checkbox: validation.validators.checkbox,
         minLength: validation.validators.minLength,
         requiredGroupAny: validation.validators.requiredGroupAny,
         requiredGroupNot: validation.validators.requiredGroupNot,
@@ -25,6 +24,7 @@ validation.setGroupMessageBehavior( form, validationService );
 
 form.addEventListener( 'submit', function( event ) {
     event.preventDefault();
+
     validationService.validateForm().then( function( result ) {
         console.log( '----->validateForm success', result );
     } ).catch( function( result ) {

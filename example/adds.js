@@ -14,5 +14,6 @@ if ( addInputFieldBtn !== null ) {
             '><br><br>';
 
         form.insertAdjacentHTML( 'afterbegin', html );
+        validationService.updateConfigAndValuesAndBehaviour();
     } );
 }

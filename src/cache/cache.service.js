@@ -31,6 +31,8 @@ export class Cache {
 
     /**
      * Checks if a value is stored for the given key
+     * Checking is not done via getValue method
+     * reason: a value could be of type boolean and so not be handled proper
      * @param {String} key
      * @returns {Boolean}
      */

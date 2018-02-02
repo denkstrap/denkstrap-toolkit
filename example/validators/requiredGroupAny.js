@@ -1,27 +1,14 @@
 validation.validators.requiredGroupAny = function( value, config ) {
     return new Promise( function( resolve, reject ) {
-
-        // console.log( 'config', config );
-        // console.log( 'value', value );
-        //var groupMemberEls = document.querySelectorAll( config.requiredGroupAny.options.groupMemberSel );
-
         var otherValid = false;
-        // if ( !value ) {
-        //     Array.prototype.forEach.call( groupMemberEls, function( field ) {
-        //         otherValid = !otherValid && !field.checked ? false : true;
-        //     } );
-        // }
 
-
-        config.addInfo.groupMembers.forEach( function( el ) {
+        config.groupData.forEach( function( el ) {
             var field = document.getElementById( el.id );
             // console.log( 111, el.identifier, field.checked );
             otherValid = !otherValid && !field.checked ? false : true;
         }.bind( this ) );
 
         var options;
-
-        // console.log( 'otherValid', otherValid, 'value', value );
 
         var valid = value || otherValid;
         if ( valid ) {
@@ -46,7 +33,5 @@ validation.validators.requiredGroupAny = function( value, config ) {
                 message: 'This field is mandatory.'
             } );
         }
-        // console.log( 'sent options', options );
-
     } );
 }

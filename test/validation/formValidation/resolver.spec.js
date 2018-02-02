@@ -242,16 +242,14 @@ describe( 'Resolver', function() {
     } );
 
 
-    describe( 'getAddInfoData( fieldName, configFields )', function() {
+    describe( 'getAddDataOfGroupMembers( fieldName, configFields )', function() {
 
         it( 'should give additional data to validator', function( done ) {
 
-            var addInfo = {
-                groupMembers: [
+            var addInfo = [
                     { id: 'name', value: '' },
                     { id: 'nameHidden', value: 'testnameHidden' }
-                ]
-            }
+                ];
 
             var validatorResultData = {
                 options: {
@@ -274,7 +272,7 @@ describe( 'Resolver', function() {
             field.addEventListener( eventName, function( event ) {
 
                 expect( function() {
-                    return formValidation.resolver.getAddInfoData( 'nameWithFeedbackDisplay', formValidation.configFields );
+                    return formValidation.resolver.getAddDataOfGroupMembers( 'nameWithFeedbackDisplay', formValidation.configFields );
                 }() ).toEqual( addInfo );
 
                 done();

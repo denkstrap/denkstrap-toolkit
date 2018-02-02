@@ -1,4 +1,4 @@
-import Behaviour from '../../../src/validation/formValidation/behaviour';
+import {Behaviour} from '../../../src/validation/formValidation/behaviour';
 import {FormValidation} from '../../../src/validation/formValidation/formValidation';
 
 /** @test {Behaviour} */
@@ -10,7 +10,7 @@ describe( 'behaviour', function() {
     } );
 
     var formId = 'form';
-    var formValidation
+    var formValidation;
     var initForm = function() {
         formValidation = new FormValidation( { formId: formId } );
         formValidation.init();
@@ -30,7 +30,7 @@ describe( 'behaviour', function() {
                         formValidation.validation
                     );
                 }
-            ).toThrowError( TypeError );
+            ).toThrowError( TypeError, 'form id must be of type String' );
         } );
 
         it( 'should throw an error when parameter validationAttr is not of type String', function() {
@@ -118,6 +118,14 @@ describe( 'behaviour', function() {
                 }
             }, 10 );
 
+        } );
+
+        it( 'should do remove previous set event handler', function( ) {
+            var field = document.getElementById( 'name' );
+            var spy = sinon.spy( field, 'removeEventListener' );
+            initForm();
+            formValidation.behaviour.behaviour();
+            sinon.assert.callCount( spy, 1 );
         } );
 
     } );

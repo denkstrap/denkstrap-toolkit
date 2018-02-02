@@ -1,7 +1,7 @@
-import { ValidationServiceExt } from '../../src/validation/validation.service.ext';
-/** @test {ValidationServiceExt} */
+import { ValidationServiceDom } from '../../src/validation/validation.service.dom';
+/** @test {ValidationServiceDom} */
 
-describe( 'Validation Service Ext', function() {
+describe( 'Validation Service Dom', function() {
 
     // https://www.npmjs.com/package/karma-fixture
     // not working
@@ -21,9 +21,9 @@ describe( 'Validation Service Ext', function() {
     };
 
     it( 'should throw an error when given parameter is not instance of ' +
-        'TMLInputElemen, HTMLSelectElement or  HTMLTextAreaElement', function() {
+        'HTMLInputElemen, HTMLSelectElement or  HTMLTextAreaElement', function() {
         var validationResolver = { getValidator: function() {} };
-        var validationService = new ValidationServiceExt( {}, validationResolver, cacheMock );
+        var validationService = new ValidationServiceDom( {}, validationResolver, cacheMock );
         expect(function() {
             validationService.setValueByField( 'string' )
         }).toThrowError( TypeError );
@@ -33,13 +33,24 @@ describe( 'Validation Service Ext', function() {
         var el = document.getElementById( 'name' );
         el.value = 'testname';
         var validationResolver = { getValidator: function() {} };
-        var validationService = new ValidationServiceExt( {}, validationResolver, cacheMock );
+        var validationService = new ValidationServiceDom( {}, validationResolver, cacheMock );
         var config = validationService.getValues();
         validationService.setValueByField( el );
         expect( config ).toEqual( {
             name: 'testname'
         } );
-
     } );
 
+    it( 'should set the correct value to validator config by using a checkbox field', function() {
+        var el = document.getElementById( 'checkbox' );
+        var validationResolver = { getValidator: function() {} };
+        var validationService = new ValidationServiceDom( {}, validationResolver, cacheMock );
+        var config = validationService.getValues();
+        validationService.setValueByField( el );
+        expect( config ).toEqual( {
+            checkbox: true
+        } );
+    } );
+    
+    
 } );

@@ -165,7 +165,7 @@ export class Resolver {
     }
 
     /**
-     * Collects values of group members of field (set by groupSel)
+     * Collects values of group members of field (set by sendToValidatorDataGroupSel)
      * to give additional data to the validators
      *
      * @param {String} fieldName
@@ -177,12 +177,11 @@ export class Resolver {
      * @property {String} id
      * @propery {String} value
      */
-    getAddInfoData( fieldName, configFields ) {
-        var addInfo = {};
-        var fields = document.querySelectorAll( configFields[ fieldName ].groupSel );
-        addInfo.groupMembers = [];
+    getAddDataOfGroupMembers( fieldName, configFields ) {
+        var fields = document.querySelectorAll( configFields[ fieldName ].sendToValidatorDataGroupSel );
+        var addInfo = [];
         Array.prototype.forEach.call( fields, function( field ) {
-            addInfo.groupMembers.push( { id: field.id, value: field.value } );
+            addInfo.push( { id: field.id, value: field.value } );
         } );
 
         return addInfo;
@@ -237,12 +236,14 @@ export class Resolver {
                                 return new Promise( function( resolve, reject ) {
                                     var fieldDom = document.getElementById( fieldName );
 
-                                    var data = {};
-                                    data.value = value;
-                                    data.validatorData = this.configFields[ fieldName ].validators[ validatorName ];
+                                    var sendToValidatorAddData = {
+                                        // e.g.: {"message": 'Required "name" not set'}
+                                        domConfigData: this.configFields[ fieldName ].validators[ validatorName ]
+                                    };
 
-                                    if ( this.configFields[ fieldName ].groupSel !== null ) {
-                                        data.addInfo = this.getAddInfoData( fieldName, this.configFields );
+                                    if ( this.configFields[ fieldName ].sendToValidatorDataGroupSel !== null ) {
+                                        sendToValidatorAddData.groupData =
+                                            this.getAddDataOfGroupMembers( fieldName, this.configFields );
                                     }
 
                                     if ( typeof this.validators[ validatorName ] ===
@@ -250,7 +251,8 @@ export class Resolver {
                                         console.log( 'ERROR: Validator', validatorName, 'not defined' );
                                     }
 
-                                    this.validators[ validatorName ]( value, data ).then( function( result ) {
+                                    this.validators[ validatorName ]( value, sendToValidatorAddData ).
+                                    then( function( result ) {
 
                                         var configFeedbackDisplay = this.getValidationFeedbackData(
                                             result, fieldName );

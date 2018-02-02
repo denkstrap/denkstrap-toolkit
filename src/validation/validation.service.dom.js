@@ -8,7 +8,7 @@ import {ValidationService} from './validation.service';
  *
  * @extends ValidationService
  */
-export class ValidationServiceExt extends ValidationService {
+export class ValidationServiceDom extends ValidationService {
 
     /**
      * @param {Object} config

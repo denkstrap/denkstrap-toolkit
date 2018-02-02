@@ -1,4 +1,4 @@
-import {ValidationServiceExt} from '../validation.service.ext';
+import {ValidationServiceDom} from '../validation.service.dom';
 
 import {Cache} from './cache';
 
@@ -129,10 +129,10 @@ export class FormValidation {
      */
     setValidationAndBehaviour() {
         /**
-         * {@link ValidationServiceExt}
+         * {@link ValidationServiceDom}
          * @type {Class}
          */
-        this.validation = new ValidationServiceExt(
+        this.validation = new ValidationServiceDom(
             this.config,
             this.resolver.resolver(),
             this.options.caching ? this.cache.getValidationCache() : this.cache.getValidationOffCache(),
@@ -298,7 +298,7 @@ export class FormValidation {
      * (Id of fields with it's value).
      * This values are used to validate.
      * {@link ValidationService.validate},
-     * ({@link ValidationServiceExt.setValueByField},
+     * ({@link ValidationServiceDom.setValueByField},
      * {@link ValidationService.getValue} )
      */
     setValues() {
@@ -324,8 +324,9 @@ export class FormValidation {
         this.validation.setConfig( this.config );
         this.setValues();
         this.setResolver();
-        this.validation.setResolver( this.resolver );
-        this.behaviour.updateConfigFieldsAndValidation( this.configFields, this.validation )
+        this.validation.setResolver( this.resolver.resolver() );
+        this.behaviour.updateConfigFieldsAndValidation( this.configFields, this.validation );
+        this.behaviour.behaviour();
     }
 
     /**
@@ -343,7 +344,8 @@ export class FormValidation {
      * @property {Object} feedbackDisplay {@link FeedbackDisplay.getDefaultFieldOptions}
      * @property {Boolean} caching : false
      * @property {Boolean} setEventOnValidation : false
-     * @property {null} groupSel : null
+     * @property {null} sendToValidatorDataGroupSel : null {@link Resolver}
+     * @property {null} behaviourGroupSel : null - used in {@link Behaviour}
      */
     getDefaultValidationFieldConfig() {
         return {
@@ -351,7 +353,8 @@ export class FormValidation {
             feedbackDisplay: FeedbackDisplay.getDefaultFieldOptions(),
             caching: true,
             setEventOnValidation: false,
-            groupSel: null
+            sendToValidatorDataGroupSel: null,
+            behaviourGroupSel: null
         };
     }
 
@@ -364,7 +367,7 @@ export class FormValidation {
      * @property {Object} feedbackDisplay
      * @property {Boolean} caching : true|false
      * @property {Boolean} setEventOnValidation : false|true
-     * @property {String} groupSel : null|*css selector*
+     * @property {String} behaviourGroupSel : null|*css selector*
      *
      */
     getValidationFieldConfig( fields ) {
