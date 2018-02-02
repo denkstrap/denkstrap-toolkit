@@ -252,41 +252,43 @@ export class Resolver {
                                     }
 
                                     this.validators[ validatorName ]( value, sendToValidatorAddData ).
-                                    then( function( result ) {
+                                        then( function( result ) {
 
-                                        var configFeedbackDisplay = this.getValidationFeedbackData(
-                                            result, fieldName );
-                                        this.displayActionValid( fieldDom, configFeedbackDisplay,
-                                            this.feedbackDisplay );
+                                            var configFeedbackDisplay = this.getValidationFeedbackData(
+                                                result, fieldName );
+                                            this.displayActionValid( fieldDom, configFeedbackDisplay,
+                                                this.feedbackDisplay );
 
-                                        if ( this.configFields[ fieldName ].setEventOnValidation ) {
-                                            this.dispatchEvent( fieldDom, true );
-                                        }
-
-                                        resolve(
-                                            {
-                                                isValid: true
+                                            if ( this.configFields[ fieldName ].setEventOnValidation ) {
+                                                this.dispatchEvent( fieldDom, true );
                                             }
-                                        );
 
-                                    }.bind( this ) ).catch( function( result ) {
+                                            resolve(
+                                                {
+                                                    isValid: true
+                                                }
+                                            );
+
+                                        }.bind( this ) ).catch( function( result ) {
 
 
-                                        var configFeedbackDisplay = this.getValidationFeedbackData( result, fieldName );
+                                            var configFeedbackDisplay = this.getValidationFeedbackData( result,
+                                                fieldName );
 
-                                        this.displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay );
+                                            this.displayActionInvalid( result, fieldDom, validator,
+                                                configFeedbackDisplay );
 
-                                        if ( this.configFields[ fieldName ].setEventOnValidation ) {
-                                            this.dispatchEvent( fieldDom, false );
-                                        }
-
-                                        reject(
-                                            {
-                                                isValid: false
+                                            if ( this.configFields[ fieldName ].setEventOnValidation ) {
+                                                this.dispatchEvent( fieldDom, false );
                                             }
-                                        );
 
-                                    }.bind( this ) );
+                                            reject(
+                                                {
+                                                    isValid: false
+                                                }
+                                            );
+
+                                        }.bind( this ) );
 
                                 }.bind( this ) );
                             }.bind( this ) );
