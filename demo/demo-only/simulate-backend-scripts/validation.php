@@ -12,7 +12,7 @@ if ( $val === '' || $val === 0 ) {
     $valBack = 1;
 }
 
-$msg = $jsonDecode->{'validatorData'}->{'message'};
+$msg = $jsonDecode->{'domConfigData'}->{'message'};
 
 $msg = str_replace( '{{ name }}', 'Presley', $msg );
 

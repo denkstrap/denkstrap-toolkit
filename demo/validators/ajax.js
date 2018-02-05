@@ -1,10 +1,11 @@
-validation.validators.ajax = function( value, data ) {
+validation.validators.ajax = function( value, addData ) {
     return new Promise( function( resolve, reject ) {
         var options = {};
-        var validatorData = data[ 'validatorData' ];
+        var validatorData = addData[ 'domConfigData' ];
 
         options.url = validatorData.url;
-        options.data = data;
+        options.data = addData;
+        options.data.value = value;
 
         options.method = 'post';
 
