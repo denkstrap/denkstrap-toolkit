@@ -1,0 +1,86 @@
+{
+  "coverage": "91%",
+  "expectCount": 100,
+  "actualCount": 91,
+  "files": {
+    "src/cache/cache.service.js": {
+      "expectCount": 7,
+      "actualCount": 6,
+      "undocumentLines": [
+        14
+      ]
+    },
+    "src/validation/formValidation/behaviour.js": {
+      "expectCount": 10,
+      "actualCount": 10,
+      "undocumentLines": []
+    },
+    "src/validation/formValidation/cache.js": {
+      "expectCount": 6,
+      "actualCount": 5,
+      "undocumentLines": [
+        16
+      ]
+    },
+    "src/validation/formValidation/condition.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/validation/formValidation/dispatchEvent.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/validation/formValidation/feedbackDisplay.js": {
+      "expectCount": 18,
+      "actualCount": 17,
+      "undocumentLines": [
+        18
+      ]
+    },
+    "src/validation/formValidation/formValidation.js": {
+      "expectCount": 23,
+      "actualCount": 20,
+      "undocumentLines": [
+        120,
+        146,
+        241
+      ]
+    },
+    "src/validation/formValidation/getValidationFields.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/validation/formValidation/resolver.js": {
+      "expectCount": 12,
+      "actualCount": 9,
+      "undocumentLines": [
+        22,
+        31,
+        40
+      ]
+    },
+    "src/validation/formValidation/validators/email.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/validation/formValidation/validators/required.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/validation/validation.service.dom.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/validation/validation.service.js": {
+      "expectCount": 16,
+      "actualCount": 16,
+      "undocumentLines": []
+    }
+  }
+}

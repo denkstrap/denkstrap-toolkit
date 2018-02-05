@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/validation/formValidation/resolver.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/validation/formValidation/resolver.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import dispatchEvent from &apos;./dispatchEvent&apos;;
+
+/**
+ * This Class provides resolver functionality
+ *
+ */
+export class Resolver {
+    /**
+     *
+     * @param {Object} configFields
+     * @param {Object} validators
+     * @param {Object} feedbackDisplay
+     */
+    constructor( configFields, validators, feedbackDisplay ) {
+        /**
+         *
+         * @type {Object}
+         */
+        if ( typeof configFields !== &apos;object&apos; ) {
+            throw new TypeError( &apos;configField is not of type object&apos; );
+        }
+        this.configFields = configFields;
+
+        /**
+         *
+         * @type {Object}
+         */
+        if ( typeof validators !== &apos;object&apos; ) {
+            throw new TypeError( &apos;validators is not of type object&apos; );
+        }
+        this.validators = validators;
+
+        /**
+         *
+         * @type {Object}
+         */
+        if ( typeof feedbackDisplay !== &apos;object&apos; ) {
+            throw new TypeError( &apos;feedbackDisplay is not of type object&apos; );
+        }
+        this.feedbackDisplay = feedbackDisplay;
+        /**
+         * {@link dispatchEvent}
+         * @type {Function}
+         */
+        this.dispatchEvent = dispatchEvent;
+    }
+
+    /**
+     * Merges validator feedbackData with HTML given feedbackData (stored in this.configFields) and returns the
+     * resulting data object.
+     * @param {Object} result
+     * @param {Boolean} result.isValid
+     * @param {String} result.message
+     * @param {String} fieldName
+     * @return {Object}
+     * @property {Object} result merged HTML given data
+     * (merged with default feedbackData {@link getValidationFieldConfig} )
+     * and validator feedbackData
+     * @example
+     *
+     * from HTML:
+     * &quot;feedbackDisplay&quot;: {
+     *   &quot;fieldShowState&quot;: true
+     * }
+     *
+     * from validator:
+     * result = {
+     *            options: {
+     *                &apos;feedbackDisplay&apos;: {
+     *                    &quot;fieldShowState&quot;: false
+     *                }
+     *            },
+     *            isValid: valid
+     *        }
+
+     */
+    getValidationFeedbackData( result, fieldName ) {
+
+        if ( typeof result !== &apos;object&apos; ) {
+            throw new TypeError( &apos;result must be an object&apos; );
+        }
+
+        if ( typeof fieldName !== &apos;string&apos; ) {
+            throw new TypeError( &apos;fieldName must be a string&apos; );
+        }
+
+        // get validator feedbackData
+        var configFeedbackDisplayValidator = result.options &amp;&amp; result.options.feedbackDisplay ?
+            result.options.feedbackDisplay : {};
+        var configFeedbackDisplay = {};
+
+        Object.keys( this.configFields[ fieldName ].feedbackDisplay ).forEach( function( key ) {
+            configFeedbackDisplay[ key ] =
+                typeof configFeedbackDisplayValidator[ key ] !== &apos;undefined&apos; ?
+                    typeof this.configFields[ fieldName ].feedbackDisplay[ key ] === &apos;object&apos; &amp;&amp;
+                    typeof configFeedbackDisplayValidator[ key ] === &apos;object&apos; ?
+                        Object.assign(
+                            this.configFields[ fieldName ].feedbackDisplay[ key ],
+                            configFeedbackDisplayValidator[ key ]
+                        ) :
+                        configFeedbackDisplayValidator[ key ] :
+                    this.configFields[ fieldName ].feedbackDisplay[ key ];
+
+        }.bind( this ) );
+
+        return configFeedbackDisplay;
+    }
+
+    /**
+     *
+     * @param {Object} setByValidatorOnly
+     */
+    displayActionSetByValidatorOnly( setByValidatorOnly ) {
+        this.feedbackDisplay.setStatusBySelector( setByValidatorOnly.fieldShowStateValidSel, true );
+        this.feedbackDisplay.setStatusBySelector( setByValidatorOnly.fieldShowStateInvalidSel, false );
+        this.feedbackDisplay.removeStatusBySelector( setByValidatorOnly.fieldRemoveStateSel );
+    }
+
+    /**
+     * This function provides validation invalid actions.
+     * @param {Object} result
+     * @param {Boolean} result.isValid
+     * @param {String} result.message
+     * @param {Object} fieldDom
+     * @param {Object} validator
+     * @param {Object} configFeedbackDisplay
+     */
+    displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay ) {
+        var message = typeof validator.message !== &apos;undefined&apos; &amp;&amp;
+        ( configFeedbackDisplay.preferHTMLValidatorMessage || typeof result.message === &apos;undefined&apos; ) ?
+            validator.message :
+            ( typeof result.message !== &apos;undefined&apos; ? result.message : &apos;&apos; );
+
+        if ( configFeedbackDisplay.fieldShowState ) {
+            this.feedbackDisplay.setStatus( fieldDom, false, configFeedbackDisplay.fieldIdForAriaUsage );
+        } else {
+            this.feedbackDisplay.removeStatus( fieldDom );
+        }
+
+        if ( configFeedbackDisplay.messageShow ) {
+            this.feedbackDisplay.showMessage( fieldDom, message,
+                configFeedbackDisplay.messageLocation,
+                fieldDom.id
+            );
+        }
+
+        this.displayActionSetByValidatorOnly( configFeedbackDisplay.setByValidatorOnly );
+    }
+
+    /**
+     * This function provides validation valid actions.
+     *
+     * @param {Object} fieldDom
+     * @param {Object} configFeedbackDisplay
+     */
+    displayActionValid( fieldDom, configFeedbackDisplay ) {
+        if ( configFeedbackDisplay.fieldShowState ) {
+            this.feedbackDisplay.setStatus( fieldDom, true, configFeedbackDisplay.fieldIdForAriaUsage );
+        } else {
+            this.feedbackDisplay.removeStatus( fieldDom );
+        }
+
+        this.feedbackDisplay.removeMessageAndAccordingAriaAttrOfField( fieldDom );
+        this.displayActionSetByValidatorOnly( configFeedbackDisplay.setByValidatorOnly );
+    }
+
+    /**
+     * Collects values of group members of field (set by sendToValidatorDataGroupSel)
+     * to give additional data to the validators
+     *
+     * @param {String} fieldName
+     * @param {Object} configFields
+     *
+     * @return {Object} addInfo
+     * @property {Array} groupMembers
+     * @property {Object} {}
+     * @property {String} id
+     * @propery {String} value
+     */
+    getAddDataOfGroupMembers( fieldName, configFields ) {
+        var fields = document.querySelectorAll( configFields[ fieldName ].sendToValidatorDataGroupSel );
+        var addInfo = [];
+        Array.prototype.forEach.call( fields, function( field ) {
+            addInfo.push( { id: field.id, value: field.value } );
+        } );
+
+        return addInfo;
+    }
+
+
+    /**
+     * This function resolves the validation of each field.
+     * The validation resolver is providing a getValidation function.
+     * The getValidation function is providing a promise object.
+     * This promise object is used inside validation loop in
+     * {@link ValidationService.validate}
+     * @return {Object} - returns a promise object
+     */
+    resolver() {
+        /**
+         * The validation resolver is handling the validators and validation-config
+         * to serve proper validation data to the ValidationService - class.
+         */
+        return {
+            /**
+             * This function is used in {link @validate},
+             * @param {String} validatorName - The name of the validator
+             * @return {Promise} - Returns am promise which is solved in @validate
+             */
+            getValidator: function( validatorName ) {
+
+                return new Promise(
+                    /**
+                     * @param {Function} resolve
+                     */
+                    function( resolve ) {
+
+                        resolve(
+                            /**
+                             *  This function is giving back via &quot;resolve&quot; to {@link validate}
+                             *  and could be taken via &quot;then&quot;. It&apos;s executed in {@link validate}.
+                             */
+
+                            /**
+                             * @param {String} value
+                             * @param {Object} validator
+                             * @param {Object} validationService
+                             * @param {String} fieldName
+                             * @return {Promise}
+                             */
+                            function( value, validator, validationService, fieldName ) {
+                                /**
+                                 * @param {Function} resolve
+                                 * @param {Function} reject
+                                 */
+                                return new Promise( function( resolve, reject ) {
+                                    var fieldDom = document.getElementById( fieldName );
+
+                                    var sendToValidatorAddData = {
+                                        // e.g.: {&quot;message&quot;: &apos;Required &quot;name&quot; not set&apos;}
+                                        domConfigData: this.configFields[ fieldName ].validators[ validatorName ]
+                                    };
+
+                                    if ( this.configFields[ fieldName ].sendToValidatorDataGroupSel !== null ) {
+                                        sendToValidatorAddData.groupData =
+                                            this.getAddDataOfGroupMembers( fieldName, this.configFields );
+                                    }
+
+                                    if ( typeof this.validators[ validatorName ] ===
+                                        &apos;undefined&apos; ) {
+                                        console.log( &apos;ERROR: Validator&apos;, validatorName, &apos;not defined&apos; );
+                                    }
+
+                                    this.validators[ validatorName ]( value, sendToValidatorAddData ).
+                                        then( function( result ) {
+
+                                            var configFeedbackDisplay = this.getValidationFeedbackData(
+                                                result, fieldName );
+                                            this.displayActionValid( fieldDom, configFeedbackDisplay,
+                                                this.feedbackDisplay );
+
+                                            if ( this.configFields[ fieldName ].setEventOnValidation ) {
+                                                this.dispatchEvent( fieldDom, true );
+                                            }
+
+                                            resolve(
+                                                {
+                                                    isValid: true
+                                                }
+                                            );
+
+                                        }.bind( this ) ).catch( function( result ) {
+
+
+                                            var configFeedbackDisplay = this.getValidationFeedbackData( result,
+                                                fieldName );
+
+                                            this.displayActionInvalid( result, fieldDom, validator,
+                                                configFeedbackDisplay );
+
+                                            if ( this.configFields[ fieldName ].setEventOnValidation ) {
+                                                this.dispatchEvent( fieldDom, false );
+                                            }
+
+                                            reject(
+                                                {
+                                                    isValid: false
+                                                }
+                                            );
+
+                                        }.bind( this ) );
+
+                                }.bind( this ) );
+                            }.bind( this ) );
+                    }.bind( this ) );
+            }.bind( this )
+        };
+    }
+
+}
+
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

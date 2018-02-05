@@ -1,8 +1,8 @@
 {
-  "name": "denkstrap-toolbelt",
+  "name": "validation-service",
   "version": "1.0.0",
-  "description": "A toolbelt with handy stuff in web development",
-  "main": "index.js",
+  "description": "A validation service to run form inputs against validators.",
+  "main": "dist/validation/validation.service.js",
   "author": "Marius Büscher <marius.buescher@denkwerk.com>",
   "license": "MIT",
   "scripts": {

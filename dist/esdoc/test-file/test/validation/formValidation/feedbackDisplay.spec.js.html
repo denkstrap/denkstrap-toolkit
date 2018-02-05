@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">test/validation/formValidation/feedbackDisplay.spec.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/validation/formValidation/feedbackDisplay.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {FeedbackDisplay} from &apos;../../../src/validation/formValidation/feedbackDisplay&apos;;
+/** @test {FeedbackDisplay} */
+
+describe( &apos;FeedbackDisplay&apos;, function() {
+
+    beforeEach( function() {
+        this.result = fixture.load( &apos;/test/fixtures/form.html&apos; );
+    } );
+
+    afterEach( function() {
+        viewport.reset()
+    } );
+
+    describe( &apos;constructor&apos;, function() {
+
+        it( &apos;should throw an error when option fieldErrorClass is not of type String&apos;, function() {
+            expect( function() {
+                    var feedbackDisplay = new FeedbackDisplay( {
+                        fieldErrorClass: 1
+                    } );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error when option fieldSuccessClass is not of type String&apos;, function() {
+            expect( function() {
+                    var feedbackDisplay = new FeedbackDisplay( {
+                        fieldSuccessClass: 1
+                    } );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error when option messageTemplate is not of type String&apos;, function() {
+            expect( function() {
+                    var feedbackDisplay = new FeedbackDisplay( {
+                        messageTemplate: 1
+                    } );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error when option messageCreateFunction is not of type Null or Function&apos;, function() {
+            expect( function() {
+                    var feedbackDisplay = new FeedbackDisplay( {
+                        messageCreateFunction: 1
+                    } );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should not throw an error when given options are empty or undefined&apos;, function() {
+            expect( function() {
+                    var feedbackDisplay = new FeedbackDisplay( {} );
+                    var feedbackDisplay2 = new FeedbackDisplay();
+                }
+            ).not.toThrowError( TypeError );
+        } );
+
+    } );
+
+
+    describe( &apos;setStatusInvalidAria( field, fieldIdForAriaUsage )&apos;, function() {
+
+        it( &apos;should set aria attributes for invalid status&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var id = &apos;name&apos;;
+                var field = document.getElementById( id );
+
+                feedbackDisplay.setStatusInvalidAria( field, null );
+                var ariaInvalidAttr = field.getAttribute( &apos;aria-invalid&apos; );
+                var ariaDescribedby = field.getAttribute( &apos;aria-describedby&apos; );
+                var r = ariaInvalidAttr === &apos;true&apos; &amp;&amp; ariaDescribedby === &apos;validation-message-&apos; + id ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+        it( &apos;should use correct dom element for message location&apos;, function() {
+            var html = fixture.load( &apos;/test/fixtures/form.html&apos; );
+            var feedbackDisplay = new FeedbackDisplay();
+            var id = &apos;name&apos;;
+            var field = document.getElementById( id );
+
+            sinon.spy( feedbackDisplay, &apos;getMessageId&apos; );
+
+            feedbackDisplay.setStatusInvalidAria( field, null );
+            sinon.assert.calledWith( feedbackDisplay.getMessageId, field );
+
+            var fieldUseId = &apos;nameWithFeedbackDisplay&apos;;
+            var fieldUse = document.getElementById( &apos;nameWithFeedbackDisplay&apos; );
+            feedbackDisplay.setStatusInvalidAria( field, fieldUseId );
+            sinon.assert.calledWith( feedbackDisplay.getMessageId, fieldUse );
+        } );
+
+    } );
+
+    describe( &apos;removeStatus( field )&apos;, function() {
+
+        it( &apos;should have cleaned html (no validation classes, nor validation aria attributes)&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var id = &apos;name&apos;;
+                var field = document.getElementById( id );
+
+                feedbackDisplay.setStatusInvalidAria( field, null );
+                var fieldErrorClass = feedbackDisplay.options.fieldErrorClass;
+                var fieldSuccessClass = feedbackDisplay.options.fieldSuccessClass;
+
+                feedbackDisplay.removeStatus( field );
+
+                var ariaInvalidAttr = field.getAttribute( &apos;aria-invalid&apos; );
+                var ariaDescribedby = field.getAttribute( &apos;aria-describedby&apos; );
+
+                var r = !field.classList.contains( fieldErrorClass ) &amp;&amp; !field.classList.contains( fieldSuccessClass ) &amp;&amp;
+                ( ariaInvalidAttr === null || ariaInvalidAttr === &apos;&apos; ) &amp;&amp;
+                ( ariaDescribedby === null || ariaDescribedby === &apos;&apos; ) ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+    describe( &apos;setStatus( field, valid, fieldIdForAriaUsage )&apos;, function() {
+
+        it( &apos;should have correct html depending on validation result&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var id = &apos;name&apos;;
+                var field = document.getElementById( id );
+                var fieldErrorClass = feedbackDisplay.options.fieldErrorClass;
+                var fieldSuccessClass = feedbackDisplay.options.fieldSuccessClass;
+
+                feedbackDisplay.setStatus( field, false, null );
+
+                var ariaInvalidAttr = field.getAttribute( &apos;aria-invalid&apos; );
+                var ariaDescribedby = field.getAttribute( &apos;aria-describedby&apos; );
+
+                var r = field.classList.contains( fieldErrorClass ) &amp;&amp;
+                ariaInvalidAttr === &apos;true&apos; &amp;&amp;
+                ariaDescribedby === &apos;validation-message-&apos; + id ? true : false;
+
+                feedbackDisplay.setStatus( field, true, null );
+
+                ariaInvalidAttr = field.getAttribute( &apos;aria-invalid&apos; );
+                ariaDescribedby = field.getAttribute( &apos;aria-describedby&apos; );
+
+                var r2 = !field.classList.contains( fieldErrorClass ) &amp;&amp;
+                field.classList.contains( fieldSuccessClass ) &amp;&amp;
+                ( ariaInvalidAttr === null || ariaInvalidAttr === &apos;&apos; ) &amp;&amp;
+                ( ariaDescribedby === null || ariaDescribedby === &apos;&apos; ) ? true : false;
+
+                return r &amp;&amp; r2;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+
+    describe( &apos;setStatusBySelector( selector, status )&apos;, function() {
+
+        it( &apos;should have correct html depending on validation result&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var selector = &apos;#name, #nameWithFeedbackDisplay&apos;;
+                var ariaInvalidAttr = &apos;aria-invalid&apos;;
+
+                feedbackDisplay.setStatusBySelector( selector, false );
+
+                var fieldsLength = document.querySelectorAll( &apos;#form input[&apos; + ariaInvalidAttr + &apos;]&apos; ).length;
+                var r = fieldsLength === 2 ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+    describe( &apos;getDefaultInsertLoc( field )&apos;, function() {
+
+        it( &apos;should give back a reference to the according label of field&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var field = document.getElementById( &apos;name&apos; );
+                var label = document.querySelector( &apos;[for=&quot;name&quot;]&apos; );
+                var r = feedbackDisplay.getDefaultInsertLoc( field ) === label ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+    describe( &apos;checkMessageLocationDataFormat( messageLocation )&apos;, function() {
+
+        it( &apos;should throw an error if message location is not of type valid type&apos;, function() {
+            expect( function() {
+                var messageLocation = 1;
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error if message location is not of valid subtype&apos;, function() {
+            expect( function() {
+                var messageLocation = [ { &apos;minWidth&apos;: &apos;0&apos;, &apos;insertTargetSelector&apos;: &apos;[for=&quot;nameWithFeedbackDisplay&quot;]&apos; } ];
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error if corresponding messageLocation.insertTargetSelector is null&apos;, function() {
+            expect( function() {
+                var messageLocation = [ { &apos;minWidth&apos;: 0, &apos;insertTargetSelector&apos;: &apos;[for=&quot;nameWithFeedbackDisplay_DOES_NOT_EXIST&quot;]&apos; } ];
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw no error if message location is made of valid data&apos;, function() {
+            expect( function() {
+                var messageLocation = [ { &apos;minWidth&apos;: 0, &apos;insertTargetSelector&apos;: &apos;[for=&quot;nameWithFeedbackDisplay&quot;]&apos; } ];
+                FeedbackDisplay.checkMessageLocationDataFormat( messageLocation );
+            } ).not.toThrowError();
+        } );
+
+
+    } );
+
+    describe( &apos;getBreakpointMessageInfoLocationData( messageLocation )&apos;, function() {
+
+        it( &apos;should return message breakpoint data 750&apos;, function() {
+
+            var messageLocationMin750 =
+            {
+                minWidth: 750,
+                insertTargetSelector: &apos;#nameHidden&apos;
+            };
+
+            expect( function() {
+
+                var feedbackDisplay = new FeedbackDisplay();
+
+                var messageLocation = [
+                    {
+                        minWidth: 0,
+                        insertTargetSelector: &apos;#name&apos;
+                    }
+                ];
+
+                messageLocation.push( messageLocationMin750 );
+
+                viewport.set( 750 );
+                var breakPointData = feedbackDisplay.getBreakpointMessageInfoLocationData( messageLocation );
+
+                return breakPointData;
+            }() ).toEqual( messageLocationMin750 );
+        } );
+
+        it( &apos;should return message location data of null&apos;, function( done ) {
+            if ( navigator.appName !== &apos;Netscape&apos; ) {
+                var messageLocationMin750 =
+                {
+                    minWidth: 750,
+                    insertTargetSelector: &apos;#nameHidden&apos;
+                };
+
+                var feedbackDisplay = new FeedbackDisplay();
+
+                var messageLocation = [];
+
+                messageLocation.push( messageLocationMin750 );
+
+                viewport.set( 749 );
+
+                expect( function() {
+
+                    var breakPointData = feedbackDisplay.getBreakpointMessageInfoLocationData( messageLocation );
+
+                    return breakPointData;
+                }() ).toBe( null );
+            } else {
+                console.log( &apos;!!!!!!!!!!!!!!!!!!!!!! viewport is not working in Netscape &apos; +
+                    &apos;- so this test is skipped(should return message location data of null)&apos; );
+                // TODO: Is there a possibility to get it working on FF/PhantomJS
+                done();
+            }
+
+        } );
+
+    } );
+
+
+    describe( &apos;getMessageInsertLocationData( field, messageLocation )&apos;, function() {
+
+
+        it( &apos;should return message location data with breakpoint data 750 and label of input as fallback insert point&apos;, function( ) {
+
+            var messageLocationMin750 =
+            {
+                minWidth: 750,
+                insertTargetSelector: &apos;#nameHiddenDOES_NOT_EXIST&apos;
+            };
+
+            var infoData = {
+                insertLoc: document.querySelector( &apos;[for=&quot;name&quot;]&apos; ),
+                breakpointData: messageLocationMin750
+            }
+
+            expect( function() {
+
+                var feedbackDisplay = new FeedbackDisplay();
+                var id = &apos;name&apos;;
+                var field = document.getElementById( id );
+
+                var messageLocation = [];
+
+                messageLocation.push( messageLocationMin750 );
+
+                viewport.set( 750 );
+                var breakPointData = feedbackDisplay.getMessageInsertLocationData( field, messageLocation );
+
+                return breakPointData;
+
+
+            }() ).toEqual( infoData );
+
+        } );
+
+    } );
+
+    describe( &apos;showMessage( field, message, messageLocation )&apos;, function() {
+
+        it( &apos;should show error message with specific message and fallback insert point&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var field = document.getElementById( &apos;name&apos; );
+                var message = &apos;Enter a name, please.&apos;;
+                var messageLocation = null;
+                var messageId = feedbackDisplay.getMessageId( field );
+                feedbackDisplay.showMessage( field, message, messageLocation );
+
+                var messageDom = document.getElementById( messageId );
+                var r =  messageDom instanceof HTMLElement &amp;&amp;
+                messageDom.innerHTML === message ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+
+    describe( &apos;removeMessageAndAccordingAriaAttrOfField( field )&apos;, function() {
+
+        it( &apos;should remove error message and accrding aria attributes of field&apos;, function() {
+            expect( function() {
+                var feedbackDisplay = new FeedbackDisplay();
+                var field = document.getElementById( &apos;name&apos; );
+                var message = &apos;Enter a name, please.&apos;;
+                var messageLocation = null;
+                var messageId = feedbackDisplay.getMessageId( field );
+                feedbackDisplay.showMessage( field, message, messageLocation );
+
+                feedbackDisplay.removeMessageAndAccordingAriaAttrOfField( field );
+
+                var messageDom = document.getElementById( messageId );
+                var r =  messageDom === null &amp;&amp;
+                    field.getAttribute( &apos;aria-describedby&apos; ) === null ? true : false;
+                return r;
+            }() ).toBeTruthy();
+        } );
+
+    } );
+
+    // describe( &apos;getMessageId( field )&apos;, function() {
+    //
+    //     it( &apos;should give back validation message id&apos;, function() {
+    //         expect( function() {
+    //             var feedbackDisplay = new FeedbackDisplay();
+    //             var id = &apos;name&apos;;
+    //             var field = document.getElementById( id );
+    //             var messge = feedbackDisplay.getMessageId( field );s
+    //             var r = message instanceof HTMLElement ? true : false;
+    //             return r;
+    //         }() ).toBeTruthy();
+    //     } );
+    //
+    // } );
+
+
+
+} );
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

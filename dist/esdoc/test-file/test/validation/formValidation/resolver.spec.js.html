@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">test/validation/formValidation/resolver.spec.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/validation/formValidation/resolver.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {FeedbackDisplay} from &apos;../../../src/validation/formValidation/feedbackDisplay&apos;;
+import {Resolver} from &apos;../../../src/validation/formValidation/resolver&apos;;
+import {FormValidation} from &apos;../../../src/validation/formValidation/formValidation&apos;;
+
+/** @test {Resolver} */
+
+describe( &apos;Resolver&apos;, function() {
+
+    beforeEach( function() {
+        this.result = fixture.load( &apos;/test/fixtures/form.html&apos; );
+    } );
+
+
+    var formId = &apos;form&apos;;
+
+    describe( &apos;constructor( configFields, validators, feedbackDisplay )&apos;, function() {
+
+        it( &apos;should throw an error on wrong configFields type&apos;, function() {
+            expect( function() {
+                var formValidation = new FormValidation( { formId: formId } );
+                new Resolver(
+                    1,
+                    formValidation.options.validators,
+                    formValidation.feedbackDisplay );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error on wrong validators type&apos;, function() {
+            expect( function() {
+                var formValidation = new FormValidation( { formId: formId } );
+                new Resolver(
+                    formValidation.configFields,
+                    1,
+                    formValidation.feedbackDisplay );
+            } ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error on wrong feedbackDisplay type&apos;, function() {
+            expect( function() {
+                var formValidation = new FormValidation( { formId: formId } );
+                new Resolver(
+                    formValidation.configFields,
+                    formValidation.options.validators,
+                    1 );
+            } ).toThrowError( TypeError );
+        } );
+
+    } );
+
+
+    describe( &apos;getValidationFeedbackData( result, fieldName )&apos;, function() {
+
+        var validatorResultData = {
+            options: {
+                feedbackDisplay: {
+                    fieldShowState: false
+                }
+            }
+        };
+
+        it( &apos;should throw an error on wrong result type&apos;, function() {
+
+            var formValidation = new FormValidation( { formId: formId } );
+            var getValidationFeedbackDataExpected = FeedbackDisplay.getDefaultFieldOptions();
+            getValidationFeedbackDataExpected.messageLocation = [ {
+                &quot;minWidth&quot;: 0,
+                &quot;insertTargetSelector&quot;: &quot;[for=\&quot;nameWithFeedbackDisplay\&quot;]&quot;
+            } ];
+            getValidationFeedbackDataExpected.fieldShowState = false;
+
+            expect( function() {
+                var resolver = new Resolver(
+                    formValidation.configFields,
+                    formValidation.options.validators,
+                    formValidation.feedbackDisplay );
+                resolver.getValidationFeedbackData( 1, &apos;nameWithFeedbackDisplay&apos; );
+            } ).toThrowError( TypeError );
+
+        } );
+
+        it( &apos;should throw an error on wrong fieldName type&apos;, function() {
+
+            var formValidation = new FormValidation( { formId: formId } );
+            var getValidationFeedbackDataExpected = FeedbackDisplay.getDefaultFieldOptions();
+            getValidationFeedbackDataExpected.messageLocation = [ {
+                &quot;minWidth&quot;: 0,
+                &quot;insertTargetSelector&quot;: &quot;[for=\&quot;nameWithFeedbackDisplay\&quot;]&quot;
+            } ];
+            getValidationFeedbackDataExpected.fieldShowState = false;
+
+            expect( function() {
+                var resolver = new Resolver(
+                    formValidation.configFields,
+                    formValidation.options.validators,
+                    formValidation.feedbackDisplay );
+                resolver.getValidationFeedbackData( validatorResultData, 1 );
+            } ).toThrowError( TypeError );
+
+        } );
+
+
+        it( &apos;should give back a proper merged feedback data object&apos;, function() {
+
+            var formValidation = new FormValidation( { formId: formId } );
+
+            var getValidationFeedbackDataExpected = FeedbackDisplay.getDefaultFieldOptions();
+            getValidationFeedbackDataExpected.messageLocation = [ {
+                &quot;minWidth&quot;: 0,
+                &quot;insertTargetSelector&quot;: &quot;[for=\&quot;nameWithFeedbackDisplay\&quot;]&quot;
+            } ];
+            getValidationFeedbackDataExpected.fieldShowState = false;
+
+            expect( function() {
+                var resolver = new Resolver(
+                    formValidation.configFields,
+                    formValidation.options.validators,
+                    formValidation.feedbackDisplay );
+                return resolver.getValidationFeedbackData( validatorResultData, &apos;nameWithFeedbackDisplay&apos; );
+            }() ).toEqual( getValidationFeedbackDataExpected );
+
+        } );
+
+
+    } );
+
+    describe( &apos;displayActionSetByValidatorOnly( setByValidatorOnly )&apos;, function() {
+
+        it( &apos;should set/remove status classes and aria attributes by setByValidatorOnly param&apos;, function( done ) {
+
+            var setByValidatorOnly = {
+                fieldShowStateValidSel: null,
+                fieldShowStateInvalidSel: null,
+                fieldRemoveStateSel: &apos;#name&apos;
+            }
+
+            var formValidation = new FormValidation( { formId: formId } );
+            formValidation.init();
+
+            var field = document.getElementById( &apos;name&apos; );
+            var eventName = &apos;name&apos; + &apos;-validated&apos;;
+            field.addEventListener( eventName, function( event ) {
+                formValidation.resolver.displayActionSetByValidatorOnly( setByValidatorOnly );
+                expect( function() {
+                    return !document.getElementById( &apos;name&apos; ).classList.contains( &apos;validation-error&apos; );
+                }() ).toBeTruthy();
+
+                done();
+
+            } );
+
+            formValidation.validateForm();
+
+        } );
+
+
+    } );
+
+
+    describe( &apos;displayActionInvalid( result, fieldDom, validator, configFeedbackDisplay )&apos;, function() {
+
+        it( &apos;should set error caused dom manipulations&apos;, function( done ) {
+
+            var validatorResultData = {
+                options: {
+                    feedbackDisplay: {
+                        fieldShowState: false
+                    }
+                }
+            };
+
+            var configServiceValidator = {
+                &quot;message&quot;: &quot;Required \&quot;name\&quot; not set&quot;
+            }
+
+            var formValidation = new FormValidation( { formId: formId } );
+            formValidation.init();
+
+            var name = &apos;name&apos;;
+            var field = document.getElementById( name );
+            var eventName = name + &apos;-validated&apos;;
+            field.addEventListener( eventName, function( event ) {
+                formValidation.resolver.displayActionInvalid(
+                    validatorResultData,
+                    field,
+                    configServiceValidator,
+                    formValidation.configFields[ name ].feedbackDisplay );
+                expect( function() {
+                    return document.getElementById( name ).classList.contains( &apos;validation-error&apos; );
+                }() ).toBeTruthy();
+
+                done();
+
+            } );
+
+            formValidation.validateForm();
+
+        } );
+
+
+    } );
+
+
+    describe( &apos;displayActionValid( fieldDom, configFeedbackDisplay )&apos;, function() {
+
+        it( &apos;should set valid validator result caused dom manipulations&apos;, function( done ) {
+
+            var validatorResultData = {
+                options: {
+                    feedbackDisplay: {
+                        fieldShowState: true
+                    }
+                }
+            };
+
+            var configServiceValidator = {
+                &quot;message&quot;: &quot;Required \&quot;name\&quot; not set&quot;
+            }
+
+            var formValidation = new FormValidation( { formId: formId } );
+            formValidation.init();
+
+            var name = &apos;name&apos;;
+            var field = document.getElementById( name );
+            var eventName = name + &apos;-validated&apos;;
+            field.addEventListener( eventName, function( event ) {
+                formValidation.resolver.displayActionValid(
+                    field,
+                    formValidation.configFields[ name ].feedbackDisplay );
+                expect( function() {
+                    return document.getElementById( name ).classList.contains( &apos;validation-success&apos; );
+                }() ).toBeTruthy();
+
+                done();
+
+            } );
+
+            formValidation.validateForm();
+
+        } );
+
+
+    } );
+
+
+    describe( &apos;getAddDataOfGroupMembers( fieldName, configFields )&apos;, function() {
+
+        it( &apos;should give additional data to validator&apos;, function( done ) {
+
+            var addInfo = [
+                    { id: &apos;name&apos;, value: &apos;&apos; },
+                    { id: &apos;nameHidden&apos;, value: &apos;testnameHidden&apos; }
+                ];
+
+            var validatorResultData = {
+                options: {
+                    feedbackDisplay: {
+                        fieldShowState: true
+                    }
+                }
+            };
+
+            var configServiceValidator = {
+                &quot;message&quot;: &quot;Required \&quot;name\&quot; not set&quot;
+            }
+
+            var formValidation = new FormValidation( { formId: formId } );
+            formValidation.init();
+
+            var name = &apos;name&apos;;
+            var field = document.getElementById( name );
+            var eventName = name + &apos;-validated&apos;;
+            field.addEventListener( eventName, function( event ) {
+
+                expect( function() {
+                    return formValidation.resolver.getAddDataOfGroupMembers( &apos;nameWithFeedbackDisplay&apos;, formValidation.configFields );
+                }() ).toEqual( addInfo );
+
+                done();
+
+            } );
+
+            formValidation.validateForm();
+
+        } );
+
+
+    } );
+
+
+
+
+} );
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

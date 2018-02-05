@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/validation/formValidation/cache.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/validation/formValidation/cache.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Cache as CacheService} from &apos;../../cache/cache.service&apos;;
+/**
+ * This Class provides cache functionality to avoid doubled validation
+ *
+ */
+export class Cache {
+
+    /**
+     * @constructor
+     * @param {String} validationAttr - validation attr (where validation data is stored)
+     */
+    constructor( validationAttr ) {
+        if ( typeof validationAttr !== &apos;string&apos; ) {
+            throw new TypeError( &apos;validationAttr must be of type String&apos; );
+        }
+        this.validationAttr = validationAttr;
+    }
+
+    /**
+     * Validation cache off version
+     *
+     * @return {{getValue: getValue, setValue: setValue}}
+     */
+    getValidationOffCache() {
+        return {
+            getValue: function() {
+                return false;
+            },
+            setValue: function() {
+            }
+        };
+    }
+
+    /**
+     * validation cache (used to avoid unnecessary validations
+     * @returns {{getValue: (function(this:Cache)), setValue: setValue, data: Array}}
+     */
+    getValidationCache() {
+        var cache = Object.assign( new CacheService(), {
+            isCached: function( cacheKey ) {
+                var fieldName = cacheKey.split( &apos;.&apos; )[ 1 ];
+                cache.checkKey( cacheKey );
+                var test = this.isCachingEnabled( fieldName ) &amp;&amp; cache.cacheMap[ cacheKey ] ? true : false;
+                return this.isCachingEnabled( fieldName ) &amp;&amp; cache.cacheMap[ cacheKey ] ? true : false;
+            }.bind( this )
+        } );
+        return cache;
+    }
+
+    /**
+     *
+     * @param {String} fieldName
+     * @returns {boolean}
+     */
+    isCachingEnabled( fieldName ) {
+        var fieldDom = document.getElementById( fieldName );
+        var objData = fieldDom.getAttribute( this.validationAttr );
+        objData = JSON.parse( objData );
+        /* must have value false to prevent taking undefined as false (no coercion) */
+        return objData.caching === false ? false : true;
+    }
+
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

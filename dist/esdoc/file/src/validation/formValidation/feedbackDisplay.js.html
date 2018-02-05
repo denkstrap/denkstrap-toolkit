@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/validation/formValidation/feedbackDisplay.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/validation/formValidation/feedbackDisplay.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * This Class provides display functionality.
+ * Is handles display of error messages and validation states of each field.
+ *
+ */
+export class FeedbackDisplay {
+
+    /**
+     * @param {Object} options {@link getOptions}
+     */
+    constructor( options ) {
+        /**
+         * The general feedback display options.
+         * {@link getOptions}
+         * @type {Object}
+         */
+        if ( typeof options !== &apos;undefined&apos; ) {
+            this.options = Object.assign( this.getOptions(), options );
+            if ( typeof this.options.fieldErrorClass !== &apos;string&apos; ) {
+                throw new TypeError( &apos;option fieldErrorClass is not of type String&apos; );
+            }
+            if ( typeof this.options.fieldSuccessClass !== &apos;string&apos; ) {
+                throw new TypeError( &apos;option fieldSuccessClass is not of type String&apos; );
+            }
+            if ( typeof this.options.messageTemplate !== &apos;string&apos; ) {
+                throw new TypeError( &apos;option messageTemplate is not of type String&apos; );
+            }
+            if ( this.options.messageCreateFunction !== null &amp;&amp;
+                typeof this.options.messageCreateFunction !== &apos;function&apos; ) {
+                throw new TypeError( &apos;optionmessageCreateFunction is not of type Null or Function&apos; );
+            }
+        } else {
+            this.options = this.getOptions();
+        }
+    }
+
+    /**
+     *
+     * @return {Object}
+     * @property {String} [fieldErrorClass=&apos;validation-error&apos;]
+     * @property {String} [fieldSuccessClass=&apos;validation-success&apos;]
+     * @property {String} [messageTemplate=look at getOptions-src-code, could not escape curly braces]
+     * @property {Function} [messageCreateFunction=null]
+     */
+    getOptions() {
+        return {
+            fieldErrorClass: &apos;validation-error&apos;,
+            fieldSuccessClass: &apos;validation-success&apos;,
+            messageTemplate: &apos;&lt;p id=&quot;{{ id }}&quot; class=&quot;validation-message&quot; aria-live=&quot;assertive&quot; role=&quot;alert&quot;&gt;&apos; +
+            &apos;{{ message }}&lt;/p&gt;&apos;,
+            messageCreateFunction: null
+        };
+    }
+
+    /**
+     * The Default display options for each field.
+     * @return {Object} This data is used in {@link getValidationFieldConfig}.
+     *
+     * @property {Boolean} fieldShowState : true - Sets display actions concerning each field directly.
+     * Shows state on true, removes state on false.
+     * @property {Boolean} messageShow : true - Enables displaying of message of field.
+     * Shows message on true and invalid result.
+     *
+     * @property {null} messageLocation : null
+     * @property {null} fieldIdForAriaUsage : null
+     *
+     * @property {Boolean} preferHTMLValidatorMessage : true - Enables prefering message given in HTML over message
+     * given by validator.
+     *
+     * @property {Object} setByValidatorOnly - Set by validator. Usage does not depend on validation result.
+     * These declarations are taken to operate field state actions.
+     * @property {null} setByValidatorOnly.fieldShowStateValidSel -
+     * The given validator should sent a valid CSS selector String.
+     * @property {null} setByValidatorOnly.fieldShowStateInvalidSel -
+     * The given validator should sent a valid CSS selector String.
+     * @property {null} setByValidatorOnly.fieldRemoveStateSel -
+     * The given validator should sent a valid CSS selector String.
+     */
+    static getDefaultFieldOptions() {
+        return {
+            // importance depend on validation results
+            fieldShowState: true, // Shows state on true, Removes state on false
+            messageShow: true, // Shows message on true and invalid result
+
+            messageLocation: null,
+            fieldIdForAriaUsage: null,
+
+            preferHTMLValidatorMessage: true,
+
+            // this is set by validator
+            // does not depend on validation result
+            setByValidatorOnly: {
+                fieldShowStateValidSel: null,
+                fieldShowStateInvalidSel: null,
+                fieldRemoveStateSel: null
+            }
+
+        };
+    }
+
+    /**
+     * Manages aria status of field (WCAG).
+     * @see https://www.w3.org/TR/WCAG20-TECHS/ARIA21.html
+     * used only if validation result is false
+     * @param {Object} field - Reference to dom object.
+     * @param {String|null} fieldIdForAriaUsage - This could be necessary to define
+     * if one message is used for several form fields.
+     */
+    setStatusInvalidAria( field, fieldIdForAriaUsage ) {
+        var fieldUse = field;
+        if ( fieldIdForAriaUsage !== null ) {
+            fieldUse = document.getElementById( fieldIdForAriaUsage );
+        }
+        var id = this.getMessageId( fieldUse );
+        field.setAttribute( &apos;aria-invalid&apos;, &apos;true&apos; );
+        field.setAttribute( &apos;aria-describedby&apos;, id );
+    }
+
+    /**
+     * Manages aria status of field (WCAG).
+     * @see https://www.w3.org/TR/WCAG20-TECHS/ARIA21.html
+     * @param {Object} field - Dom reference.
+     */
+    removeStatusAria( field ) {
+        field.removeAttribute( &apos;aria-invalid&apos; );
+        field.removeAttribute( &apos;aria-describedby&apos; );
+    }
+
+    /**
+     * Removes status classes and aria attributes of a field.
+     * @param {Object} field Reference to dom object.
+     */
+    removeStatus( field ) {
+        field.classList.remove( this.options.fieldErrorClass );
+        field.classList.remove( this.options.fieldSuccessClass );
+        this.removeStatusAria( field );
+    }
+
+    /**
+     *
+     * @param {Object} field Dom reference of field.
+     * @param {Boolean} valid The status type handle.
+     * @param {String} fieldIdForAriaUsage
+     */
+    setStatus( field, valid, fieldIdForAriaUsage ) {
+        var validErrorClass = this.options.fieldErrorClass;
+        var validSuccessClass = this.options.fieldSuccessClass;
+        if ( valid ) {
+            field.classList.add( validSuccessClass );
+            field.classList.remove( validErrorClass );
+            this.removeStatusAria( field );
+        } else {
+            field.classList.add( validErrorClass );
+            field.classList.remove( validSuccessClass );
+            this.setStatusInvalidAria( field, fieldIdForAriaUsage );
+        }
+    }
+
+    /**
+     *
+     * @param {String} selector - CSS selector.
+     * @param {Boolean} status - The status to show.
+     */
+    setStatusBySelector( selector, status ) {
+        if ( selector !== null ) {
+            var fields = document.querySelectorAll( selector );
+            Array.prototype.forEach.call( fields, function( field ) {
+                this.setStatus( field, status, null );
+            }.bind( this ) );
+        }
+    }
+
+
+    /**
+     * Removes staus classes and aria attributes of dom elements.
+     * @param {String} selector - CSS selector to get dom element list.
+     */
+    removeStatusBySelector( selector ) {
+        if ( selector !== null ) {
+            var fields = document.querySelectorAll( selector );
+            Array.prototype.forEach.call( fields, function( field ) {
+                this.removeStatus( field );
+            }.bind( this ) );
+        }
+    }
+
+    /**
+     * Returns the message id.
+     * @param {Object} field - Reference to dom element.
+     * @return {String}
+     */
+    getMessageId( field ) {
+        return &apos;validation-message-&apos; + field.id;
+    }
+
+    /**
+     *
+     * @param {Object} field - Reference to dom element.
+     * @returns {Object} - Reference to dom element.
+     */
+    getDefaultInsertLoc( field ) {
+        var attr = field.getAttribute( &apos;type&apos; );
+        var insertLoc = attr !== &apos;checkbox&apos; &amp;&amp; attr !== &apos;radio&apos; ? field.previousElementSibling || field :
+            field.parentNode;
+        return insertLoc;
+    }
+
+    /**
+     * Checks messageLocation data for its validity
+     * @example
+     * &quot;messageLocation&quot;: [ { &quot;minWidth&quot;: 0, &quot;insertTargetSelector&quot;: &quot;[for=\&quot;nameWithFeedbackDisplay\&quot;]&quot; } ]
+     * @param {null|String} messageLocation
+     */
+    static checkMessageLocationDataFormat( messageLocation ) {
+
+        if ( messageLocation !== null &amp;&amp; !Array.isArray( messageLocation ) ) {
+            throw new TypeError( &apos;messageLocation should be null or of type Array&apos; );
+        }
+
+        if ( Array.isArray( messageLocation ) ) {
+            var length = messageLocation.length;
+            var bP;
+            for ( var i = 0; i &lt; length; i++ ) {
+                bP = messageLocation[ i ];
+
+                if ( typeof bP.minWidth !== &apos;number&apos; ) {
+                    throw new TypeError( &apos;messageLocation needs for each entry a minWidth property of type Number&apos; );
+                }
+
+                if ( typeof bP.insertTargetSelector !== &apos;string&apos; ) {
+                    throw new TypeError( &apos;messageLocation needs for each entry &apos; +
+                        &apos;a insertTargetSelector property of type String&apos; );
+                }
+
+                var insertLoc = document.querySelector( bP.insertTargetSelector );
+                if ( insertLoc === null ) {
+                    throw new TypeError(
+                        &apos;messageLocation needs for each entry a insertTargetSelector not resulting in null&apos; );
+                }
+
+            }
+        }
+    }
+
+    /**
+     *
+     * @param {Object} messageLocation
+     * @returns {Object|null} - Breakpoint depended message location data.
+     * If breakpoint is matched all properties defined in HTML for this breakpoint (via min-width property)
+     * are returned otherwise null is returned.
+     * @example
+     * {
+     * &quot;minWidth&quot;: 750,
+     * &quot;insertTargetSelector&quot;: &quot;#name-name-second-insert-point&quot;,
+     * &quot;layoutContainerIdOuter&quot;: &quot;#validation-message-layout-name-name-second&quot;,
+     * &quot;layoutContainerIdNrInner&quot;: 1
+     * }
+     */
+    getBreakpointMessageInfoLocationData( messageLocation ) {
+        var validBp = null;
+        if ( messageLocation !== null ) {
+            var length = messageLocation.length;
+            var matchMedia;
+            var bP;
+            for ( var i = 0; i &lt; length; i++ ) {
+                bP = messageLocation[ i ];
+                matchMedia = &apos;(min-width:&apos; + bP.minWidth + &apos;px)&apos;;
+                if ( window.matchMedia( matchMedia ).matches ) {
+                    validBp = bP;
+                }
+            }
+        }
+
+        return validBp;
+    }
+
+    /**
+     * Manages where to place the validator message.
+     * @param {Object} field - Reference to dom element.
+     * @param {Object} messageLocation
+     * @returns {Object}
+     * @property {Object} insertLoc - Reference to dom element.
+     * @property {Object} breakpointData {@link getBreakpointMessageInfoLocationData}
+     */
+    getMessageInsertLocationData( field, messageLocation ) {
+        var validBp = this.getBreakpointMessageInfoLocationData( messageLocation );
+        var insertLoc;
+
+        var infoData = {};
+
+        if ( validBp !== null ) {
+            insertLoc = document.querySelector( validBp.insertTargetSelector );
+        }
+
+        if ( validBp === null || insertLoc === null ) {
+            insertLoc = this.getDefaultInsertLoc( field );
+        }
+
+        infoData.insertLoc = insertLoc;
+        infoData.breakpointData = validBp;
+
+        return infoData;
+    }
+
+    /**
+     * Removes message and according aria attribute of given field.
+     * @param {Object} field - Reference to dom element.
+     */
+    removeMessageAndAccordingAriaAttrOfField( field ) {
+        var message = document.getElementById( this.getMessageId( field ) );
+        if ( message !== null ) {
+            message.parentNode.removeChild( message );
+            field.removeAttribute( &apos;aria-describedby&apos; );
+        }
+    }
+
+    /**
+     *
+     * @param {Object} field - Reference to dom element.
+     * @param {String} message - The error message.
+     * @param {null|Array} messageLocation
+     */
+    showMessage( field, message, messageLocation ) {
+        this.removeMessageAndAccordingAriaAttrOfField( field );
+        var html = this.options.messageTemplate.replace( &apos;{{ id }}&apos;,
+            this.getMessageId( field ) ).replace( &apos;{{ id-for }}&apos;, field.id )
+            .replace( &apos;{{ message }}&apos;, message );
+
+        var insertLocData = this.getMessageInsertLocationData( field, messageLocation );
+
+        if ( typeof this.options.messageCreateFunction === &apos;function&apos; ) {
+            this.options.messageCreateFunction( insertLocData, html );
+        } else {
+            insertLocData.insertLoc.insertAdjacentHTML( &apos;beforebegin&apos;, html );
+        }
+    }
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

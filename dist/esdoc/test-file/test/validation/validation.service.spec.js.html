@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">test/validation/validation.service.spec.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/validation/validation.service.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ValidationService } from &apos;../../src/validation/validation.service&apos;;
+/** @test {ValidationService} */
+
+describe( &apos;Validation Service&apos;, function() {
+
+    var cacheMock = {
+        getValue: function() {
+            return false;
+        },
+        isCached: function() {
+            return false;
+        },
+        setValue: function() {}
+    };
+
+    var invalidConfigValues = [
+        { value: &apos;string&apos;, name: &apos;String&apos; },
+        { value: undefined, name: &apos;undefined&apos; },
+        { value: [], name: &apos;Array&apos; },
+        { value: 5, name: &apos;Number&apos; }
+    ];
+
+    invalidConfigValues.forEach( function( config ) {
+        it( &apos;should throw a type error when config is given &apos; + config.name, function() {
+            var validationResolver = { getValidator: function() {} };
+            var stopValidationOnFirstFail = false;
+            expect( function() {
+                new ValidationService( config.value, validationResolver, cacheMock, stopValidationOnFirstFail );
+            } ).toThrowError( TypeError );
+        } );
+    } );
+
+    it(
+        &apos;should throw an error when the validation resolver does not implement the getValidator method&apos;,
+        function() {
+            var validationResolver = { getValidator: &apos;foobar&apos; };
+            expect( function() {
+                new ValidationService( {}, validationResolver, cacheMock );
+            } ).toThrowError( TypeError );
+        } );
+
+    it( &apos;should throw an error when the cache does not implement the getValue method&apos;, function() {
+        var cacheMock = {
+            setValue: function() {}
+        };
+        var validationResolver = { getValidator: &apos;foobar&apos; };
+
+        expect( function() {
+            new ValidationService( {}, validationResolver, cacheMock );
+        } ).toThrowError( TypeError );
+    } );
+
+    it( &apos;should throw an error when the cache does not implement the setValue method&apos;, function() {
+        var cacheMock = {
+            getValue: function() {}
+        };
+        var validationResolver = { getValidator: &apos;foobar&apos; };
+
+        expect(function() {
+            new ValidationService( {}, validationResolver, cacheMock )
+        }).toThrowError( TypeError );
+    } );
+
+    it( &apos;should save the config on construction&apos;, function() {
+        var validationResolver = { getValidator: function() {} };
+        var validationService = new ValidationService( {
+            foo: {}
+        }, validationResolver, cacheMock );
+
+        expect( validationService.config ).toEqual( {
+            foo: {}
+        } );
+    } );
+
+    it( &apos;should have a function setValues() setting all values&apos;, function() {
+        var validationResolver = { getValidator: function() {} };
+        var validationService = new ValidationService( {}, validationResolver, cacheMock );
+
+        validationService.setValues( {
+            test: &apos;laberfoo&apos;
+        } );
+
+        expect( validationService.getValues() ).toEqual( {
+            test: &apos;laberfoo&apos;
+        } );
+    } );
+
+    it( &apos;should have a function setValue() setting a specific value&apos;, function() {
+        var validationResolver = { getValidator: function() {} };
+        var validationService = new ValidationService( {}, validationResolver, cacheMock );
+
+        validationService.setValue( &apos;test&apos;, &apos;laberfoo&apos; );
+
+        expect( validationService.getValue( &apos;test&apos; ) ).toEqual( &apos;laberfoo&apos; );
+    } );
+
+    it( &apos;should validate one field with success&apos;, function( done ) {
+        var spy = sinon.spy( cacheMock, &apos;setValue&apos; );
+
+        var validationResolver = { getValidator: function() {
+            return new Promise( function( resolve ) {
+                resolve( function( value, config, service ) {
+                    expect( value ).toBe( &apos;test&apos; );
+                    expect( config ).toEqual( { message: &apos;Required field not set&apos; } );
+                    expect( service ).toBe( validationService );
+                    return new Promise( function( resolve ) {
+                        resolve( { isValid: true } );
+                    } );
+                } );
+            } );
+        } };
+        var validationService = new ValidationService( {
+            &apos;fieldA&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; }
+            }
+        }, validationResolver, cacheMock );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;test&apos; );
+        validationService.validate( &apos;fieldA&apos;, &apos;test&apos; ).then( function( result ) {
+            spy.firstCall.calledWith( &apos;test.fieldA&apos;, {
+                value: &apos;test&apos;,
+                validators: {
+                    &apos;required&apos;: {
+                        isValid: true
+                    }
+                }
+            } );
+            cacheMock.setValue.restore();
+            expect( result ).toEqual( {
+                isValid: true,
+                results: {
+                        required: { isValid: true }
+                    }
+            } );
+            done();
+        } ).catch( function() {
+            fail();
+            done();
+        } );
+    } );
+
+    it( &apos;should validate one field with failure&apos;, function( done ) {
+        var spy = sinon.spy( cacheMock, &apos;setValue&apos; );
+
+        var resolver = { getValidator: function() {} };
+
+        var validationResolver = sinon.mock( resolver );
+        var validationService = new ValidationService( {
+            &apos;fieldA&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; },
+                &apos;email&apos;: { message: &apos;Not a valid email address&apos; }
+            }
+        }, resolver, cacheMock, false );
+
+
+        validationResolver.expects( &apos;getValidator&apos; )
+            .once()
+            .withExactArgs( &apos;required&apos; )
+            .returns( new Promise( function( resolve ) {
+                resolve( function() {
+                    return new Promise( function( resolve ) {
+                        resolve( { isValid: true } );
+                    } );
+                } );
+            } ) );
+
+        validationResolver.expects( &apos;getValidator&apos; )
+            .once()
+            .withExactArgs( &apos;email&apos; )
+            .returns( new Promise( function( resolve ) {
+                resolve( function( value, config ) {
+                    return new Promise( function( resolve, reject ) {
+                        reject( { isValid: false, message: config.message } );
+                    } );
+                } );
+            } ) );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;test&apos; );
+        validationService.validate( &apos;fieldA&apos; ).then( function() {
+            fail();
+            done();
+        } ).catch( function( result ) {
+            spy.firstCall.calledWith( &apos;.fieldA&apos;, {
+                value: &apos;test&apos;,
+                validators: {
+                    &apos;required&apos;: {
+                        isValid: true
+                    }
+                }
+            } );
+            spy.secondCall.calledWith( &apos;.fieldA&apos;, {
+                value: &apos;test&apos;,
+                validators: {
+                    &apos;required&apos;: {
+                        isValid: true
+                    },
+                    &apos;email&apos;: {
+                        isValid: false,
+                        message: &apos;Not a valid email address&apos;
+                    }
+                }
+            } );
+
+            cacheMock.setValue.restore();
+            expect( result ).toEqual( {
+                isValid: false,
+                results: {
+                    required: { isValid: true },
+                    email: { isValid: false, message: &apos;Not a valid email address&apos; }
+                }
+            } );
+            done();
+        } );
+
+        // validationResolver.verify();
+        // TODO: why does this crashes the validation
+
+    } );
+
+    it( &apos;should validate the form with success&apos;, function( done ) {
+        var resolver = { getValidator: function() {} };
+        var validationResolver = sinon.mock( resolver );
+        var validationService = new ValidationService( {
+            &apos;fieldA&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; },
+                &apos;email&apos;: { message: &apos;Not a valid email address&apos; }
+            },
+            &apos;fieldB&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; }
+            }
+        }, resolver, cacheMock );
+
+        validationResolver.expects( &apos;getValidator&apos; )
+            .twice()
+            .withExactArgs( &apos;required&apos; )
+            .returns( new Promise( function( resolve ) {
+                resolve( function() {
+                    return new Promise( function( resolve ) {
+                        resolve( { isValid: true } );
+                    } );
+                } );
+            } ) );
+
+        validationResolver.expects( &apos;getValidator&apos; )
+            .once()
+            .withExactArgs( &apos;email&apos; )
+            .returns( new Promise( function( resolve ) {
+                resolve( function() {
+                    return new Promise( function( resolve ) {
+                        resolve( { isValid: true } );
+                    } );
+                } );
+            } ) );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;test&apos; );
+        validationService.setValue( &apos;fieldB&apos;, &apos;lorem ipsum&apos; );
+        validationService.validateForm().then( function( result ) {
+            expect( result ).toEqual( {
+                isValid: true,
+                results: {
+                    &apos;fieldA&apos;: {
+                        isValid: true,
+                        results: {
+                            required: { isValid: true },
+                            email: { isValid: true }
+                        }
+                    },
+                    &apos;fieldB&apos;: {
+                        isValid: true,
+                        results: {
+                            required: { isValid: true }
+                        }
+                    }
+                }
+            } );
+            done();
+        } ).catch( function() {
+            fail();
+            done();
+        } );
+    } );
+
+    it( &apos;should validate the form with failure&apos;, function( done ) {
+        var resolver = { getValidator: function() {} };
+        var validationResolver = sinon.mock( resolver );
+        var validationService = new ValidationService( {
+            &apos;fieldA&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; },
+                &apos;email&apos;: { message: &apos;Not a valid email address&apos; }
+            },
+            &apos;fieldB&apos;: {
+                &apos;required&apos;: { message: &apos;Field B is mendatory&apos; }
+            }
+        }, resolver, cacheMock );
+
+        validationResolver.expects( &apos;getValidator&apos; )
+            .twice()
+            .withExactArgs( &apos;required&apos; )
+            .returns( new Promise( function( resolve ) {
+                resolve( function( value, config ) {
+                    return new Promise( function( resolve, reject ) {
+                        if ( value === &apos;&apos; ) {
+                            reject( {
+                                isValid: false,
+                                message: config.message
+                            } );
+                        } else {
+                            resolve( { isValid: true } );
+                        }
+                    } );
+                } );
+            } ) );
+
+        validationResolver.expects( &apos;getValidator&apos; )
+            .once()
+            .withExactArgs( &apos;email&apos; )
+            .returns( new Promise( function( resolve ) {
+                resolve( function() {
+                    return new Promise( function( resolve ) {
+                        resolve( { isValid: true } );
+                    } );
+                } );
+            } ) );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;test&apos; );
+        validationService.setValue( &apos;fieldB&apos;, &apos;&apos; );
+        validationService.validateForm().then( function() {
+            fail();
+            done();
+        } ).catch( function( result ) {
+            expect( result ).toEqual( {
+                isValid: false,
+                results: {
+                    &apos;fieldA&apos;: {
+                        isValid: true,
+                        results: {
+                            required: { isValid: true },
+                            email: { isValid: true }
+                        }
+                    },
+                    &apos;fieldB&apos;: {
+                        isValid: false,
+                        results: {
+                            required: {
+                                isValid: false,
+                                message: &apos;Field B is mendatory&apos;
+                            }
+                        }
+                    }
+                }
+            } );
+            done();
+        } );
+    } );
+
+    it( &apos;should succeed when getting a valid value from cache&apos;, function( done ) {
+        var cacheMock = {
+            isCached: function() {
+                return true;
+            },
+            getValue: function() {
+                return {
+                    value: &apos;test&apos;,
+                    results: {
+                        required: {
+                            isValid: true
+                        }
+                    }
+                };
+            },
+            setValue: function() {}
+        };
+
+        var validationResolver = { getValidator: function() {
+            fail();
+            done();
+        } };
+        var validationService = new ValidationService( {
+            &apos;fieldA&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; }
+            }
+        }, validationResolver, cacheMock );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;test&apos; );
+        validationService.validate( &apos;fieldA&apos;, &apos;test&apos; ).then( function( result ) {
+            expect( result ).toEqual( {
+                isValid: true,
+                results: {
+                    required: { isValid: true }
+                }
+            } );
+            done();
+        } ).catch( function() {
+            fail();
+            done();
+        } );
+    } );
+
+    it( &apos;should fail when getting a invalid value from cache&apos;, function( done ) {
+        var cacheMock = {
+            isCached: function() {
+                return true;
+            },
+            getValue: function( cacheKey ) {
+                expect( cacheKey ).toBe( &apos;foo.fieldA&apos; );
+                return {
+                    value: &apos;&apos;,
+                    results: {
+                        required: {
+                            isValid: false,
+                            message: &apos;Required field not set&apos;
+                        }
+                    }
+                };
+            },
+            setValue: function() {}
+        };
+
+        var validationResolver = { getValidator: function() {
+            fail();
+            done();
+        } };
+        var validationService = new ValidationService( {
+            &apos;fieldA&apos;: {
+                &apos;required&apos;: { message: &apos;Required field not set&apos; }
+            }
+        }, validationResolver, cacheMock );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;&apos; );
+        validationService.validate( &apos;fieldA&apos;, &apos;foo&apos; ).then( function() {
+            fail();
+            done();
+        } ).catch( function( result ) {
+            expect( result ).toEqual( {
+                isValid: false,
+                results: {
+                    required: {
+                        isValid: false,
+                        message: &apos;Required field not set&apos;
+                    }
+                }
+            } );
+            done();
+        } );
+    } );
+
+    it( &apos;should mark a field as valid when there is no validator configured&apos;, function( done ) {
+        var validationResolver = { getValidator: function() {
+            fail();
+            done();
+        } };
+
+        var validationService = new ValidationService( {}, validationResolver, cacheMock );
+
+        validationService.setValue( &apos;fieldA&apos;, &apos;test&apos; );
+        validationService.setValue( &apos;fieldA&apos;, &apos;&apos; );
+        validationService.validate( &apos;fieldA&apos;, &apos;&apos; ).then( function( result ) {
+            expect( result ).toEqual( {
+                isValid: true
+            } );
+            done();
+        } ).catch( function() {
+            fail();
+            done();
+        } );
+    } );
+} );
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

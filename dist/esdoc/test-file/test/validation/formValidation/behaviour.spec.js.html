@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">test/validation/formValidation/behaviour.spec.js | validation-service</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A validation service to run form inputs against validators."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="validation-service"><meta property="twitter:description" content="A validation service to run form inputs against validators."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.dom.js~ValidationServiceDom.html">ValidationServiceDom</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/behaviour.js~Behaviour.html">Behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getValidationFields">getValidationFields</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/validation/formValidation/behaviour.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Behaviour} from &apos;../../../src/validation/formValidation/behaviour&apos;;
+import {FormValidation} from &apos;../../../src/validation/formValidation/formValidation&apos;;
+
+/** @test {Behaviour} */
+
+describe( &apos;behaviour&apos;, function() {
+
+    beforeEach( function() {
+        this.result = fixture.load( &apos;/test/fixtures/form.html&apos; );
+    } );
+
+    var formId = &apos;form&apos;;
+    var formValidation;
+    var initForm = function() {
+        formValidation = new FormValidation( { formId: formId } );
+        formValidation.init();
+    }
+
+
+    describe( &apos;constructor( formId, validationAttr, condition, configFields, validation )&apos;, function() {
+
+        it( &apos;should throw an error when parameter formId is not of type String&apos;, function() {
+            initForm();
+            expect( function() {
+                    new Behaviour(
+                        1,
+                        formValidation.options.validationAttr,
+                        formValidation.options.condition,
+                        formValidation.configFields,
+                        formValidation.validation
+                    );
+                }
+            ).toThrowError( TypeError, &apos;form id must be of type String&apos; );
+        } );
+
+        it( &apos;should throw an error when parameter validationAttr is not of type String&apos;, function() {
+            initForm();
+            expect( function() {
+                    new Behaviour(
+                        formId,
+                        1,
+                        formValidation.options.condition,
+                        formValidation.configFields,
+                        formValidation.validation
+                    );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error when parameter condition is not of type Function&apos;, function() {
+            initForm();
+            expect( function() {
+                    new Behaviour(
+                        formId,
+                        formValidation.options.validationAttr,
+                        1,
+                        formValidation.configFields,
+                        formValidation.validation
+                    );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error when parameter configFields is not of type Object&apos;, function() {
+            initForm();
+            expect( function() {
+                    new Behaviour(
+                        formId,
+                        formValidation.options.validationAttr,
+                        formValidation.options.condition,
+                        1,
+                        formValidation.validation
+                    );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+        it( &apos;should throw an error when parameter validation is not of type Object&apos;, function() {
+            initForm();
+            expect( function() {
+                    new Behaviour(
+                        formId,
+                        formValidation.options.validationAttr,
+                        formValidation.options.condition,
+                        formValidation.configFields,
+                        1
+                    );
+                }
+            ).toThrowError( TypeError );
+        } );
+
+    } );
+
+    describe( &apos;behaviour()&apos;, function() {
+
+        it( &apos;should do validation on focus out of field&apos;, function( done ) {
+            var html = fixture.load( &apos;/test/fixtures/form.html&apos; );
+
+            var field = document.getElementById( &apos;name&apos; );
+            field.focus();
+
+            initForm();
+
+            var spy = sinon.spy( formValidation.validation, &apos;validate&apos; );
+
+            var checkInterval2Set = false;
+            var checkInterval = setInterval( function() {
+                if ( document.activeElement === field &amp;&amp; !checkInterval2Set ) {
+                    checkInterval2Set = true;
+                    field.blur();
+                    var checkInterval2 = setInterval( function() {
+                        if ( document.activeElement !== field ) {
+                            sinon.assert.callCount( spy, 1 );
+                            done();
+                            clearInterval( checkInterval );
+                        }
+                    }, 10 )
+                }
+            }, 10 );
+
+        } );
+
+        it( &apos;should do remove previous set event handler&apos;, function( ) {
+            var field = document.getElementById( &apos;name&apos; );
+            var spy = sinon.spy( field, &apos;removeEventListener&apos; );
+            initForm();
+            formValidation.behaviour.behaviour();
+            sinon.assert.callCount( spy, 1 );
+        } );
+
+    } );
+
+} );
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

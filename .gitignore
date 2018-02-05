@@ -1,4 +1,5 @@
 node_modules/
-dist/
+dist/validation/formValidation/*
+!dist/validation/formValidation/formValidation.js
 artifacts/
 .idea/

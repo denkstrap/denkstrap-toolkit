@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/validation/formValidation/resolverActionValid.js | denkstrap-toolbelt</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A toolbelt with handy stuff in web development"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="denkstrap-toolbelt"><meta property="twitter:description" content="A toolbelt with handy stuff in web development"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cache">cache</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/cache/cache.service.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation">validation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.ext.js~ValidationServiceExt.html">ValidationServiceExt</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/validation.service.js~ValidationService.html">ValidationService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation">validation/formValidation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/cache.js~Cache.html">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/feedbackDisplay.js~FeedbackDisplay.html">FeedbackDisplay</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/validation/formValidation/formValidation.js~FormValidation.html">FormValidation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-behaviour">behaviour</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-condition">condition</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventDispatch">eventDispatch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resolver">resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resolverActionInvalid">resolverActionInvalid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-resolverActionValid">resolverActionValid</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#validation-formvalidation-validators">validation/formValidation/validators</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-email">email</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-required">required</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/validation/formValidation/resolverActionValid.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * This function provides validation valid actions.
+ * @param {Object} result
+ * @param {String} fieldName
+ * @param {Function} handleValidationFeedbackData
+ * @param {Function} feedbackDisplay
+ */
+export default function resolverActionValid( result, fieldName, handleValidationFeedbackData, feedbackDisplay ) {
+    var fieldDom = document.getElementById( fieldName );
+    var fields;
+    var configFeedbackDisplay = handleValidationFeedbackData( result, fieldName );
+    var messages;
+    // console.log( &apos;configFeedbackDisplay valid&apos;, configFeedbackDisplay );
+
+    if ( configFeedbackDisplay.fieldShowState ) {
+        feedbackDisplay.setValidStatus( fieldDom, true );
+    } else {
+        feedbackDisplay.removeValidStatus( fieldDom );
+    }
+
+    feedbackDisplay.removeMessage( fieldDom );
+
+    // console.log( &apos;#configFeedbackDisplay&apos;, configFeedbackDisplay );
+    if ( configFeedbackDisplay.fieldShowStateValidSel !== null ) {
+        fields = document.querySelectorAll( configFeedbackDisplay.fieldShowStateValidSel );
+        Array.prototype.forEach.call( fields, function( field ) {
+            feedbackDisplay.setValidStatus( field, true );
+        }.bind( this ) );
+    }
+
+    if ( configFeedbackDisplay.fieldShowStateInvalidSel !== null ) {
+        fields = document.querySelectorAll( configFeedbackDisplay.fieldShowStateInvalidSel );
+        Array.prototype.forEach.call( fields, function( field ) {
+            feedbackDisplay.setValidStatus( field, false );
+        }.bind( this ) );
+    }
+
+    if ( configFeedbackDisplay.fieldRemoveStateSel !== null ) {
+        fields = document.querySelectorAll( configFeedbackDisplay.fieldRemoveStateSel );
+        Array.prototype.forEach.call( fields, function( field ) {
+            feedbackDisplay.removeValidStatus( field );
+        }.bind( this ) );
+    }
+
+    if ( configFeedbackDisplay.messageShowSel !== null ) {
+        messages = document.querySelectorAll( configFeedbackDisplay.messageShowSel );
+        Array.prototype.forEach.call( messages, function( message ) {
+            feedbackDisplay.showValidMessage( fieldDom, message,
+                configFeedbackDisplay.messageLocation,
+                // this.validation.getIdentifier
+                fieldDom.id //TODO
+            );
+        }.bind( this ) );
+    }
+
+    if ( configFeedbackDisplay.messageRemoveSel !== null ) {
+        messages = document.querySelectorAll( configFeedbackDisplay.messageRemoveSel );
+        Array.prototype.forEach.call( messages, function( message ) {
+            feedbackDisplay.removeValidMessage( message );
+        }.bind( this ) );
+    }
+}
+
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
