@@ -68,12 +68,19 @@ There are a few prerequisites for this repository:
 
 ### Work on the sources
 
-sources are located here: "src/"
+Sources are located here: "src/".
+The code is written in ES6. It's transpiled to ES2015 via Babbel.
 
 ### Work on tests
 
 Tests are located here; "test/".<br>
-Test files must have same file name as source files plus ".spec" extension.
+Test files must have same file name as source files plus ".spec" extension.<br>
+Tests are written with Jasmine and Sinon.JS.<br>
+The tests ara running in Karma.<br>
+Karma tests can run in real browsers.<br>
+Some browser adapters are installed. Comment them out/in in the "karma.conf.js" to let the
+tests run with the target browser (The browser must be installed on your system locally).
+
 
 #### console commands
 
