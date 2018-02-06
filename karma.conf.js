@@ -22,13 +22,14 @@ module.exports = function( config ) {
         // List of files / patterns to load in the browser
         files: [
             //'node_modules/babel-polyfill/dist/polyfill.js',
-            'example/polyfills/custom-event.js',
-            'example/polyfills/object-assign.js',
-            'example/polyfills/promise.js',
+            'demo/polyfills/custom-event.js',
+            'demo/polyfills/object-assign.js',
+            'demo/polyfills/promise.js',
             'node_modules/axe-core/axe.min.js',
             'src/**/*.js',
             'test/**/*.js',
-            // 'test/validation/validation.service.spec.js',
+            //'test/validation/validation.service.spec.js',
+            // 'test/validation/formValidation/behaviour.spec.js',
             {
                 pattern: 'test/fixtures/**/*',
                 included: true,

@@ -94,7 +94,6 @@ describe( 'behaviour', function() {
     describe( 'behaviour()', function() {
 
         it( 'should do validation on focus out of field', function( done ) {
-            var html = fixture.load( '/test/fixtures/form.html' );
 
             var field = document.getElementById( 'name' );
             field.focus();
@@ -126,6 +125,31 @@ describe( 'behaviour', function() {
             initForm();
             formValidation.behaviour.behaviour();
             sinon.assert.callCount( spy, 1 );
+        } );
+
+
+        it( 'should validate group members (associated via field option behaviourGroupSel)', function( done ) {
+            var field = document.getElementById( 'nameWithFeedbackDisplay' );
+            field.focus();
+
+            initForm();
+
+            var spy = sinon.spy( formValidation.validation, 'validate' );
+
+            var checkInterval2Set = false;
+            var checkInterval = setInterval( function() {
+                if ( document.activeElement === field && !checkInterval2Set ) {
+                    checkInterval2Set = true;
+                    field.blur();
+                    var checkInterval2 = setInterval( function() {
+                        if ( document.activeElement !== field ) {
+                            sinon.assert.callCount( spy, 3 );
+                            done();
+                            clearInterval( checkInterval );
+                        }
+                    }, 10 )
+                }
+            }, 10 );
         } );
 
     } );
