@@ -10,12 +10,18 @@
 
 ## Documentation
 
-- The documentation can be found in "dist/esdoc", just download the dist folder and open index.html
+- The documentation can be found in "dist/esdoc", just download a release:<br>
+ https://github.com/denkstrap/denkstrap-toolkit/releases
+ <br>
+and open index.html in the unzipped dist folder.
 - Download the demo page (dist is needed although) to watch the demos
 
 ## Just want to use the form validation code?
 
-Download formValidation.js, located in folder "dist/validation/" and embed it.
+Download formValidation.js, located in folder "dist/validation/" and embed it.<br>
+Dist folder is shipped with each release:<br>
+https://github.com/denkstrap/denkstrap-toolkit/releases<br>
+
 Use "data-validation" attribute to define a validation field in the markup.<br>
 The according form needs an id.
 This id is the minimal option to give to the form validation class constructor.

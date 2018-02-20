@@ -11,6 +11,7 @@
     "watch": "webpack --progress --watch --colors",
     "start": "webpack-dev-server TODO: The web-dev-server is not running proper, have a look on the outcommented webpack.config part",
     "build": "webpack",
+    "release": "webpack && esdoc",
     "lint": "eslint src/**",
     "lint-report": "eslint src/** -o artifacts/eslint.html -f html",
     "lint-fix": "eslint src/** --fix"
