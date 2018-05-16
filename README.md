@@ -39,7 +39,7 @@ Example:<br>
     </form>
 
     <script>
-        var formValidation = new FormValidation( { formId: 'form'} );
+        var validationService = new FormValidation( { formId: 'form'} );
 
         var form = document.getElementById( form );
         form.addEventListener( 'submit', function( event ) {
